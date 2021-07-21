@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Book review</title>
+</head>
+<body>
+<a href="{% url 'br:index' %}">Book review</a>
+<a href="{% url 'br:recent' %}">Recent</a>
+<a href="{% url 'br:popular' %}">Popular</a>
+<a href="{% url 'br:ratings' %}">Ratings</a>
+<form method="get" action="{% url 'br:search' %}">
+    <input type="search" name="search" placeholder="Book, author, genre...">
+    <button name="Submit">Search</button>
+</form>
+{% block content %} {% endblock content %}
+</body>
+</html>

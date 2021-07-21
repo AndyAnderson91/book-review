@@ -5,28 +5,33 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 
 
-class Author(models.Model):
-    first_name = models.CharField(max_length=50)
-    patronymic = models.CharField(max_length=50, blank=True)
-    last_name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.last_name
-
-
-class Genre(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
-
 def current_year():
     return datetime.date.today().year
 
 
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
+
+
+class Author(models.Model):
+    first_name = models.CharField(max_length=50)
+    patronymic = models.CharField(max_length=50, blank=True)
+    last_name = models.CharField(max_length=50)
+    # Born year is needed for namesake cases
+    born = models.IntegerField(validators=[MinValueValidator(0), max_value_current_year], null=True, blank=True)
+
+    class Meta:
+        unique_together = ['first_name', 'patronymic', 'last_name', 'born']
+
+    def __str__(self):
+        return self.last_name
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Book(models.Model):
@@ -38,6 +43,9 @@ class Book(models.Model):
     year = models.IntegerField(validators=[MinValueValidator(0), max_value_current_year])
     # set of users who already reviewed this book, so they can't do it again.
     reviewed_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['title', 'year']
 
     def __str__(self):
         return self.title
@@ -51,6 +59,10 @@ class Review(models.Model):
     # One review can only refer to one book while one book can have many reviews
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     text = models.TextField(max_length=8192)
-    score = models.IntegerField(choices=score_choices)
+    rating = models.IntegerField(choices=score_choices)
     # By default, the review is available for viewing to all users
+    owner = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     public = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.title

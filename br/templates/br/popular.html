@@ -1,0 +1,11 @@
+{%  extends 'br/base.html' %}
+{% block content %}
+<h1>Most reviewed books</h1>
+<ul>
+    {% for book in popular_books %}
+    <p>{{forloop.counter}}) {{book.title}}</p>
+    <p>Reviewes: {{book.num_reviews}}</p>
+    <p>Rating: {{book.avg_rating|floatformat:2}}</p>
+    {% endfor %}
+</ul>
+{% endblock content %}
