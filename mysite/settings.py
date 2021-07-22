@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # book_review app
     'br',
+    # users app
+    'users',
     # Default apps
     'django.contrib.admin',
     'django.contrib.auth',
