@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
@@ -15,7 +17,11 @@ class Author(models.Model):
         unique_together = ['first_name', 'patronymic', 'last_name', 'born']
 
     def __str__(self):
-        return self.last_name
+        if self.patronymic:
+            parts = [self.first_name, self.patronymic, self.last_name]
+        else:
+            parts = [self.first_name, self.last_name]
+        return " ".join(parts)
 
 
 class Genre(models.Model):
@@ -40,11 +46,11 @@ class Book(models.Model):
     class Meta:
         unique_together = ['title', 'pub_date']
 
+    def is_published(self):
+        return self.pub_date < datetime.date.today()
+
     def get_absolute_url(self):
-        kwargs = {
-            'pk': self.id,
-            'slug': self.slug
-        }
+        kwargs = {'pk': self.id, 'slug': self.slug}
         return reverse('br:book', kwargs=kwargs)
 
     def __str__(self):

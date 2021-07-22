@@ -5,7 +5,13 @@
     {% for book in popular_books %}
     <p>{{forloop.counter}}) <a href="{{book.get_absolute_url}}">{{book.title}}</a></p>
     <p>Reviewes: {{book.num_reviews}}</p>
-    <p>Rating: {{book.avg_rating|floatformat:2}}</p>
+    <p>Rating:
+        {% if book.avg_rating %}
+        {{book.avg_rating|floatformat:2}}
+        {% else %}
+        -
+        {% endif %}
+    </p>
     {% endfor %}
 </ul>
 {% endblock content %}
