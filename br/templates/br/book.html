@@ -1,0 +1,14 @@
+{%  extends 'br/base.html' %}
+{% block content %}
+<h1>{{book.title}}</h1>
+<p>Author{{ book.authors.all|length|pluralize }}:
+    {% for author in book.authors.all %}
+    {{author.first_name}}
+    {% if author.patronymic %}
+    {{ author.patronymic}}
+    {% endif %}
+    {{author.last_name}}
+    {% endfor %}
+</p>
+<p>Genre</p>
+{% endblock content %}

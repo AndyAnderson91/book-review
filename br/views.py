@@ -15,7 +15,7 @@ class RecentListView(generic.list.ListView):
     context_object_name = 'recent_books'
 
     def get_queryset(self):
-        return Book.objects.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating')).order_by('-year')
+        return Book.objects.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating')).order_by('-pub_date')
 
 
 class PopularListView(generic.list.ListView):
@@ -43,3 +43,8 @@ class SearchTemplateView(generic.base.TemplateView):
         context = super().get_context_data(**kwargs)
         # search algoritms and adding results to context
         return context
+
+
+class BookDetailView(generic.detail.DetailView):
+    model = Book
+    template_name = 'br/book.html'
