@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # book_review urls
     path('', include('br.urls')),
-    path('users/', include('users.urls'))
+    # users urls
+    path('', include('users.urls'))
 ]

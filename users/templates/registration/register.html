@@ -1,0 +1,15 @@
+{% extends "br/base.html" %}
+
+{% block content %}
+
+<h1>Registration page</h1>
+{% if form.errors %}
+<p>Invalid data Please try again.</p>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Register</button>
+</form>
+
+{% endblock content %}
