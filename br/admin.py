@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import Author, Genre, Book, Review
 
 
@@ -30,12 +31,13 @@ class GenreAdmin(admin.ModelAdmin):
 
 
 class BookAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('title',)}
     inlines = [
         BookAuthor,
         BookGenre,
         ReviewInline
     ]
-    exclude = ('authors', 'genres',)
+    exclude = ('authors', 'genres')
 
 
 admin.site.register(Book, BookAdmin)

@@ -47,4 +47,5 @@ class SearchTemplateView(generic.base.TemplateView):
 
 class BookDetailView(generic.detail.DetailView):
     model = Book
+    query_pk_and_slug = True
     template_name = 'br/book.html'
