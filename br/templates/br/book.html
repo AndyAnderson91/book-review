@@ -24,15 +24,14 @@
 {% endif %}
 
 {% if my_review %}
+<p>
+    <a href="{% url 'br:edit_review' book.id book.slug %}">Edit my review</a>
+    <a href="{% url 'br:delete_review' book.id book.slug %}">Delete my review</a>
+</p>
 <h3>{{my_review.owner.username|title}} {{my_review.pub_date}}</h3>
-
 <p>Rating: {{my_review.rating}}/5</p>
 <h4>{{my_review.title}}</h4>
 <p>{{my_review.text}}</p>
-<p>
-    <a href="{% url 'br:edit_review' book.id book.slug %}">Edit my review</a>
-    <a>Delete my review</a>
-</p>
 {% else %}
 <p>
     <a href="{% url 'br:add_review' book.id book.slug %}">Write review</a>

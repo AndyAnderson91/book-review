@@ -1,0 +1,10 @@
+{%  extends 'br/base.html' %}
+{% block content %}
+
+<h1>Review delete page</h1>
+<form method="post">{% csrf_token %}
+    <p>Are you sure you want to delete review on «{{book.title}}»?</p>
+    <input type="submit" value="Confirm">
+</form>
+
+{% endblock content %}
