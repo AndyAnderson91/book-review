@@ -1,0 +1,9 @@
+{%  extends 'br/base.html' %}
+{% block content %}
+<h1>Edit my review on «{{book.title}}»</h1>
+<form method="post" action="{% url 'br:edit_review' book.id book.slug %}">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Save edits</button>
+</form>
+{% endblock content %}

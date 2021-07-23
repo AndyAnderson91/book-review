@@ -2,7 +2,8 @@ import datetime
 
 from django.views import generic
 from django.db.models import Avg, Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.auth.models import User
 from .models import Author, Genre, Book, Review
 from .forms import SimpleForm
 
@@ -100,13 +101,22 @@ class ReviewCreateView(generic.edit.CreateView):
     template_name = 'br/add_review.html'
     query_pk_and_slug = True
 
+    def get(self, request, *args, **kwargs):
+        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        if not book.is_published():
+            return redirect(book)
+        book_reviews = book.review_set.all()
+        users_already_reviewed = User.objects.filter(review__in=book_reviews)
+        if request.user in users_already_reviewed:
+            return redirect(book.get_absolute_url())
+        return super().get(request, *args, **kwargs)
+
     def get_success_url(self):
         book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
         return book.get_absolute_url()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.kwargs)
         book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
         context['book'] = book
         return context
@@ -117,3 +127,29 @@ class ReviewCreateView(generic.edit.CreateView):
         book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
         new_review.book = book
         return super().form_valid(form)
+
+
+class ReviewUpdateView(generic.edit.UpdateView):
+    fields = ['rating', 'title', 'text']
+    template_name = 'br/edit_review.html'
+    query_pk_and_slug = True
+
+    def get_object(self, queryset=None):
+        """
+        There is db constraint on review.owner and review.book as unique_together, so its safe to get review this way.
+        """
+        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        review = get_object_or_404(Review, book=book, owner=self.request.user)
+        return review
+
+    def get_success_url(self):
+        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        return book.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        context['book'] = book
+        return context
+
+

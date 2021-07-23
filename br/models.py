@@ -39,8 +39,6 @@ class Book(models.Model):
     language = models.CharField(max_length=50)
     pub_date = models.DateField(null=True, blank=True)
     description = models.TextField(max_length=1024, blank=True)
-    # set of users who already reviewed this book, so they can't do it again.
-    reviewed_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=50)
 
     class Meta:
@@ -70,6 +68,9 @@ class Review(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateField(auto_now=True)
     public = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ['book', 'owner']
 
     def __str__(self):
         return self.title
