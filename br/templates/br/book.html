@@ -14,4 +14,41 @@
 {% endif %}
 <p>Original language: {{book.language}}</p>
 <p>{{book.description}}</p>
+
+{% if my_review or other_reviews %}
+
+<h2>Reviews({{book.review_set.count}}):</h2>
+
+{% if my_review %}
+<h3>{{my_review.owner.username|title}} {{my_review.pub_date}}</h3>
+
+<p>Rating: {{my_review.rating}}/5</p>
+<h4>{{my_review.title}}</h4>
+<p>{{my_review.text}}</p>
+<p>
+    <a>Edit my review</a>
+    <a>Delete my review</a>
+</p>
+{% else %}
+<p>
+    <a href="{% url 'br:add_review' book.id book.slug %}">Write review</a>
+</p>
+{% endif %}
+
+{% for review in other_reviews %}
+<h3>{{review.owner.username|title}} {{review.pub_date}}</h3>
+<p>Rating: {{review.rating}}/5</p>
+<h4>{{review.title}}</h4>
+<p>{{review.text}}</p>
+{% endfor %}
+
+{% else %}
+{% if book.is_published %}
+<h2>No reviews yet</h2>
+{% else %}
+<h2>Reviews will appear after the book is published</h2>
+{% endif %}
+
+{% endif %}
+
 {% endblock content %}
