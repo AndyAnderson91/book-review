@@ -13,7 +13,7 @@ class IndexListView(generic.list.ListView):
 
     def get_queryset(self):
         today = datetime.date.today()
-        anticipated_books = Book.objects.filter(pub_date__gt=today).order_by('-pub_date', 'title')
+        anticipated_books = Book.objects.filter(pub_date__gt=today).order_by('pub_date', 'title')
         return anticipated_books
 
 
@@ -152,7 +152,9 @@ class SearchTemplateView(generic.base.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        q = self.request.GET['q']
         # search algoritms and adding results to context
+        context['q'] = q
         return context
 
 

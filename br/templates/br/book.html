@@ -2,10 +2,14 @@
 {% block content %}
 <h1>{{book.title}}</h1>
 <p>Author{{ book.authors.all|length|pluralize }}:
-    {{ book.authors.all|join:", " }}
+    {% for author in book.authors.all %}
+    <a href="{% url 'br:search' %}?q={{author}}">{{author}}</a>{% if not forloop.last %},{% endif %}
+    {% endfor %}
 </p>
 <p>Genre{{ book.genres.all|length|pluralize }}:
-    {{ book.genres.all|join:", " }}
+    {% for genre in book.genres.all %}
+    <a href="{% url 'br:search' %}?q={{genre}}">{{genre|lower}}</a>{% if not forloop.last %},{% endif %}
+    {% endfor %}
 </p>
 {% if book.is_published %}
 <p>Published: {{book.pub_date.year}}</p>

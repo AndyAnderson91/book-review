@@ -11,8 +11,8 @@
 <a href="{% url 'br:popular' %}">Popular</a>
 <a href="{% url 'br:ratings' %}">Best rated</a>
 <form method="get" action="{% url 'br:search' %}">
-    <input type="search" name="search" placeholder="Book, author, genre...">
-    <button name="Submit">Search</button>
+    <input type="search" name="q" placeholder="Book, author, genre...">
+    <button>Search</button>
 </form>
 {% if user.is_authenticated %}
 Hello, {{user.username|title}}!
