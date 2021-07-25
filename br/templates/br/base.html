@@ -11,15 +11,15 @@
 <a href="{% url 'br:popular' %}">Popular</a>
 <a href="{% url 'br:ratings' %}">Best rated</a>
 <form method="get" action="{% url 'br:search' %}">
-    <input type="search" name="q" placeholder="Book, author, genre...">
+    <input type="search" name="q" placeholder="Book, author, genre, year...">
     <button>Search</button>
 </form>
 {% if user.is_authenticated %}
 Hello, {{user.username|title}}!
-<a href="{% url 'users:logout' %}?next={{request.path}}">Logout</a>
+<a href="{% url 'users:logout' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode}}{% endif %}">Logout}</a>
 {% else %}
-<a href="{% url 'users:login' %}?next={{request.path}}">Login</a>
-<a href="{% url 'users:register' %}?next={{request.path}}">Register</a>
+<a href="{% url 'users:login' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode}}{% endif %}">Login</a>
+<a href="{% url 'users:register' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode}}{% endif %}">Register</a>
 {% endif %}
 
 {% block content %} {% endblock content %}

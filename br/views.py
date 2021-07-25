@@ -1,10 +1,13 @@
 import datetime
+from itertools import chain
 
 from django.views import generic
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, Q, Value as V
+
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
-from .models import Book, Review
+from .models import Book, Review, Author
+from .search import search
 
 
 class IndexListView(generic.list.ListView):
@@ -12,8 +15,8 @@ class IndexListView(generic.list.ListView):
     context_object_name = 'anticipated_books'
 
     def get_queryset(self):
-        today = datetime.date.today()
-        anticipated_books = Book.objects.filter(pub_date__gt=today).order_by('pub_date', 'title')
+        all_books = Book.objects.all()
+        anticipated_books = get_anticipated(all_books)
         return anticipated_books
 
 
@@ -22,7 +25,8 @@ class RecentListView(generic.list.ListView):
     context_object_name = 'recent_books'
 
     def get_queryset(self):
-        published_books = published()
+        all_books = Book.objects.all()
+        published_books = get_published(all_books)
         annotated_books = add_annotations(published_books)
         return annotated_books.order_by('-pub_date', 'title')
 
@@ -32,7 +36,8 @@ class PopularListView(generic.list.ListView):
     context_object_name = 'popular_books'
 
     def get_queryset(self):
-        published_books = published()
+        all_books = Book.objects.all()
+        published_books = get_published(all_books)
         annotated_books = add_annotations(published_books)
         return annotated_books.order_by('-num_reviews', 'title')
 
@@ -42,7 +47,8 @@ class RatingListView(generic.list.ListView):
     context_object_name = 'best_rated_books'
 
     def get_queryset(self):
-        published_books = published()
+        all_books = Book.objects.all()
+        published_books = get_published(all_books)
         annotated_books = add_annotations(published_books)
         return annotated_books.order_by('-avg_rating', 'title')
 
@@ -149,20 +155,37 @@ class ReviewDeleteView(generic.edit.DeleteView):
 
 class SearchTemplateView(generic.base.TemplateView):
     template_name = 'br/search.html'
+    context_object_name = 'results'
+
+    def get(self, request, *args, **kwargs):
+        if 'q' not in self.request.GET:
+            return redirect('br:index')
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         q = self.request.GET['q']
-        # search algoritms and adding results to context
+
+        if 'category' in self.request.GET:
+            category = self.request.GET['category']
+        else:
+            category = None
+        results = search(q, category)
         context['q'] = q
+        context['results'] = results
         return context
 
 
-def published():
+def get_published(books_set):
     today = datetime.date.today()
-    return Book.objects.filter(pub_date__lte=today)
+    return books_set.filter(pub_date__lte=today)
 
 
-def add_annotations(books):
-    annotated_books = books.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating'))
-    return annotated_books
+def get_anticipated(books_set):
+    today = datetime.date.today()
+    return books_set.filter(pub_date__gt=today)
+
+
+def add_annotations(books_set):
+    return books_set.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating'))
+

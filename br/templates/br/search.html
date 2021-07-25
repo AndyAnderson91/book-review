@@ -2,4 +2,12 @@
 {% block content %}
 <h1>Search results page</h1>
 <p>Hello! You're looking for «{{q|title}}»</p>
+{% if results %}
+<h2>Results:</h2>
+{% for book in results %}
+<p><a href="{{book.get_absolute_url}}">{{book.title}}</a></p>
+{% endfor %}
+{% else %}
+<h2>No results</h2>
+{% endif %}
 {% endblock content %}
