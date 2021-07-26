@@ -162,6 +162,7 @@ class SearchListView(generic.list.ListView):
     paginate_by = 10
 
     def get(self, request, *args, **kwargs):
+        print(self.request.GET)
         if not self.request.GET.get('q'):
             return redirect('br:index')
         return super().get(request, *args, **kwargs)
@@ -185,6 +186,14 @@ class SearchListView(generic.list.ListView):
         })
 
         return context
+
+
+class HeyTemplateView(generic.base.TemplateView):
+    template_name = 'br/hey.html'
+
+    def get(self, request, *args, **kwargs):
+        print(self.request.GET)
+        return super().get(request, *args, **kwargs)
 
 
 def get_published(books_set):

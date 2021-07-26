@@ -16,11 +16,12 @@
 </form>
 {% if user.is_authenticated %}
 Hello, {{user.username|title}}!
-<a href="{% url 'users:logout' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode}}{% endif %}">Logout</a>
+<a href="{% url 'users:logout' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Logout</a>
 {% else %}
-<a href="{% url 'users:login' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode}}{% endif %}">Login</a>
-<a href="{% url 'users:register' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode}}{% endif %}">Register</a>
+<a href="{% url 'users:login' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Login</a>
+<a href="{% url 'users:register' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Register</a>
 {% endif %}
+<p><a href="{% url 'br:hey' %}?q=100&si=200">HEY!</a></p>
 
 {% block content %} {% endblock content %}
 </body>

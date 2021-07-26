@@ -3,18 +3,18 @@
 <h1>{{book.title}}</h1>
 <p>Author{{ book.authors.all|length|pluralize }}:
     {% for author in book.authors.all %}
-    <a href="{% url 'br:search' %}?category=author&q={{author}}">{{author}}</a>{% if not forloop.last %},{% endif %}
+    <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>{% if not forloop.last %},{% endif %}
     {% endfor %}
 </p>
 <p>Genre{{ book.genres.all|length|pluralize }}:
     {% for genre in book.genres.all %}
-    <a href="{% url 'br:search' %}?category=genre&q={{genre}}">{{genre|lower}}</a>{% if not forloop.last %},{% endif %}
+    <a href="{% url 'br:search' %}?q={{genre}}&category=genre">{{genre|lower}}</a>{% if not forloop.last %},{% endif %}
     {% endfor %}
 </p>
 {% if book.is_published %}
-<p>Published: <a href="{% url 'br:search' %}?category=year&q={{book.pub_date.year}}">{{book.pub_date.year}}</a></p>
+<p>Published: <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
 {% else %}
-<p>Expected at {{book.pub_date|date:'F'}} {{book.pub_date.day}}, <a href="{% url 'br:search' %}?category=year&q={{book.pub_date.year}}">{{book.pub_date.year}}</a></p>
+<p>Expected at {{book.pub_date|date:'F'}} {{book.pub_date.day}}, <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
 {% endif %}
 <p>Original language: {{book.language}}</p>
 <p>{{book.description}}</p>
