@@ -1,13 +1,13 @@
 import datetime
-import re
+from operator import attrgetter
 
 from django.views import generic
-from django.db.models import Avg, Count
+
 
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from .models import Book, Review
-from .search import search_categories, search, split_results
+from .search import search_categories, search, add_annotations
 
 
 class IndexListView(generic.list.ListView):
@@ -17,12 +17,13 @@ class IndexListView(generic.list.ListView):
     def get_queryset(self):
         all_books = Book.objects.all()
         anticipated_books = get_anticipated(all_books)
-        return anticipated_books
+        return anticipated_books.order_by('pub_date', 'title')
 
 
 class RecentListView(generic.list.ListView):
     template_name = 'br/recent.html'
     context_object_name = 'recent_books'
+    paginate_by = 10
 
     def get_queryset(self):
         all_books = Book.objects.all()
@@ -34,6 +35,7 @@ class RecentListView(generic.list.ListView):
 class PopularListView(generic.list.ListView):
     template_name = 'br/popular.html'
     context_object_name = 'popular_books'
+    paginate_by = 10
 
     def get_queryset(self):
         all_books = Book.objects.all()
@@ -45,6 +47,7 @@ class PopularListView(generic.list.ListView):
 class RatingListView(generic.list.ListView):
     template_name = 'br/rating.html'
     context_object_name = 'best_rated_books'
+    paginate_by = 10
 
     def get_queryset(self):
         all_books = Book.objects.all()
@@ -153,31 +156,32 @@ class ReviewDeleteView(generic.edit.DeleteView):
         return book.get_absolute_url()
 
 
-class SearchTemplateView(generic.base.TemplateView):
+class SearchListView(generic.list.ListView):
     template_name = 'br/search.html'
     context_object_name = 'results'
+    paginate_by = 10
 
     def get(self, request, *args, **kwargs):
         if not self.request.GET.get('q'):
             return redirect('br:index')
         return super().get(request, *args, **kwargs)
 
+    def get_queryset(self):
+        q = self.request.GET['q']
+        category = self.request.GET.get('category')
+        results = search(q, category)
+        return sorted(results, key=attrgetter('pub_date'))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        q = self.request.GET['q']
-
-        category = self.request.GET.get('category')
-        current_year = datetime.date.today().year
-        results = search(q, category)
-        published, anticipated = split_results(results)
+        results = context['results']
+        published = count_published(results)
 
         context.update({
-            'q': q,
+            'q': self.request.GET['q'],
+            'category': self.request.GET.get('category'),
             'available_categories': search_categories,
-            'category': category,
-            'current_year': current_year,
             'published': published,
-            'anticipated': anticipated,
         })
 
         return context
@@ -193,6 +197,9 @@ def get_anticipated(books_set):
     return books_set.filter(pub_date__gt=today)
 
 
-def add_annotations(books_set):
-    return books_set.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating'))
-
+def count_published(results):
+    published = 0
+    for book in results:
+        if book.is_published():
+            published += 1
+    return published

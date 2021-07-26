@@ -1,6 +1,8 @@
 {%  extends 'br/base.html' %}
 {% block content %}
 
+{% if results %}
+
 <h2>
     {% if category == 'book' %}Books found by title
     {% elif category == 'author' %}Books written by {{q}}
@@ -11,22 +13,56 @@
     {% endif %}
 </h2>
 
+{% else %}
+
+<h2>Nothing found for «{{q}}» :(</h2>
+
+{% endif %}
+
 {% if published %}
 {% if category != 'year' %}<h3>Published books:</h3>{% endif %}
-{% for book in published %}
-<p><a href="{{book.get_absolute_url}}">{{book.title}}</a></p>
-{% endfor %}
+{% with published_ends=published|stringformat:'s' %}
+    {% with published_slice=':'|add:published_ends %}
+        <ul>
+        {% for book in results|slice:published_slice reversed %}
+            <li>{% include 'br/book_bar.html' with category=category %}</li>
+        {% endfor %}
+        </ul>
+    {% endwith %}
+{% endwith %}
 {% endif %}
 
-{% if anticipated %}
+{% if published < results|length %}
 {% if category != 'year' %}<h3>Anticipated books:</h3>{% endif %}
-{% for book in anticipated %}
-<p><a href="{{book.get_absolute_url}}">{{book.title}}</a></p>
-{% endfor %}
+{% with published_ends=published|stringformat:'s' %}
+    {% with anticipated_slice=published_ends|add:':' %}
+        <ul>
+        {% for book in results|slice:anticipated_slice %}
+            <li>{% include 'br/book_bar.html' %}</li>
+        {% endfor %}
+        </ul>
+    {% endwith %}
+{% endwith %}
 {% endif %}
 
-{% if not published and not anticipated %}
-<h3>Nothing found :(</h3>
+{% if paginator.num_pages > 1 %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?{{request.GET.urlencode}}&page=1">&laquo; first</a>
+            <a href="?{{request.GET.urlencode}}&page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?{{request.GET.urlencode}}&page={{ page_obj.next_page_number }}">next</a>
+            <a href="?{{request.GET.urlencode}}&page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endif %}
 
 

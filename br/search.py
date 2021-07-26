@@ -1,6 +1,4 @@
-from operator import attrgetter
-
-from django.db.models import Q, Value as V
+from django.db.models import Q, Value as V, Avg, Count
 from django.db.models.functions import Concat
 from .models import Book
 
@@ -39,18 +37,11 @@ def search(q, category):
     else:
         results = []
 
+    if results:
+        results = add_annotations(results)
+
     return list(set(results))
 
+def add_annotations(books_set):
+    return books_set.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating'))
 
-def split_results(results):
-    anticipated = []
-    published = []
-    if results:
-        for book in results:
-            if book.is_published():
-                published.append(book)
-            else:
-                anticipated.append(book)
-    published = sorted(published, key=attrgetter('pub_date'), reverse=True)
-    anticipated = sorted(anticipated, key=attrgetter('pub_date'), reverse=True)
-    return published, anticipated

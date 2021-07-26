@@ -20,6 +20,6 @@ urlpatterns = [
     path('review/<int:pk>-<slug:slug>/delete/', login_required(views.ReviewDeleteView.as_view()), name='delete_review'),
 
     # Search
-    path('search/', views.SearchTemplateView.as_view(), name='search'),
+    path('search/', views.SearchListView.as_view(), name='search'),
 
 ]

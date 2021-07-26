@@ -2,7 +2,6 @@ import datetime
 
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 
@@ -46,7 +45,7 @@ class Book(models.Model):
         unique_together = ['title', 'pub_date']
 
     def is_published(self):
-        return self.pub_date < datetime.date.today()
+        return self.pub_date <= datetime.date.today()
 
     def get_absolute_url(self):
         kwargs = {'pk': self.id, 'slug': self.slug}
