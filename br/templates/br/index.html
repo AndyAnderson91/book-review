@@ -4,9 +4,11 @@
 <p>Welcome to «Book review» main page</p>
 
 <p>Most anticipating books:</p>
+<ul>
 {% for book in anticipated_books %}
-<p>
-    <a href="{{book.get_absolute_url}}">{{book.title}}</a>
-</p>
+
+    <li>{% include 'br/book_bar.html' %}</li>
+
 {% endfor %}
+</ul>
 {% endblock content %}

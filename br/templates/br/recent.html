@@ -3,15 +3,9 @@
 <h1>Recently published books</h1>
 <ul>
     {% for book in recent_books %}
-    <p>{{forloop.counter}}) <a href="{{book.get_absolute_url}}">{{book.title}}</a></p>
-    <p>Reviewes: {{book.num_reviews}}</p>
-    <p>Rating:
-        {% if book.avg_rating %}
-        {{book.avg_rating|floatformat:2}}
-        {% else %}
-        -
-        {% endif %}
-    </p>
+
+    <li>{% include 'br/book_bar.html' %}</li>
+
     {% endfor %}
 </ul>
 {% endblock content %}

@@ -1,13 +1,33 @@
 {%  extends 'br/base.html' %}
 {% block content %}
-<h1>Search results page</h1>
-<p>Hello! You're looking for «{{q|title}}»</p>
-{% if results %}
-<h2>Results:</h2>
-{% for book in results %}
+
+<h2>
+    {% if category == 'book' %}Books found by title
+    {% elif category == 'author' %}Books written by {{q}}
+    {% elif category == 'genre' %}{{q}} genre
+    {% elif category == 'year' %}Books of {{q}} year
+    {% elif category is None %}Searching results for «{{q}}»
+    {% elif category %}There is no such category in database
+    {% endif %}
+</h2>
+
+{% if published %}
+{% if category != 'year' %}<h3>Published books:</h3>{% endif %}
+{% for book in published %}
 <p><a href="{{book.get_absolute_url}}">{{book.title}}</a></p>
 {% endfor %}
-{% else %}
-<h2>No results</h2>
 {% endif %}
+
+{% if anticipated %}
+{% if category != 'year' %}<h3>Anticipated books:</h3>{% endif %}
+{% for book in anticipated %}
+<p><a href="{{book.get_absolute_url}}">{{book.title}}</a></p>
+{% endfor %}
+{% endif %}
+
+{% if not published and not anticipated %}
+<h3>Nothing found :(</h3>
+{% endif %}
+
+
 {% endblock content %}

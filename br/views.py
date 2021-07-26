@@ -1,13 +1,13 @@
 import datetime
-from itertools import chain
+import re
 
 from django.views import generic
-from django.db.models import Avg, Count, Q, Value as V
+from django.db.models import Avg, Count
 
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
-from .models import Book, Review, Author
-from .search import search
+from .models import Book, Review
+from .search import search_categories, search, split_results
 
 
 class IndexListView(generic.list.ListView):
@@ -158,7 +158,7 @@ class SearchTemplateView(generic.base.TemplateView):
     context_object_name = 'results'
 
     def get(self, request, *args, **kwargs):
-        if 'q' not in self.request.GET:
+        if not self.request.GET.get('q'):
             return redirect('br:index')
         return super().get(request, *args, **kwargs)
 
@@ -166,13 +166,20 @@ class SearchTemplateView(generic.base.TemplateView):
         context = super().get_context_data(**kwargs)
         q = self.request.GET['q']
 
-        if 'category' in self.request.GET:
-            category = self.request.GET['category']
-        else:
-            category = None
+        category = self.request.GET.get('category')
+        current_year = datetime.date.today().year
         results = search(q, category)
-        context['q'] = q
-        context['results'] = results
+        published, anticipated = split_results(results)
+
+        context.update({
+            'q': q,
+            'available_categories': search_categories,
+            'category': category,
+            'current_year': current_year,
+            'published': published,
+            'anticipated': anticipated,
+        })
+
         return context
 
 

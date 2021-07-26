@@ -1,0 +1,25 @@
+<p>
+    <a href="{{book.get_absolute_url}}">{{book.title}}</a>
+    {% if book.is_published %}
+    rating:
+    {% if book.avg_rating %}
+    {{book.avg_rating|floatformat:2}}
+    {% else %}
+    -
+    {% endif %}
+    ({{book.num_reviews}} review{{book.num_reviews|pluralize}})
+    {% else %}
+    (coming {{book.pub_date|date:'F'}} {{book.pub_date.day}}, <a href="{% url 'br:search' %}?category=year&q={{book.pub_date.year}}">{{book.pub_date.year}})</a>
+    {% endif %}
+</p>
+<p>by {% for author in book.authors.all %}
+    <a href="{% url 'br:search' %}?category=author&q={{author}}">{{author}}</a>{% if not forloop.last %},{% endif %}
+    {% endfor %}
+</p>
+<p>
+    {% if book.description|length > 300 %}
+    {{book.description|slice:':300'}}...
+    {% else %}
+    {{book.description}}
+    {% endif %}
+</p>
