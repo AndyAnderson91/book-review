@@ -1,13 +1,13 @@
 import datetime
-from operator import attrgetter
 
-from django.core.paginator import Paginator
-from django.views import generic
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect
+from django.views import generic
+
+from .annotations import annotated_books
 from .models import Book, Review
 from .search import search
-from .func_and_const import books
 
 
 class IndexListView(generic.list.ListView):
@@ -15,7 +15,7 @@ class IndexListView(generic.list.ListView):
     context_object_name = 'anticipated_books'
 
     def get_queryset(self):
-        anticipated_books = get_anticipated(books)
+        anticipated_books = get_anticipated(annotated_books)
         return anticipated_books.order_by('pub_date', 'title')
 
 
@@ -25,7 +25,7 @@ class RecentListView(generic.list.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        published_books = get_published(books)
+        published_books = get_published(annotated_books)
         return published_books.order_by('-pub_date', 'title')
 
     def get_context_data(self, **kwargs):
@@ -39,7 +39,7 @@ class PopularListView(generic.list.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        published_books = get_published(books)
+        published_books = get_published(annotated_books)
         return published_books.order_by('-num_reviews', 'title')
 
 
@@ -49,7 +49,7 @@ class RatingListView(generic.list.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        published_books = get_published(books)
+        published_books = get_published(annotated_books)
         return published_books.order_by('-avg_rating', 'title')
 
 
@@ -166,7 +166,6 @@ class SearchListView(generic.list.ListView):
     paginate_by = 10
 
     def get(self, request, *args, **kwargs):
-        print(self.request.GET)
         if not self.request.GET.get('q'):
             return redirect('br:index')
         return super().get(request, *args, **kwargs)
@@ -175,13 +174,12 @@ class SearchListView(generic.list.ListView):
         q = self.request.GET['q']
         category = self.request.GET.get('category')
         results = search(q, category)
-        print(len(results))
-        return sorted(results, key=attrgetter('avg_rating'), reverse=True)
+        return results
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'q': self.request.GET['q'],
+            'q': self.request.GET.get('q'),
             'category': self.request.GET.get('category'),
         })
 
@@ -189,12 +187,12 @@ class SearchListView(generic.list.ListView):
 
 
 class MyReviewsListView(generic.list.ListView):
-    template_name='br/my_reviews.html'
+    template_name = 'br/my_reviews.html'
     context_object_name = 'my_reviews'
     paginate_by = 10
 
     def get_queryset(self):
-        return Review.objects.filter(owner=self.request.user).order_by('-pub_date')
+        return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
 
 
 def get_published(books_set):
