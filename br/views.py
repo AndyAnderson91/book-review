@@ -1,6 +1,7 @@
 import datetime
 from operator import attrgetter
 
+from django.core.paginator import Paginator
 from django.views import generic
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
@@ -40,6 +41,11 @@ class RecentListView(generic.list.ListView):
         annotated_books = add_annotations(published_books)
         return annotated_books.order_by('-pub_date', 'title')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        return context
+
 
 class PopularListView(generic.list.ListView):
     template_name = 'br/popular.html'
@@ -74,17 +80,24 @@ class BookDetailView(generic.detail.DetailView):
         context = super().get_context_data(**kwargs)
 
         reviews = Review.objects.filter(book=context['book']).order_by('-pub_date')
-        print(self.request.user)
-
         if self.request.user.is_authenticated and reviews.filter(owner=self.request.user):
-            my_review = reviews.get(owner=self.request.user)
-            other_reviews = reviews.exclude(owner=self.request.user)
+            my_review = [reviews.get(owner=self.request.user), ]
+            other_reviews = list(reviews.exclude(owner=self.request.user))
         else:
-            my_review = None
-            other_reviews = reviews
+            my_review = list()
+            other_reviews = list(reviews)
 
-        context['my_review'] = my_review
-        context['other_reviews'] = other_reviews
+        reviews = my_review + other_reviews
+        paginator = Paginator(reviews, 2)
+
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context.update({
+            'paginator': paginator,
+            'page_obj': page_obj,
+            'reviews': reviews,
+        })
+
         return context
 
 

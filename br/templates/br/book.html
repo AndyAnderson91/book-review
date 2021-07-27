@@ -21,40 +21,38 @@
 
 {% if book.is_published %}
 
-{% if my_review or other_reviews %}
-<h2>Reviews({{book.review_set.count}}):</h2>
+{% if reviews %}
+<h2>Reviews({{reviews|length}}):</h2>
 {% else %}
 <h2>No reviews yet</h2>
 {% endif %}
 
-{% if my_review %}
-<p>
-    <a href="{% url 'br:edit_review' book.id book.slug %}">Edit my review</a>
-    <a href="{% url 'br:delete_review' book.id book.slug %}">Delete my review</a>
-</p>
-<h3>{{my_review.owner.username|title}} {{my_review.pub_date}}</h3>
-<p>Rating: {{my_review.rating}}/5</p>
-<h4>{{my_review.title}}</h4>
-<p>{{my_review.text}}</p>
-{% else %}
+{% if reviews.0.owner != request.user %}
 <p>
     <a href="{% url 'br:add_review' book.id book.slug %}">Write review</a>
 </p>
 {% endif %}
 
-{% if other_reviews %}
-{% for review in other_reviews %}
+{% for review in page_obj %}
+{% if review.owner == request.user %}
+<p>
+    <a href="{% url 'br:edit_review' book.id book.slug %}">Edit my review</a>
+    <a href="{% url 'br:delete_review' book.id book.slug %}">Delete my review</a>
+</p>
+{% endif %}
+
 <h3>{{review.owner.username|title}} {{review.pub_date}}</h3>
 <p>Rating: {{review.rating}}/5</p>
 <h4>{{review.title}}</h4>
 <p>{{review.text}}</p>
 {% endfor %}
-{% endif %}
 
 {% else %}
 
 <h2>Reviews can be written as soon as the book is published</h2>
 
 {% endif %}
+
+{% include 'br/pagination.html' %}
 
 {% endblock content %}
