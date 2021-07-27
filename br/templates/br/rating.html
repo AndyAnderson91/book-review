@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Best rated books</h1>
 <ul>
-    {% for book in best_rated_books %}
+    {% for book in page_obj %}
 
     <li>{% include 'br/book_bar.html' %}</li>
 

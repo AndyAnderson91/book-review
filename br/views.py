@@ -193,18 +193,15 @@ class SearchListView(generic.list.ListView):
         q = self.request.GET['q']
         category = self.request.GET.get('category')
         results = search(q, category)
-        return sorted(results, key=attrgetter('pub_date'))
+        print(len(results))
+        return sorted(results, key=attrgetter('avg_rating'), reverse=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        results = context['results']
-        published = count_published(results)
-
         context.update({
             'q': self.request.GET['q'],
             'category': self.request.GET.get('category'),
             'available_categories': search_categories,
-            'published': published,
         })
 
         return context

@@ -1,5 +1,5 @@
 from django.db.models import Q, Value as V, Avg, Count
-from django.db.models.functions import Concat
+from django.db.models.functions import Concat, Coalesce
 from .models import Book
 
 search_categories = ['book', 'author', 'genre', 'year']
@@ -44,5 +44,5 @@ def search(q, category):
 
 
 def add_annotations(books_set):
-    return books_set.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating'))
+    return books_set.annotate(num_reviews=Count('review'), avg_rating=Coalesce(Avg('review__rating'), float(0)))
 
