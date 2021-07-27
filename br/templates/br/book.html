@@ -34,17 +34,7 @@
 {% endif %}
 
 {% for review in page_obj %}
-{% if review.owner == request.user %}
-<p>
-    <a href="{% url 'br:edit_review' book.id book.slug %}">Edit my review</a>
-    <a href="{% url 'br:delete_review' book.id book.slug %}">Delete my review</a>
-</p>
-{% endif %}
-
-<h3>{{review.owner.username|title}} {{review.pub_date}}</h3>
-<p>Rating: {{review.rating}}/5</p>
-<h4>{{review.title}}</h4>
-<p>{{review.text}}</p>
+{% include 'br/review_bar.html' %}
 {% endfor %}
 
 {% else %}

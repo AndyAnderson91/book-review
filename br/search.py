@@ -1,22 +1,16 @@
-from django.db.models import Q, Value as V, Avg, Count
-from django.db.models.functions import Concat, Coalesce
-from .models import Book
-
-search_categories = ['book', 'author', 'genre', 'year']
+from django.db.models import Q
+from .func_and_const import books
 
 
 def search(q, category):
-    full_name = Concat('authors__first_name', V(' '), 'authors__patronymic', V(' '), 'authors__last_name')
-    short_name = Concat('authors__first_name', V(' '), 'authors__last_name')
-    books = Book.objects.annotate(full_name=full_name, short_name=short_name)
 
     if category == 'book':
         results = books.filter(title__icontains=q)
 
     elif category == 'author':
         results = books.filter(
-            Q(full_name__icontains=q) |
-            Q(short_name__icontains=q)
+            Q(author_full_name__icontains=q) |
+            Q(author_short_name__icontains=q)
         )
 
     elif category == 'genre':
@@ -28,8 +22,8 @@ def search(q, category):
     elif category == 'any':
         results = books.filter(
             Q(title__icontains=q) |
-            Q(full_name__icontains=q) |
-            Q(short_name__icontains=q) |
+            Q(author_full_name__icontains=q) |
+            Q(author_short_name__icontains=q) |
             Q(genres__name__icontains=q) |
             Q(pub_date__year__icontains=q)
         )
@@ -37,12 +31,4 @@ def search(q, category):
     else:
         results = []
 
-    if results:
-        results = add_annotations(results)
-
     return list(set(results))
-
-
-def add_annotations(books_set):
-    return books_set.annotate(num_reviews=Count('review'), avg_rating=Coalesce(Avg('review__rating'), float(0)))
-

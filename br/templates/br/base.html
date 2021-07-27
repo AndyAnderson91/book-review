@@ -16,7 +16,7 @@
     <button>Search</button>
 </form>
 {% if user.is_authenticated %}
-Hello, {{user.username|title}}!
+Hello, <a href="{% url 'br:my_reviews' %}">{{user.username|title}}</a>!
 <a href="{% url 'users:logout' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Logout</a>
 {% else %}
 <a href="{% url 'users:login' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Login</a>

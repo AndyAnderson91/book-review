@@ -23,4 +23,7 @@ urlpatterns = [
     # Search
     path('search/', views.SearchListView.as_view(), name='search'),
 
+    # My reviews page
+    path('my_reviews/', login_required(views.MyReviewsListView.as_view()), name='my_reviews'),
+
 ]
