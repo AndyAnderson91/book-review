@@ -3,16 +3,14 @@
     <a href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit my review</a>
     <a href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete my review</a>
 </p>
-{% endif %}
-
-{% if review.owner == request.user and request.path != '/my_reviews/' %}
+{% if request.path != '/my_reviews/' %}
 <h3><a href="{% url 'br:my_reviews' %}">{{review.owner.username|title}}</a> {{review.pub_date}}</h3>
 {% else %}
-<h3>{{review.owner.username|title}} {{review.pub_date}}</h3>
+<h3>{{review.pub_date}} on <a href="{{review.book.get_absolute_url}}">{{review.book.title}}</a></h3>
 {% endif %}
 
-{% if request.path == '/my_reviews/' %}
-<p>Review on <a href="{{review.book.get_absolute_url}}">{{review.book.title}}</a></p>
+{% else %}
+<h3>{{review.owner.username|title}} {{review.pub_date}}</h3>
 {% endif %}
 
 <p>Rating: {{review.rating}}/5</p>

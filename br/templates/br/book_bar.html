@@ -30,15 +30,13 @@
     {% endfor %}
 </p>
 
-{% if book.is_published %}
 <p>Rating:
     {% if book.avg_rating %}
-    {{book.avg_rating|floatformat:2}} ({{book.num_reviews}} review{{book.num_reviews|pluralize}})
+    {{book.avg_rating|floatformat:2}} ({{book.review_set.count}} review{{book.review_set.count|pluralize}})
     {% else %}
     - (no reviews yet)
     {% endif %}
-    </p>
-{% endif %}
+</p>
 
 <p>
     {% if book.description|length > 300 %}
