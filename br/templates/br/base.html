@@ -12,6 +12,7 @@
 <a href="{% url 'br:ratings' %}">Best rated</a>
 <form method="get" action="{% url 'br:search' %}">
     <input type="search" name="q" placeholder="Book, author, genre, year...">
+    <input type="hidden" name="category" value="any">
     <button>Search</button>
 </form>
 {% if user.is_authenticated %}
@@ -21,7 +22,7 @@ Hello, {{user.username|title}}!
 <a href="{% url 'users:login' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Login</a>
 <a href="{% url 'users:register' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Register</a>
 {% endif %}
-<p><a href="{% url 'br:hey' %}?q=100&si=200">HEY!</a></p>
+
 
 {% block content %} {% endblock content %}
 </body>

@@ -25,7 +25,7 @@ def search(q, category):
     elif category == 'year':
         results = books.filter(pub_date__year__iexact=q)
 
-    elif category is None:
+    elif category == 'any':
         results = books.filter(
             Q(title__icontains=q) |
             Q(full_name__icontains=q) |
@@ -41,6 +41,7 @@ def search(q, category):
         results = add_annotations(results)
 
     return list(set(results))
+
 
 def add_annotations(books_set):
     return books_set.annotate(num_reviews=Count('review'), avg_rating=Avg('review__rating'))

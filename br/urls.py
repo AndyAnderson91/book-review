@@ -22,7 +22,4 @@ urlpatterns = [
     # Search
     path('search/', views.SearchListView.as_view(), name='search'),
 
-    # Hey!
-    path('hey/', views.HeyTemplateView.as_view(), name='hey')
-
 ]

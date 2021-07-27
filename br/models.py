@@ -32,14 +32,14 @@ class Genre(models.Model):
 
 
 class Book(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=80)
     # Book might have multiple authors, so many-to-many relationship is better
     authors = models.ManyToManyField(Author)
     genres = models.ManyToManyField(Genre)
     language = models.CharField(max_length=50)
-    pub_date = models.DateField(null=True, blank=True)
+    pub_date = models.DateField()
     description = models.TextField(max_length=1024, blank=True)
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=80)
 
     class Meta:
         unique_together = ['title', 'pub_date']

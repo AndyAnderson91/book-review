@@ -188,14 +188,6 @@ class SearchListView(generic.list.ListView):
         return context
 
 
-class HeyTemplateView(generic.base.TemplateView):
-    template_name = 'br/hey.html'
-
-    def get(self, request, *args, **kwargs):
-        print(self.request.GET)
-        return super().get(request, *args, **kwargs)
-
-
 def get_published(books_set):
     today = datetime.date.today()
     return books_set.filter(pub_date__lte=today)

@@ -8,8 +8,9 @@
     {% elif category == 'author' %}Books written by {{q}}
     {% elif category == 'genre' %}{{q}} genre
     {% elif category == 'year' %}Books of {{q}} year
-    {% elif category is None %}Searching results for «{{q}}»
+    {% elif category == 'any' %}Searching results for «{{q}}»
     {% elif category %}There is no such category in database
+    {% elif not category %}Please specify the category
     {% endif %}
 </h2>
 
