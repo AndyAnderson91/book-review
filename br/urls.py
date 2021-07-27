@@ -7,6 +7,7 @@ urlpatterns = [
 
     # Four pages in Navbar
     path('', views.IndexListView.as_view(), name='index'),
+
     path('recent/', views.RecentListView.as_view(), name='recent'),
     path('popular/', views.PopularListView.as_view(), name='popular'),
     path('ratings/', views.RatingListView.as_view(), name='ratings'),

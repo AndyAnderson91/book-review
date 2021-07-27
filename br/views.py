@@ -2,12 +2,21 @@ import datetime
 from operator import attrgetter
 
 from django.views import generic
-
-
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from .models import Book, Review
 from .search import search_categories, search, add_annotations
+
+
+# class BooksListView(generic.list.ListView):
+#     model = Book
+#     template_name = 'br/books_list.html'
+#     context_object_name = 'books'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         print(self.request.path)
+#         return super
 
 
 class IndexListView(generic.list.ListView):
