@@ -32,7 +32,7 @@
 
 <p>Rating:
     {% if book.avg_rating %}
-    {{book.avg_rating|floatformat:2}} ({{book.review_set.count}} review{{book.review_set.count|pluralize}})
+    {{book.avg_rating|floatformat:2}} (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
     {% else %}
     - (no reviews yet)
     {% endif %}
