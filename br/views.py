@@ -15,42 +15,36 @@ class IndexListView(generic.list.ListView):
     context_object_name = 'anticipated_books'
 
     def get_queryset(self):
-        anticipated_books = get_anticipated(annotated_books)
+        today = datetime.date.today()
+        anticipated_books = annotated_books.filter(pub_date__gt=today)
         return anticipated_books.order_by('pub_date', 'title')
 
 
-class RecentListView(generic.list.ListView):
-    template_name = 'br/recent.html'
-    context_object_name = 'recent_books'
+class BooksListView(generic.list.ListView):
+    template_name = 'br/books_list.html'
+    context_object_name = 'books'
     paginate_by = 10
 
     def get_queryset(self):
-        published_books = get_published(annotated_books)
-        return published_books.order_by('-pub_date', 'title')
+        today = datetime.date.today()
+        published_books = annotated_books.filter(pub_date__lte=today)
+        sort_type = self.kwargs['sort_type']
+        sort_by = {
+            'recent': '-pub_date',
+            'popular': '-num_reviews',
+            'best_rated': '-avg_rating'
+        }
+        return published_books.order_by(
+            sort_by[sort_type],
+            'title'
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update({
+            'sort_type': self.kwargs['sort_type']
+        })
         return context
-
-
-class PopularListView(generic.list.ListView):
-    template_name = 'br/popular.html'
-    context_object_name = 'popular_books'
-    paginate_by = 10
-
-    def get_queryset(self):
-        published_books = get_published(annotated_books)
-        return published_books.order_by('-num_reviews', 'title')
-
-
-class RatingListView(generic.list.ListView):
-    template_name = 'br/rating.html'
-    context_object_name = 'best_rated_books'
-    paginate_by = 10
-
-    def get_queryset(self):
-        published_books = get_published(annotated_books)
-        return published_books.order_by('-avg_rating', 'title')
 
 
 class BookDetailView(generic.detail.DetailView):
@@ -160,6 +154,15 @@ class ReviewDeleteView(generic.edit.DeleteView):
         return book.get_absolute_url()
 
 
+class MyReviewsListView(generic.list.ListView):
+    template_name = 'br/my_reviews.html'
+    context_object_name = 'my_reviews'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
+
+
 class SearchListView(generic.list.ListView):
     template_name = 'br/search.html'
     context_object_name = 'results'
@@ -184,22 +187,3 @@ class SearchListView(generic.list.ListView):
         })
 
         return context
-
-
-class MyReviewsListView(generic.list.ListView):
-    template_name = 'br/my_reviews.html'
-    context_object_name = 'my_reviews'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
-
-
-def get_published(books_set):
-    today = datetime.date.today()
-    return books_set.filter(pub_date__lte=today)
-
-
-def get_anticipated(books_set):
-    today = datetime.date.today()
-    return books_set.filter(pub_date__gt=today)
