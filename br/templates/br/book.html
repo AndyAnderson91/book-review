@@ -1,4 +1,5 @@
 {% extends 'br/base.html' %}
+
 {% block content %}
     <h1>{{book.title}}</h1>
     <p>Author{{ book.authors.all|length|pluralize }}:

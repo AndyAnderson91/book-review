@@ -1,17 +1,18 @@
 {% extends 'br/base.html' %}
+
 {% block content %}
 
-{% if my_reviews %}
-<h2>My reviews:</h2>
+    {% if my_reviews %}
+        <h2>My reviews:</h2>
 
-{% for review in my_reviews %}
-{% include 'br/review_bar.html' %}
-{% endfor %}
+        {% for review in my_reviews %}
+            {% include 'br/review_bar.html' %}
+        {% endfor %}
 
-{% else %}
-<h2>I have not written reviews yet</h2>
-{% endif %}
+    {% else %}
+        <h2>I have not written reviews yet</h2>
+    {% endif %}
 
-{% include 'br/pagination.html' %}
+    {% include 'br/pagination.html' %}
 
 {% endblock content %}

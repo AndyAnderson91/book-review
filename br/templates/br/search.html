@@ -1,31 +1,32 @@
 {%  extends 'br/base.html' %}
+
 {% block content %}
 
-{% if results %}
+    {% if results %}
 
-<h2>
-    {% if category == 'book' %}Books found by title
-    {% elif category == 'author' %}Books written by {{q}}
-    {% elif category == 'genre' %}{{q}} genre
-    {% elif category == 'year' %}Books of {{q}} year
-    {% elif category == 'any' %}Searching results for «{{q}}»
+        <h2>
+            {% if category == 'book' %}Books found by title
+            {% elif category == 'author' %}Books written by {{q}}
+            {% elif category == 'genre' %}{{q}} genre
+            {% elif category == 'year' %}Books of {{q}} year
+            {% elif category == 'any' %}Searching results for «{{q}}»
+            {% endif %}
+        </h2>
+
+        <ul>
+            {% for book in page_obj %}
+
+                <li>{% include 'br/book_bar.html' %}</li>
+
+            {% endfor %}
+        </ul>
+
+    {% else %}
+
+        <h2>Nothing found for «{{q}}» :(</h2>
+
     {% endif %}
-</h2>
 
-<ul>
-    {% for book in page_obj %}
-
-    <li>{% include 'br/book_bar.html' %}</li>
-
-    {% endfor %}
-</ul>
-
-{% else %}
-
-<h2>Nothing found for «{{q}}» :(</h2>
-
-{% endif %}
-
-{% include 'br/pagination.html' %}
+    {% include 'br/pagination.html' %}
 
 {% endblock content %}

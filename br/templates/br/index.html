@@ -1,17 +1,18 @@
 {%  extends 'br/base.html' %}
+
 {% block content %}
-<h1>Main page</h1>
-<p>Welcome to «Book review» main page</p>
+    <h1>Main page</h1>
+    <p>Welcome to «Book review» main page</p>
 
-<p>Most anticipating books:</p>
-<ul>
-{% for book in anticipated_books %}
+    <p>Most anticipating books:</p>
+    <ul>
+        {% for book in anticipated_books %}
 
-    <li>{% include 'br/book_bar.html' %}</li>
+            <li>{% include 'br/book_bar.html' %}</li>
 
-{% endfor %}
-</ul>
+        {% endfor %}
+    </ul>
 
-{% include 'br/pagination.html' %}
+    {% include 'br/pagination.html' %}
 
 {% endblock content %}
