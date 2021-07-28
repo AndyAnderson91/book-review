@@ -32,10 +32,7 @@ def search(q, category):
         )
 
     else:
-        results = []
+        results = BOOKS.none()
 
-    if results:
-        return results.order_by('-avg_rating', 'title')
-    else:
-        return []
+    return results.order_by('-avg_rating', 'title')
 

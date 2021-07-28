@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
 from .annotations import BOOKS
@@ -28,21 +28,21 @@ class BooksListView(generic.list.ListView):
     def get_queryset(self):
         today = datetime.date.today()
         published_books = BOOKS.filter(pub_date__lte=today)
-        sort_type = self.kwargs['sort_type']
+        sort_type = self.kwargs.get('sort_type')
         sort_by = {
             'recent': '-pub_date',
             'popular': '-num_reviews',
-            'best_rated': '-avg_rating'
+            'best_rated': '-avg_rating',
         }
         return published_books.order_by(
-            sort_by[sort_type],
+            sort_by.get(sort_type, '-pub_date'),
             'title'
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'sort_type': self.kwargs['sort_type']
+            'sort_type': self.kwargs.get('sort_type')
         })
         return context
 
@@ -55,7 +55,7 @@ class BookDetailView(generic.detail.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        reviews = Review.objects.filter(book=context['book']).order_by('-pub_date')
+        reviews = Review.objects.filter(book=context.get('book')).order_by('-pub_date')
         if self.request.user.is_authenticated and reviews.filter(owner=self.request.user):
             my_review = [reviews.get(owner=self.request.user), ]
             other_reviews = list(reviews.exclude(owner=self.request.user))
@@ -68,6 +68,7 @@ class BookDetailView(generic.detail.DetailView):
 
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+
         context.update({
             'paginator': paginator,
             'page_obj': page_obj,
@@ -83,28 +84,30 @@ class ReviewCreateView(generic.edit.CreateView):
     template_name = 'br/add_review.html'
 
     def get(self, request, *args, **kwargs):
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         book_reviews = book.review_set.all()
         users_already_reviewed = User.objects.filter(review__in=book_reviews)
-        if not book.is_published() or request.user in users_already_reviewed:
+        if book.is_published() and request.user not in users_already_reviewed:
             return redirect(book)
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
-        context['book'] = book
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
+        context.update({
+            'book': book,
+        })
         return context
 
     def form_valid(self, form):
         new_review = form.save(commit=False)
         new_review.owner = self.request.user
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         new_review.book = book
         return super().form_valid(form)
 
     def get_success_url(self):
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         return book.get_absolute_url()
 
 
@@ -116,18 +119,20 @@ class ReviewUpdateView(generic.edit.UpdateView):
         """
         There is db constraint on review.owner and review.book as unique_together, so its safe to get review this way.
         """
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         review = get_object_or_404(Review, book=book, owner=self.request.user)
         return review
 
     def get_success_url(self):
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         return book.get_absolute_url()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
-        context['book'] = book
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
+        context.update({
+            'book': book
+        })
         return context
 
 
@@ -139,18 +144,20 @@ class ReviewDeleteView(generic.edit.DeleteView):
         """
         There is db constraint on review.owner and review.book as unique_together, so its safe to get review this way.
         """
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         review = get_object_or_404(Review, book=book, owner=self.request.user)
         return review
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
-        context['book'] = book
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
+        context.update({
+            'book': book
+        })
         return context
 
     def get_success_url(self):
-        book = get_object_or_404(Book, id=self.kwargs['pk'], slug=self.kwargs['slug'])
+        book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         return book.get_absolute_url()
 
 
@@ -170,11 +177,11 @@ class SearchListView(generic.list.ListView):
 
     def get(self, request, *args, **kwargs):
         if not self.request.GET.get('q'):
-            return redirect('br:index')
+            return render(request, 'br/empty_request.html')
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        q = self.request.GET['q']
+        q = self.request.GET.get('q')
         category = self.request.GET.get('category')
         results = search(q, category)
         return results
