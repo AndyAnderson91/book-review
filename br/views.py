@@ -5,9 +5,9 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect
 from django.views import generic
 
-from .annotations import annotated_books
+from .annotations import BOOKS
 from .models import Book, Review
-from .search import search
+from .search import SEARCH_CATEGORIES, search
 
 
 class IndexListView(generic.list.ListView):
@@ -16,7 +16,7 @@ class IndexListView(generic.list.ListView):
 
     def get_queryset(self):
         today = datetime.date.today()
-        anticipated_books = annotated_books.filter(pub_date__gt=today)
+        anticipated_books = BOOKS.filter(pub_date__gt=today)
         return anticipated_books.order_by('pub_date', 'title')
 
 
@@ -27,7 +27,7 @@ class BooksListView(generic.list.ListView):
 
     def get_queryset(self):
         today = datetime.date.today()
-        published_books = annotated_books.filter(pub_date__lte=today)
+        published_books = BOOKS.filter(pub_date__lte=today)
         sort_type = self.kwargs['sort_type']
         sort_by = {
             'recent': '-pub_date',
@@ -184,6 +184,7 @@ class SearchListView(generic.list.ListView):
         context.update({
             'q': self.request.GET.get('q'),
             'category': self.request.GET.get('category'),
+            'SEARCH_CATEGORIES': SEARCH_CATEGORIES,
         })
 
         return context

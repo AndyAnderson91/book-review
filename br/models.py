@@ -25,7 +25,6 @@ class Author(models.Model):
 
 class Genre(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    plural_name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -48,14 +47,16 @@ class Book(models.Model):
         return self.pub_date <= datetime.date.today()
 
     def get_absolute_url(self):
-        kwargs = {'pk': self.id, 'slug': self.slug}
-        return reverse('br:book', kwargs=kwargs)
+        return reverse('br:book', kwargs={
+            'pk': self.id,
+            'slug': self.slug
+        })
 
     def __str__(self):
         return self.title
 
 
-rates = [(i, i) for i in range(1, 6)]
+RATINGS = [(i, i) for i in range(1, 6)]
 
 
 class Review(models.Model):
@@ -63,11 +64,10 @@ class Review(models.Model):
     # One review can only refer to one book while one book can have many reviews
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     text = models.TextField(max_length=8192)
-    rating = models.IntegerField(choices=rates)
+    rating = models.IntegerField(choices=RATINGS)
     # By default, the review is available for viewing to all users
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     pub_date = models.DateField(auto_now=True)
-    public = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ['book', 'owner']
