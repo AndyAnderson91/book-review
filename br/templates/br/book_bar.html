@@ -2,46 +2,46 @@
     <a href="{{book.get_absolute_url}}">{{book.title}}</a>
 
     {% if book.is_published %}
-    (published in
-    {% if request.path == '/search/' and category == 'year' %}
-    {{book.pub_date.year}})
-    {% else %}
-    <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}})</a>
-    {% endif %}
+        (published in
+        {% if request.path == '/search/' and category == 'year' %}
+            {{book.pub_date.year}})
+        {% else %}
+            <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}})</a>
+        {% endif %}
 
     {% else %}
-    (coming {{book.pub_date|date:'F'}} {{book.pub_date.day}},
-    {% if request.path == '/search/' and category == 'year' %}
-    {{book.pub_date.year}})
-    {% else %}
-    <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}})</a>
-    {% endif %}
+        (coming {{book.pub_date|date:'F'}} {{book.pub_date.day}},
+        {% if request.path == '/search/' and category == 'year' %}
+            {{book.pub_date.year}})
+        {% else %}
+            <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}})</a>
+        {% endif %}
 
     {% endif %}
 </p>
 
 <p>by {% for author in book.authors.all %}
     {% if request.path == '/search/' and category == 'author' %}
-    {{author}}
+        {{author}}
     {% else %}
-    <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>
+        <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>
     {% endif %}
     {% if not forloop.last %},{% endif %}
-    {% endfor %}
+{% endfor %}
 </p>
 
 <p>Rating:
     {% if book.avg_rating %}
-    {{book.avg_rating|floatformat:2}} (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
+        {{book.avg_rating|floatformat:2}} (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
     {% else %}
-    - (no reviews yet)
+        - (no reviews yet)
     {% endif %}
 </p>
 
 <p>
     {% if book.description|length > 300 %}
-    {{book.description|slice:':300'}}...
+        {{book.description|slice:':300'}}...
     {% else %}
-    {{book.description}}
+        {{book.description}}
     {% endif %}
 </p>

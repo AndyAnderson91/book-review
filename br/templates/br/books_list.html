@@ -1,23 +1,23 @@
 {%  extends 'br/base.html' %}
 {% block content %}
 
-{% if sort_type == 'recent'  %}
-<h1>Recently published books</h1>
-{% elif sort_type == 'popular' %}
-<h1>Most reviewed books</h1>
-{% elif sort_type == 'best_rated' %}
-<h1>Best rated books</h1>
-{% endif %}
+    {% if sort_type == 'recent'  %}
+        <h1>Recently published books</h1>
+    {% elif sort_type == 'popular' %}
+        <h1>Most reviewed books</h1>
+    {% elif sort_type == 'best_rated' %}
+        <h1>Best rated books</h1>
+    {% endif %}
 
-<ul>
-    {% for book in page_obj %}
+    <ul>
+        {% for book in page_obj %}
 
-    <li>{% include 'br/book_bar.html' %}</li>
+            <li>{% include 'br/book_bar.html' %}</li>
 
-    {% endfor %}
-</ul>
+        {% endfor %}
+    </ul>
 
-{% include 'br/pagination.html' %}
+    {% include 'br/pagination.html' %}
 
 {% endblock content %}
 
