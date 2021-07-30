@@ -10,13 +10,13 @@ from .models import Book, Review
 from .search import SEARCH_CATEGORIES, search
 
 
-PAGINATION_NUMBER = 10
+BOOKS_PER_PAGE = 10
 
 
 class IndexListView(generic.list.ListView):
     template_name = 'br/index.html'
     context_object_name = 'anticipated_books'
-    paginate_by = PAGINATION_NUMBER
+    paginate_by = BOOKS_PER_PAGE
 
     def get_queryset(self):
         today = datetime.date.today()
@@ -27,7 +27,7 @@ class IndexListView(generic.list.ListView):
 class BooksListView(generic.list.ListView):
     template_name = 'br/books_list.html'
     context_object_name = 'books'
-    paginate_by = PAGINATION_NUMBER
+    paginate_by = BOOKS_PER_PAGE
 
     def get_queryset(self):
         today = datetime.date.today()
@@ -170,7 +170,7 @@ class ReviewDeleteView(generic.edit.DeleteView):
 class MyReviewsListView(generic.list.ListView):
     template_name = 'br/my_reviews.html'
     context_object_name = 'my_reviews'
-    paginate_by = PAGINATION_NUMBER
+    paginate_by = BOOKS_PER_PAGE
 
     def get_queryset(self):
         return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
@@ -179,7 +179,7 @@ class MyReviewsListView(generic.list.ListView):
 class SearchListView(generic.list.ListView):
     template_name = 'br/search.html'
     context_object_name = 'results'
-    paginate_by = PAGINATION_NUMBER
+    paginate_by = BOOKS_PER_PAGE
 
     def get(self, request, *args, **kwargs):
         if not self.request.GET.get('q'):

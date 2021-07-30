@@ -7,9 +7,9 @@
     </head>
     <body>
         <a href="{% url 'br:index' %}">Book review</a>
-        <a href="/recent/">Recent</a>
-        <a href="/popular/">Popular</a>
-        <a href="/best_rated/">Best rated</a>
+        <a href="{% url 'br:books_list' sort_type='recent' %}">Recent</a>
+        <a href="{% url 'br:books_list' sort_type='popular' %}">Popular</a>
+        <a href="{% url 'br:books_list' sort_type='best_rated' %}">Best rated</a>
 
         <form method="get" action="{% url 'br:search' %}">
             <input type="search" name="q" placeholder="Book, author, genre, year..." value="{{ request.GET.q }}">

@@ -2,25 +2,34 @@
 
 {% block content %}
 
-    {% if sort_type == 'recent'  %}
-        <h1>Recently published books</h1>
-    {% elif sort_type == 'popular' %}
-        <h1>Most reviewed books</h1>
-    {% elif sort_type == 'best_rated' %}
-        <h1>Best rated books</h1>
+    {% if paginator.count %}
+
+        {% if sort_type == 'recent'  %}
+            <h1>Recently published books</h1>
+        {% elif sort_type == 'popular' %}
+            <h1>Most reviewed books</h1>
+        {% elif sort_type == 'best_rated' %}
+            <h1>Best rated books</h1>
+        {% else %}
+            <h1>Books</h1>
+        {% endif %}
+
+        <ul>
+            {% for book in page_obj %}
+
+                <li>{% include 'br/book_bar.html' %}</li>
+
+            {% endfor %}
+        </ul>
+
+        {% include 'br/pagination.html' %}
+
     {% else %}
-        <h1>Books</h1>
+
+        <h1>No published books are added to site</h1>
+
     {% endif %}
 
-    <ul>
-        {% for book in page_obj %}
-
-            <li>{% include 'br/book_bar.html' %}</li>
-
-        {% endfor %}
-    </ul>
-
-    {% include 'br/pagination.html' %}
 
 {% endblock content %}
 
