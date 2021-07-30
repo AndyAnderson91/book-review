@@ -2,16 +2,16 @@ import datetime
 
 from django.test import TestCase
 from django.contrib.auth.models import User
-from br.models import Book, Author, Genre, Review
+from br.models import Author, Book, Genre, Review
 
 
 class AuthorTestCase(TestCase):
     """
-    Class for testing Author model
+    Class for testing Author model.
     """
     @classmethod
     def setUpTestData(cls):
-        # Author with full name
+        # Author with full name.
         cls.full_name_author = Author.objects.create(
             id=1,
             first_name='Anton',
@@ -19,7 +19,7 @@ class AuthorTestCase(TestCase):
             last_name='Chekhov',
             born=datetime.date(1860, 1, 17)
         )
-        # Author with short name
+        # Author with short name.
         cls.short_name_author = Author.objects.create(
             id=2,
             first_name='Jack',
@@ -29,7 +29,7 @@ class AuthorTestCase(TestCase):
 
     def test_unique_together_full_name(self):
         """
-        Expects Exception raising since Author model has unique_together constraint on [first_name, patronymic, last_name, born]
+        Expects Exception raising since Author model has unique_together constraint on [first_name, patronymic, last_name, born].
         """
         with self.assertRaises(Exception):
             Author.objects.create(
@@ -41,7 +41,7 @@ class AuthorTestCase(TestCase):
 
     def test_unique_together_short_name(self):
         """
-        Expects Exception raising since Author model has unique_together constraint on [first_name, patronymic, last_name, born]
+        Expects Exception raising since Author model has unique_together constraint on [first_name, patronymic, last_name, born].
         """
         with self.assertRaises(Exception):
             Author.objects.create(
@@ -52,7 +52,7 @@ class AuthorTestCase(TestCase):
 
     def test_str_representation_full_name(self):
         """
-        Expects 'first_name patronymic last_name' str representation for authors with patronymic field filled
+        Expects 'first_name patronymic last_name' str representation for authors with patronymic field filled.
         """
         expected_full_name = "{0} {1} {2}".format(
             self.full_name_author.first_name,
@@ -63,7 +63,7 @@ class AuthorTestCase(TestCase):
 
     def test_str_representation_short_name(self):
         """
-        Expects 'first_name last_name' str representation for authors with patronymic field empty
+        Expects 'first_name last_name' str representation for authors with patronymic field empty.
         """
         expected_short_name = "{0} {1}".format(
             self.short_name_author.first_name,
@@ -74,32 +74,42 @@ class AuthorTestCase(TestCase):
 
 class BookTestCase(TestCase):
     """
-    Class for testing Book model
+    Class for testing Book model.
     """
     @classmethod
     def setUpTestData(cls):
-        # Book published some time ago
+        # Book published some time ago.
         cls.past_book = Book.objects.create(
             title='past_book',
             pub_date=datetime.date.today() - datetime.timedelta(days=10)
         )
-        # Book published today
+        # Book published today.
         cls.today_book = Book.objects.create(
             title='present_book',
             pub_date=datetime.date.today()
         )
-        # Book to be released in the future
+        # Book to be released in the future.
         cls.future_book = Book.objects.create(
             title='future_book',
             pub_date=datetime.date.today() + datetime.timedelta(days=10)
         )
 
-    def test_book_is_published_method(self):
+    def test_past_book_is_published(self):
         """
-        is_published() method should return True if pub_date <= today
+        Expects True.
         """
         self.assertTrue(self.past_book.is_published())
+
+    def test_today_book_is_published(self):
+        """
+        Expects True.
+        """
         self.assertTrue(self.today_book.is_published())
+
+    def test_future_book_is_published(self):
+        """
+        Expects False.
+        """
         self.assertFalse(self.future_book.is_published())
 
     def test_unique_together(self):
@@ -113,23 +123,36 @@ class BookTestCase(TestCase):
             )
 
 
-class ReviewTestCase(TestCase):
+class GenreTestCase(TestCase):
     """
-    Class for testing Review model
+    Class for testing Genre model.
     """
     @classmethod
     def setUpTestData(cls):
-        # book is required as foreign_key field in Review
+        Genre.objects.create(name='novel')
+
+    def test_unique_name(self):
+        """
+        Expects Exception raising since genre name is unique.
+        """
+        with self.assertRaises(Exception):
+            Genre.objects.create(name='novel')
+
+
+class ReviewTestCase(TestCase):
+    """
+    Class for testing Review model.
+    """
+    @classmethod
+    def setUpTestData(cls):
         book = Book.objects.create(
             title='book',
             pub_date=datetime.date.today(),
         )
-        # same with user
         owner = User.objects.create_user(
             username='andy',
             password='1'
         )
-        # review on 'book' by 'andy' user
         Review.objects.create(
             book=book,
             owner=owner,
