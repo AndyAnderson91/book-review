@@ -4,15 +4,24 @@
     <h1>Main page</h1>
     <p>Welcome to «Book review» main page</p>
 
-    <p>Most anticipating books:</p>
-    <ul>
-        {% for book in anticipated_books %}
+    {% if anticipated_books %}
 
-            <li>{% include 'br/book_bar.html' %}</li>
+        <h1>Most anticipating books:</h1>
+        <ul>
+            {% for book in anticipated_books %}
 
-        {% endfor %}
-    </ul>
+                <li>{% include 'br/book_bar.html' %}</li>
 
-    {% include 'br/pagination.html' %}
+            {% endfor %}
+        </ul>
+
+        {% include 'br/pagination.html' %}
+
+    {% else %}
+
+        <h1>No books are anticipated at the moment</h1>
+
+    {% endif %}
+
 
 {% endblock content %}

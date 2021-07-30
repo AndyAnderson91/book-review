@@ -1,29 +1,28 @@
 import datetime
 
 from django.test import TestCase, Client
-from br.models import Book, Author, Genre, Review
-
-
-class BookTestCase(TestCase):
-    def setUp(self):
-        Book.objects.create(title='past_book', pub_date=datetime.date.today() - datetime.timedelta(days=10))
-        Book.objects.create(title='present_book', pub_date=datetime.date.today())
-        Book.objects.create(title='future_book', pub_date=datetime.date.today() + datetime.timedelta(days=10))
-
-    def test_book_is_published_method(self):
-        past_book = Book.objects.get(title='past_book')
-        present_book = Book.objects.get(title='present_book')
-        future_book = Book.objects.get(title='future_book')
-
-        self.assertEqual(past_book.is_published(), True)
-        self.assertEqual(present_book.is_published(), True)
-        self.assertEqual(future_book.is_published(), False)
+from django.contrib.auth.models import User
+from br.models import Book
 
 
 class LoginTestCase(TestCase):
-    def setUp(self):
-        self.client = Client()
-        Book.objects.create(id=1, title='Book title', pub_date=datetime.date.today())
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = Client()
+
+    def test_login(self):
+        login = self.client.force_login(User.objects.get_or_create(username='tester')[0])
+
+
+
+class LoginTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        Book.objects.create(
+            id=1,
+            title='Book title',
+            pub_date=datetime.date.today()
+        )
 
     def test_login(self):
         with self.settings(LOGIN_URL='/login/'):

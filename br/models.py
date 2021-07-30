@@ -1,16 +1,24 @@
 import datetime
 
+from django.conf import settings
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+
+
+def get_sentinel_user():
+    return get_user_model().objects.get_or_create(username='deleted user')[0]
 
 
 class Author(models.Model):
     first_name = models.CharField(max_length=50)
     patronymic = models.CharField(max_length=50, blank=True)
     last_name = models.CharField(max_length=50)
-    # Born year is needed for namesake cases
-    born = models.DateField()
+    born = models.DateField(
+        help_text='YYYY-MM-DD',
+        validators=[MaxValueValidator(limit_value=datetime.date.today)]
+    )
 
     class Meta:
         unique_together = ['first_name', 'patronymic', 'last_name', 'born']
@@ -36,7 +44,7 @@ class Book(models.Model):
     authors = models.ManyToManyField(Author)
     genres = models.ManyToManyField(Genre)
     language = models.CharField(max_length=50)
-    pub_date = models.DateField()
+    pub_date = models.DateField(help_text='YYYY-MM-DD')
     description = models.TextField(max_length=1024, blank=True)
     slug = models.SlugField(max_length=80)
 
@@ -65,8 +73,10 @@ class Review(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     text = models.TextField(max_length=8192)
     rating = models.IntegerField(choices=RATINGS)
-    # By default, the review is available for viewing to all users
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET(get_sentinel_user)
+    )
     pub_date = models.DateField(auto_now=True)
 
     class Meta:

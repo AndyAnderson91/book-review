@@ -10,9 +10,13 @@ from .models import Book, Review
 from .search import SEARCH_CATEGORIES, search
 
 
+PAGINATION_NUMBER = 10
+
+
 class IndexListView(generic.list.ListView):
     template_name = 'br/index.html'
     context_object_name = 'anticipated_books'
+    paginate_by = PAGINATION_NUMBER
 
     def get_queryset(self):
         today = datetime.date.today()
@@ -23,7 +27,7 @@ class IndexListView(generic.list.ListView):
 class BooksListView(generic.list.ListView):
     template_name = 'br/books_list.html'
     context_object_name = 'books'
-    paginate_by = 10
+    paginate_by = PAGINATION_NUMBER
 
     def get_queryset(self):
         today = datetime.date.today()
@@ -87,8 +91,10 @@ class ReviewCreateView(generic.edit.CreateView):
         book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
         book_reviews = book.review_set.all()
         users_already_reviewed = User.objects.filter(review__in=book_reviews)
-        if book.is_published() and request.user not in users_already_reviewed:
+
+        if not book.is_published() or request.user in users_already_reviewed:
             return redirect(book)
+
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -164,7 +170,7 @@ class ReviewDeleteView(generic.edit.DeleteView):
 class MyReviewsListView(generic.list.ListView):
     template_name = 'br/my_reviews.html'
     context_object_name = 'my_reviews'
-    paginate_by = 10
+    paginate_by = PAGINATION_NUMBER
 
     def get_queryset(self):
         return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
@@ -173,7 +179,7 @@ class MyReviewsListView(generic.list.ListView):
 class SearchListView(generic.list.ListView):
     template_name = 'br/search.html'
     context_object_name = 'results'
-    paginate_by = 10
+    paginate_by = PAGINATION_NUMBER
 
     def get(self, request, *args, **kwargs):
         if not self.request.GET.get('q'):
