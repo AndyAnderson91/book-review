@@ -1,6 +1,7 @@
 import datetime
 
 from django.test import TestCase
+from django.utils.text import slugify
 from django.contrib.auth.models import User
 from br.models import Author, Book, Genre, Review
 
@@ -80,36 +81,31 @@ class BookTestCase(TestCase):
     def setUpTestData(cls):
         # Book published some time ago.
         cls.past_book = Book.objects.create(
-            title='past_book',
+            title='past book',
+            slug=slugify('past book'),
             pub_date=datetime.date.today() - datetime.timedelta(days=10)
         )
         # Book published today.
         cls.today_book = Book.objects.create(
-            title='present_book',
+            title='today book',
+            slug=slugify('today book'),
             pub_date=datetime.date.today()
         )
         # Book to be released in the future.
         cls.future_book = Book.objects.create(
-            title='future_book',
+            title='future book',
+            slug=slugify('future book'),
             pub_date=datetime.date.today() + datetime.timedelta(days=10)
         )
+        cls.books = [cls.past_book, cls.today_book, cls.future_book]
 
     def test_past_book_is_published(self):
-        """
-        Expects True.
-        """
         self.assertTrue(self.past_book.is_published())
 
     def test_today_book_is_published(self):
-        """
-        Expects True.
-        """
         self.assertTrue(self.today_book.is_published())
 
-    def test_future_book_is_published(self):
-        """
-        Expects False.
-        """
+    def test_future_book_is_not_published(self):
         self.assertFalse(self.future_book.is_published())
 
     def test_unique_together(self):
@@ -118,9 +114,15 @@ class BookTestCase(TestCase):
         """
         with self.assertRaises(Exception):
             Book.objects.create(
-                title='present_book',
+                title='today book',
+                slug=slugify('today book'),
                 pub_date=datetime.date.today()
             )
+
+    def test_get_absolute_url(self):
+        for book in self.books:
+            response = self.client.get(book.get_absolute_url())
+            self.assertEqual(response.status_code, 200)
 
 
 class GenreTestCase(TestCase):

@@ -1,7 +1,7 @@
 from django.db.models import Avg, Count, Value
 from django.db.models.functions import Coalesce, Concat
 
-from .models import Book, Author
+from br.models import Book, Author
 
 
 def get_annotated_books(books):

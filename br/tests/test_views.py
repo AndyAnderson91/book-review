@@ -4,7 +4,7 @@ from random import randrange
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from br.models import Author, Book, Genre, Review
+from br.models import Book, Review
 from br.views import BOOKS_PER_PAGE, REVIEWS_PER_PAGE
 from django.utils.text import slugify
 
@@ -52,46 +52,46 @@ class IndexListViewTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        # Creates 14 published books to make sure they are not sent to template
+        # Creates 14 published books to make sure they are not sent to template.
         cls.published_books = create_books(14, published=True)
 
-    def test_index_view_url_accessible_by_name(self):
+    def test_view_accessible_by_name(self):
         """
         Tests reverse using view name.
         """
         response = self.client.get(reverse('br:index'))
         self.assertEqual(response.status_code, 200)
 
-    def test_no_anticipated_books_message(self):
-        """
-        If no anticipated books, an appropriate message is displayed.
-        """
-        response = self.client.get(reverse('br:index'))
-        self.assertContains(response, 'No books are anticipated at the moment')
-
-    def test_no_anticipated_books_queryset(self):
+    def test_empty_queryset(self):
         """
         If no anticipated books, queryset sent to template is empty.
         """
         response = self.client.get(reverse('br:index'))
         self.assertQuerysetEqual(response.context['anticipated_books'], [])
 
+    def test_empty_queryset_message(self):
+        """
+        If no anticipated books, an appropriate message is displayed.
+        """
+        response = self.client.get(reverse('br:index'))
+        self.assertContains(response, 'No books are anticipated at the moment')
+
     def test_anticipated_books_sent_to_template(self):
         """
         If anticipated books exist, they are sent to template.
         """
         # Creating 32 anticipated books.
-        create_books(32, published=False)
+        books = create_books(32, published=False)
         response = self.client.get(reverse('br:index'))
         self.assertTrue(response.context['anticipated_books'])
 
-    def test_anticipated_books_pagination_on(self):
+    def test_pagination_on(self):
         # Creating 32 anticipated books.
         create_books(32, published=False)
         response = self.client.get(reverse('br:index'))
         self.assertTrue(response.context['is_paginated'])
 
-    def test_anticipated_books_per_page(self):
+    def test_books_per_page(self):
         # Creating 32 anticipated books.
         anticipated_books = create_books(32, published=False)
         response = self.client.get(reverse('br:index'))
@@ -100,7 +100,7 @@ class IndexListViewTest(TestCase):
         else:
             self.assertEqual(len(response.context['page_obj']), len(anticipated_books))
 
-    def test_anticipated_books_count_sent_to_template(self):
+    def test_books_count_sent_to_template(self):
         # Creating 32 anticipated books.
         anticipated_books = create_books(32, published=False)
         response = self.client.get(reverse('br:index'))
@@ -110,22 +110,27 @@ class IndexListViewTest(TestCase):
 class BooksListViewTest(TestCase):
     """
     Class for testing BooksListView
-    This view is used by 3 urls: /recent/, /popular/, /best_rated/
+    This view is used by 3 urls: /recent/, /popular/, /best_rated/.
     Each url defines sorting type of published books.
     Only published books can be displayed.
     """
 
     @classmethod
     def setUpTestData(cls):
-        # Creates 27 published books to make sure they are not sent to template.
+        # Creates 27 anticipated books to make sure they are not sent to template.
         cls.anticipated_books = create_books(27, published=False)
 
-    def test_books_list_view_accessible_by_name(self):
+    def test_view_accessible_by_name(self):
         for arg in ['recent', 'popular', 'best_rated']:
             response = self.client.get(reverse('br:books_list', args=(arg,)))
             self.assertEqual(response.status_code, 200)
 
-    def test_no_published_books_message(self):
+    def test_empty_queryset(self):
+        for arg in ['recent', 'popular', 'best_rated']:
+            response = self.client.get(reverse('br:books_list', args=(arg,)))
+            self.assertQuerysetEqual(response.context['books'], [])
+
+    def test_empty_queryset_message(self):
         """
         If no published books, an appropriate message is displayed.
         """
@@ -133,15 +138,7 @@ class BooksListViewTest(TestCase):
             response = self.client.get(reverse('br:books_list', args=(arg,)))
             self.assertContains(response, 'No published books are added to site')
 
-    def test_no_published_books_empty_queryset(self):
-        """
-        If no published books, an empty set is sent to template.
-        """
-        for arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('br:books_list', args=(arg,)))
-            self.assertQuerysetEqual(response.context['books'], [])
-
-    def test_published_books_pagination_on(self):
+    def test_pagination_on(self):
         # Creating 49 published books.
         create_books(49, published=True)
 
@@ -149,15 +146,7 @@ class BooksListViewTest(TestCase):
             response = self.client.get(reverse('br:books_list', args=(url_arg,)))
             self.assertTrue(response.context['is_paginated'])
 
-    def test_published_books_sent_to_template_count(self):
-        # Creating 49 published books.
-        published_books = create_books(49, published=True)
-
-        for url_arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('br:books_list', args=(url_arg,)))
-            self.assertEqual(response.context['paginator'].count, len(published_books))
-
-    def test_published_books_per_page(self):
+    def test_books_per_page(self):
         # Creating 49 published books.
         published_books = create_books(49, published=True)
 
@@ -168,11 +157,19 @@ class BooksListViewTest(TestCase):
             else:
                 self.assertEqual(len(response.context['page_obj']), len(published_books))
 
+    def test_books_sent_to_template_count(self):
+        # Creating 49 published books.
+        published_books = create_books(49, published=True)
+
+        for url_arg in ['recent', 'popular', 'best_rated']:
+            response = self.client.get(reverse('br:books_list', args=(url_arg,)))
+            self.assertEqual(response.context['paginator'].count, len(published_books))
+
 
 class BookDetailViewTest(TestCase):
     """
     Class for testing BookDetailView.
-    Every book is accessible with query_pk_and_slug = True
+    Every book is accessible with query_pk_and_slug = True.
     Only published books may have reviews.
     If book has reviews, they're displayed on book detail page.
     """
@@ -180,7 +177,7 @@ class BookDetailViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         """
-        Creating 1 published and 1 anticipated books
+        Creating 1 published book, 1 anticipated book and user.
         """
         cls.published_book = create_books(1, published=True)[0]
         cls.anticipated_book = create_books(1, published=False)[0]
@@ -188,12 +185,12 @@ class BookDetailViewTest(TestCase):
 
         cls.books = [cls.published_book, cls.anticipated_book]
 
-    def test_book_url_accessible_by_name(self):
+    def test_view_accessible_by_name(self):
         for book in self.books:
             response = self.client.get(book.get_absolute_url())
             self.assertEqual(response.status_code, 200)
 
-    def test_book_context_sent_to_template(self):
+    def test_book_sent_to_template(self):
         for book in self.books:
             response = self.client.get(book.get_absolute_url())
             self.assertEqual(response.context['book'], book)
@@ -572,7 +569,7 @@ class SearchListViewTest(TestCase):
         cls.anticipated_books = create_books(16, published=False)
         cls.books = cls.published_books + cls.anticipated_books
 
-    def test_accessible_by_view_name(self):
+    def test_view_accessible_by_name(self):
         response = self.client.get(reverse('br:search'))
         self.assertEqual(response.status_code, 200)
 
@@ -625,7 +622,7 @@ class SearchListViewTest(TestCase):
         })
         self.assertEqual(response.context['paginator'].count, len(self.books))
 
-    def test_zero_match_queryset(self):
+    def test_empty_queryset(self):
         """
     This time q is not empty, but there is no matching results.
         """

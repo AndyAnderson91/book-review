@@ -1,5 +1,5 @@
 from django.db.models import Q
-from .annotations import BOOKS, AUTHORS
+from br.custom.annotations import BOOKS, AUTHORS
 
 
 SEARCH_CATEGORIES = ['book', 'author', 'genre', 'year', 'any']
