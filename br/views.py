@@ -78,7 +78,6 @@ class BookDetailView(generic.detail.DetailView):
             'page_obj': page_obj,
             'reviews': reviews,
         })
-
         return context
 
 
@@ -199,5 +198,4 @@ class SearchListView(generic.list.ListView):
             'category': self.request.GET.get('category'),
             'SEARCH_CATEGORIES': SEARCH_CATEGORIES,
         })
-
         return context

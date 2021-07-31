@@ -168,6 +168,3 @@ class ReviewTestCase(TestCase):
                 book=Book.objects.get(title='book'),
                 owner=User.objects.get(username='andy')
             )
-
-
-

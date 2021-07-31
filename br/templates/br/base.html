@@ -12,7 +12,7 @@
         <a href="{% url 'br:books_list' sort_type='best_rated' %}">Best rated</a>
 
         <form method="get" action="{% url 'br:search' %}">
-            <input type="search" name="q" placeholder="Book, author, genre, year..." value="{{ request.GET.q }}">
+            {{ search_form }}
             <input type="hidden" name="category" value="any">
             <button>Search</button>
         </form>
