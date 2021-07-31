@@ -11,6 +11,7 @@ from .search import SEARCH_CATEGORIES, search
 
 
 BOOKS_PER_PAGE = 10
+REVIEWS_PER_PAGE = 2
 
 
 class IndexListView(generic.list.ListView):
@@ -68,7 +69,7 @@ class BookDetailView(generic.detail.DetailView):
             other_reviews = list(reviews)
 
         reviews = my_review + other_reviews
-        paginator = Paginator(reviews, 2)
+        paginator = Paginator(reviews, REVIEWS_PER_PAGE)
 
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -169,7 +170,7 @@ class ReviewDeleteView(generic.edit.DeleteView):
 class MyReviewsListView(generic.list.ListView):
     template_name = 'br/my_reviews.html'
     context_object_name = 'my_reviews'
-    paginate_by = BOOKS_PER_PAGE
+    paginate_by = REVIEWS_PER_PAGE
 
     def get_queryset(self):
         return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')

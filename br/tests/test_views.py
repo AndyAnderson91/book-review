@@ -1,10 +1,11 @@
 import datetime
+from random import randrange
 
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from br.models import Author, Book, Genre, Review
-from br.views import BOOKS_PER_PAGE
+from br.views import BOOKS_PER_PAGE, REVIEWS_PER_PAGE
 from django.utils.text import slugify
 
 
@@ -17,13 +18,30 @@ def create_books(n, published):
     # direction = -1 means timedelta will lower date.today(), +1 will increase.
     direction = -1 if published else 1
 
-    for book_number in range(1, n+1):
+    for book_number in range(n):
         books.append(Book.objects.create(
-            title='book №{0}'.format(book_number),
-            slug=slugify('book №{0}'.format(book_number)),
-            pub_date=datetime.date.today() + direction * datetime.timedelta(days=(book_number + 1))
+            title='book №{0}'.format(book_number+1),
+            slug=slugify('book №{0}'.format(book_number+1)),
+            pub_date=datetime.date.today() + direction * datetime.timedelta(days=(book_number+1))
         ))
     return books
+
+
+def create_reviews(books, user, n=1):
+    """
+    n - amount of reviews to create,
+    owner = user, book = book.
+    """
+    reviews = []
+    for review_number in range(n):
+        reviews.append(Review.objects.create(
+            rating=randrange(1, 6),
+            title='review №{0}'.format(review_number+1),
+            text='review №{0} text'.format(review_number+1),
+            book=books[review_number],
+            owner=user
+        ))
+    return reviews
 
 
 class IndexListViewTest(TestCase):
@@ -166,6 +184,7 @@ class BookDetailViewTest(TestCase):
         """
         cls.published_book = create_books(1, published=True)[0]
         cls.anticipated_book = create_books(1, published=False)[0]
+        cls.user = User.objects.create_user(username='andy', password='1')
 
         cls.books = [cls.published_book, cls.anticipated_book]
 
@@ -197,13 +216,7 @@ class BookDetailViewTest(TestCase):
         """
         Tests book detail page with review.
         """
-        review = Review.objects.create(
-            title='review title',
-            text='review text',
-            rating='5',
-            book=self.published_book,
-            owner=User.objects.create_user(username='andy', password='1')
-        )
+        review = create_reviews([self.published_book], self.user)[0]
         response = self.client.get(self.published_book.get_absolute_url())
         self.assertEqual(response.context['reviews'], [review])
 
@@ -275,7 +288,8 @@ class ReviewCreateViewTest(TestCase):
         # Posting data in CreateView built-in form.
         self.client.post(self.write_review_url, self.new_review_data)
         # Check review is created.
-        self.assertEqual(len(Review.objects.all()), 1)
+        reviews = Review.objects.all()
+        self.assertEqual(len(reviews), 1)
 
     def test_authenticated_user_with_no_review_redirect_after_post(self):
         """
@@ -295,7 +309,7 @@ class ReviewCreateViewTest(TestCase):
         # Log user in.
         self.client.force_login(self.user)
         # Creating first review.
-        Review.objects.create(**self.new_review_data)
+        create_reviews([self.book], self.user)
         # If user will try to get write review page again he will be redirected.
         response = self.client.get(self.write_review_url)
         self.assertEqual(response.status_code, 302)
@@ -316,14 +330,7 @@ class ReviewUpdateViewTest(TestCase):
             'pk': cls.book.id,
             'slug': cls.book.slug
         })
-        cls.review_data1 = {
-            'rating': '4',
-            'title': 'review_title',
-            'text': 'review_text',
-            'book': cls.book,
-            'owner': cls.user
-        }
-        cls.review_data2 = {
+        cls.review_update_data = {
             'rating': '5',
             'title': 'updated_review_title',
             'text': 'updated_review_text',
@@ -360,8 +367,8 @@ class ReviewUpdateViewTest(TestCase):
         """
         # Log user in.
         self.client.force_login(self.user)
-        # Creating review with data1
-        Review.objects.create(**self.review_data1)
+        # Creating review with standard data.
+        create_reviews([self.book], self.user)
         # Get edit review page.
         response = self.client.get(self.update_review_url)
         self.assertEqual(response.status_code, 200)
@@ -369,20 +376,20 @@ class ReviewUpdateViewTest(TestCase):
     def test_authenticated_user_with_review_post(self):
         # Log user in.
         self.client.force_login(self.user)
-        # Creating review with data1
-        Review.objects.create(**self.review_data1)
-        # Posts updated data to created review.
-        self.client.post(self.update_review_url, self.review_data2)
-        # Tests if review was changed.
-        self.assertEqual(Review.objects.first().title, self.review_data2['title'])
+        # Creating review with standard data.
+        create_reviews([self.book], self.user)
+        # Posts new data to update review.
+        self.client.post(self.update_review_url, self.review_update_data)
+        # Tests if review was updated.
+        self.assertEqual(Review.objects.first().title, self.review_update_data['title'])
 
     def test_authenticated_user_with_review_post_redirect(self):
         # Log user in.
         self.client.force_login(self.user)
-        # Creating review with data1
-        Review.objects.create(**self.review_data1)
-        # Posts updated data to created review.
-        response = self.client.post(self.update_review_url, self.review_data2)
+        # Creating review with standard data.
+        create_reviews([self.book], self.user)
+        # Posts new data to update review.
+        response = self.client.post(self.update_review_url, self.review_update_data)
         # Redirect to book page after review update.
         self.assertEqual(response.status_code, 302)
 
@@ -402,13 +409,6 @@ class ReviewDeleteViewTest(TestCase):
             'pk': cls.book.id,
             'slug': cls.book.slug
         })
-        cls.review_data = {
-            'rating': '4',
-            'title': 'review_title',
-            'text': 'review_text',
-            'book': cls.book,
-            'owner': cls.user
-        }
 
     def test_non_authenticated_user_redirect(self):
         """
@@ -440,10 +440,9 @@ class ReviewDeleteViewTest(TestCase):
         # Log user in.
         self.client.force_login(self.user)
         # Creating review.
-        Review.objects.create(**self.review_data)
+        create_reviews([self.book], self.user)
         response = self.client.get(self.delete_review_url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Are you sure you want to delete review on «{0}»?'.format(self.book.title))
 
     def test_authenticated_user_with_review_get_message(self):
         """
@@ -452,7 +451,7 @@ class ReviewDeleteViewTest(TestCase):
         # Log user in.
         self.client.force_login(self.user)
         # Creating review.
-        Review.objects.create(**self.review_data)
+        create_reviews([self.book], self.user)
         response = self.client.get(self.delete_review_url)
         self.assertContains(response, 'Are you sure you want to delete review on «{0}»?'.format(self.book.title))
 
@@ -473,8 +472,84 @@ class ReviewDeleteViewTest(TestCase):
         # Log user in.
         self.client.force_login(self.user)
         # Creating review.
-        Review.objects.create(**self.review_data)
+        create_reviews([self.book], self.user)
         # Posts updated data to created review.
         self.client.post(self.delete_review_url)
         # Redirect to book page after review update.
         self.assertEqual(len(self.book.review_set.all()), 0)
+
+
+class MyReviewListViewTest(TestCase):
+    """
+    Class for testing MyReviewListView.
+    This view is needed to display all user's reviews.
+    """
+    @classmethod
+    def setUpTestData(cls):
+        """
+        Creating 39 books and 1 user.
+        """
+        cls.books = create_books(39, published=True)
+        cls.user = User.objects.create_user(username='andy', password='1')
+        cls.my_reviews_url = reverse('br:my_reviews')
+
+    def test_non_authenticated_user_redirect(self):
+        """
+        Non authenticated users should be redirected to login page with 'next' parameter,
+        """
+        response = self.client.get(self.my_reviews_url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_non_authenticated_user_redirect_url(self):
+        response = self.client.get(self.my_reviews_url)
+        self.assertEqual(response['location'], '{0}?next=/my_reviews/'.format(
+            reverse('users:login')[:-1])
+                         )
+
+    def test_authenticated_user_get(self):
+        """
+        Authenticated user has access to read, edit and delete his reviews.
+        """
+        # Log user in.
+        self.client.force_login(self.user)
+        response = self.client.get(self.my_reviews_url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_authenticated_user_with_no_reviews_message(self):
+        # Log user in.
+        self.client.force_login(self.user)
+        response = self.client.get(self.my_reviews_url)
+        self.assertContains(response, 'No written reviews yet')
+
+    def test_authenticated_user_with_no_reviews_queryset(self):
+        # Log user in.
+        self.client.force_login(self.user)
+        response = self.client.get(self.my_reviews_url)
+        self.assertQuerysetEqual(response.context['my_reviews'], [])
+
+    def test_pagination_on(self):
+        # Log user in.
+        self.client.force_login(self.user)
+        # Creates 18 reviews
+        reviews = create_reviews(self.books, self.user, n=18)
+        response = self.client.get(self.my_reviews_url)
+        self.assertTrue(response.context['is_paginated'])
+
+    def test_reviews_per_page(self):
+        # Log user in.
+        self.client.force_login(self.user)
+        # Creating 27 reviews.
+        reviews = create_reviews(self.books, self.user, n=27)
+        response = self.client.get(self.my_reviews_url)
+        if len(reviews) >= REVIEWS_PER_PAGE:
+            self.assertEqual(len(response.context['page_obj']), REVIEWS_PER_PAGE)
+        else:
+            self.assertEqual(len(response.context['page_obj']), len(reviews))
+
+    def test_reviews_count_sent_to_template(self):
+        # Log user in.
+        self.client.force_login(self.user)
+        # Creates 24 reviews
+        reviews = create_reviews(self.books, self.user, n=24)
+        response = self.client.get(self.my_reviews_url)
+        self.assertEqual(response.context['paginator'].count, len(reviews))
