@@ -2,6 +2,9 @@ from django import forms
 
 
 class SearchForm(forms.Form):
+    """
+    This form sends data to SearchListView via GET method.
+    """
     q = forms.CharField(
         max_length=50,
         label='',

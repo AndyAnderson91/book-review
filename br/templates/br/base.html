@@ -16,6 +16,7 @@
             <input type="hidden" name="category" value="any">
             <button>Search</button>
         </form>
+
         {% if user.is_authenticated %}
             Hello, <a href="{% url 'br:my_reviews' %}">{{user.username|title}}</a>!
             <a href="{% url 'users:logout' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Logout</a>

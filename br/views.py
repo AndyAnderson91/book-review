@@ -8,6 +8,7 @@ from django.views import generic
 from .annotations import BOOKS
 from .models import Book, Review
 from .search import SEARCH_CATEGORIES, search
+from .forms import SearchForm
 
 
 BOOKS_PER_PAGE = 10
@@ -182,9 +183,14 @@ class SearchListView(generic.list.ListView):
     paginate_by = BOOKS_PER_PAGE
 
     def get(self, request, *args, **kwargs):
-        if not self.request.GET.get('q'):
-            return render(request, 'br/empty_request.html')
-        return super().get(request, *args, **kwargs)
+        form = SearchForm(data=request.GET)
+        
+        if form.is_valid():
+            return super().get(request, *args, **kwargs)
+        elif not form.data.get('q'):
+            return render(request, 'br/empty_search_request.html')
+        else:
+            return render(request, 'br/wrong_search_request.html')
 
     def get_queryset(self):
         q = self.request.GET.get('q')
