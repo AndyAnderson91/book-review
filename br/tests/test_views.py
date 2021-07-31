@@ -553,3 +553,94 @@ class MyReviewListViewTest(TestCase):
         reviews = create_reviews(self.books, self.user, n=24)
         response = self.client.get(self.my_reviews_url)
         self.assertEqual(response.context['paginator'].count, len(reviews))
+
+
+class SearchListViewTest(TestCase):
+    """
+    Class for testing SearchListView.
+    This view receives request.GET containing search_request(q) and category(category),
+    processes it and sends list of founded books to template.
+    Both authenticated and non authenticated users have access to SearchListViewTest.
+    """
+    @classmethod
+    def setUpTestData(cls):
+        """
+        Creating published and anticipated books.
+        Both can be displayed in search results.
+        """
+        cls.published_books = create_books(25, published=True)
+        cls.anticipated_books = create_books(16, published=False)
+        cls.books = cls.published_books + cls.anticipated_books
+
+    def test_accessible_by_view_name(self):
+        response = self.client.get(reverse('br:search'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_empty_request_appropriate_message(self):
+        """
+        Tests case then q = ''.
+        """
+        response = self.client.get(reverse('br:search'))
+        self.assertContains(response, 'Empty request. Type something to search')
+
+    def test_nothing_found_appropriate_message(self):
+        q = 'no matched request'
+        response = self.client.get(reverse('br:search'), {
+            'q': q,
+            'category': 'any'
+        })
+        self.assertContains(response, 'Nothing found for «{0}» :('.format(q))
+
+    def test_non_existed_category_appropriate_message(self):
+        response = self.client.get(reverse('br:search'), {
+            'q': '1',
+            'category': 'non-existed category'
+        })
+        self.assertContains(response, 'No such category')
+
+    def test_pagination_on(self):
+        response = self.client.get(reverse('br:search'), {
+            'q': 'book',
+            'category': 'any'
+        })
+        self.assertTrue(response.context['is_paginated'])
+
+    def test_reviews_per_page(self):
+        response = self.client.get(reverse('br:search'), {
+            'q': 'book',
+            'category': 'any'
+        })
+        if len(self.books) >= BOOKS_PER_PAGE:
+            self.assertEqual(len(response.context['page_obj']), BOOKS_PER_PAGE)
+        else:
+            self.assertEqual(len(response.context['page_obj']), len(self.books))
+
+    def test_full_match_queryset(self):
+        """
+        Since create_books method uses title pattern 'book №...', every book has word 'book' in its title, so q = 'book' will add every single book to results list.
+        """
+        response = self.client.get(reverse('br:search'), {
+            'q': 'book',
+            'category': 'any'
+        })
+        self.assertEqual(response.context['paginator'].count, len(self.books))
+
+    def test_zero_match_queryset(self):
+        """
+    This time q is not empty, but there is no matching results.
+        """
+        response = self.client.get(reverse('br:search'), {
+            'q': 'no_results_request',
+            'category': 'any'
+        })
+        self.assertEqual(response.context['paginator'].count, 0)
+
+    def test_several_matches_queryset(self):
+        """
+        This tests case then q = '1'. Many books has '1' in title, but not all.
+        """
+        response = self.client.get(reverse('br:search'), {
+            'q': '1',
+            'category': 'book'
+        })
+        self.assertTrue(0 < response.context['paginator'].count < len(self.books))

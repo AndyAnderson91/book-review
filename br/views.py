@@ -184,7 +184,7 @@ class SearchListView(generic.list.ListView):
 
     def get(self, request, *args, **kwargs):
         form = SearchForm(data=request.GET)
-        
+
         if form.is_valid():
             return super().get(request, *args, **kwargs)
         elif not form.data.get('q'):
