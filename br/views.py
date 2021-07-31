@@ -12,7 +12,7 @@ from .forms import SearchForm
 
 
 BOOKS_PER_PAGE = 10
-REVIEWS_PER_PAGE = 2
+REVIEWS_PER_PAGE = 5
 
 
 class IndexListView(generic.list.ListView):
