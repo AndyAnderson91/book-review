@@ -1,7 +1,10 @@
 {%  extends 'br/base.html' %}
 
+{% block page_header %}
+    <h2>New review on «{{book.title}}»</h2>
+{% endblock page_header %}
+
 {% block content %}
-    <h1>New review on «{{book.title}}»</h1>
     <form method="post" action="{% url 'br:add_review' book.id book.slug %}">
         {% csrf_token %}
         {{form.as_p}}

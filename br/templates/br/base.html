@@ -10,7 +10,6 @@
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     </head>
     <body>
-
         <nav class="navbar navbar-expand-md navbar-light bg-light mb-4 border">
             <a class="navbar-brand" href="{% url 'br:index' %}">Book review</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,13 +51,16 @@
                         </li>
                     {% endif %}
                 </ul>
-
             </div>
         </nav>
 
-        <main>
-            {% block content %} {% endblock content %}
+        <main role="main" class="container">
+            <div class="pb-2 mb-2 border-bottom">
+                {% block page_header %}{% endblock page_header %}
+            </div>
+            <div>
+                {% block content %} {% endblock content %}
+            </div>
         </main>
     </body>
-
 </html>

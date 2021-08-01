@@ -1,18 +1,16 @@
 {% extends 'br/base.html' %}
 
+{% block page_header %}
+    <h2>My reviews</h2>
+{% endblock page_header %}
+
 {% block content %}
-
     {% if my_reviews %}
-        <h2>My reviews:</h2>
-
         {% for review in my_reviews %}
             {% include 'br/review_bar.html' %}
         {% endfor %}
-
     {% else %}
-        <h2>No written reviews yet</h2>
+        <h4>No reviews written yet</h4>
     {% endif %}
-
     {% include 'br/pagination.html' %}
-
 {% endblock content %}

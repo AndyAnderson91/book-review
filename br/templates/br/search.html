@@ -1,19 +1,21 @@
 {%  extends 'br/base.html' %}
 
+
+{% block page_header %}
+    <h2>Search results</h2>
+{% endblock page_header %}
+
 {% block content %}
-
     {% if results %}
-
-        <h2>
-            {% if category == 'book' %}Books found by title:
-            {% elif category == 'author' %}Books written by «{{q}}»:
-            {% elif category == 'genre' %}Books in «{{q}}» genre:
-            {% elif category == 'year' %}Books of «{{q}}» year:
-            {% elif category == 'any' %}Books found for «{{q}}» request:
+        <h4>
+            {% if category == 'book' %}Books found by title
+            {% elif category == 'author' %}Books written by «{{q}}»
+            {% elif category == 'genre' %}Books in «{{q}}» genre
+            {% elif category == 'year' %}Books of «{{q}}» year
+            {% elif category == 'any' %}Books found for «{{q}}» request
             {% endif %}
-        </h2>
-        <h3>{{ paginator.count }} result{{ paginator.count|pluralize }}</h3>
-
+            ({{ paginator.count }}):
+        </h4>
         <ul>
             {% for book in page_obj %}
 
@@ -24,12 +26,12 @@
 
     {% elif category in SEARCH_CATEGORIES %}
 
-        <h2>Nothing found for «{{q}}» :(</h2>
+        <h4>Nothing found for «{{q}}» :(</h4>
 
     {% else %}
 
-        <h2>No such category</h2>
-        <h3>
+        <h4>No such category</h4>
+        <p>
             Please choose among
             {% for category in SEARCH_CATEGORIES %}
                 {% if forloop.revcounter > 2 %}
@@ -40,8 +42,7 @@
                     «{{ category }}».
                 {% endif %}
             {% endfor %}
-        </h3>
-
+        </p>
 
     {% endif %}
 

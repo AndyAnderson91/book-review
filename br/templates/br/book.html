@@ -1,7 +1,10 @@
 {% extends 'br/base.html' %}
 
+{% block page_header %}
+    <h2>{{book.title}}</h2>
+{% endblock page_header %}
+
 {% block content %}
-    <h1>{{book.title}}</h1>
     <p>Author{{ book.authors.all|length|pluralize }}:
         {% for author in book.authors.all %}
             <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>{% if not forloop.last %},{% endif %}
@@ -19,32 +22,23 @@
     {% endif %}
     <p>Original language: {{book.language}}</p>
     <p>{{book.description}}</p>
-
     <a id="reviews"></a>
     {% if book.is_published %}
-
         {% if reviews %}
-            <h2>Reviews({{reviews|length}}):</h2>
+            <h4>Reviews({{reviews|length}}):</h4>
         {% else %}
-            <h2>No reviews yet</h2>
+            <h4>No reviews yet</h4>
         {% endif %}
-
         {% if reviews.0.owner != request.user %}
             <p>
                 <a href="{% url 'br:add_review' book.id book.slug %}">Write review</a>
             </p>
         {% endif %}
-
         {% for review in page_obj %}
             {% include 'br/review_bar.html' %}
         {% endfor %}
-
     {% else %}
-
-        <h2>Reviews can be written as soon as the book is published</h2>
-
+        <h4>Reviews can be written as soon as the book is published</h4>
     {% endif %}
-
     {% include 'br/pagination.html' %}
-
 {% endblock content %}
