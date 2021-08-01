@@ -32,8 +32,10 @@
         <h3>
             Please choose among
             {% for category in SEARCH_CATEGORIES %}
-                {% if not forloop.last %}
+                {% if forloop.revcounter > 2 %}
                     «{{ category }}»,
+                {% elif forloop.revcounter == 2 %}
+                    «{{ category }}» or
                 {% else %}
                     «{{ category }}».
                 {% endif %}

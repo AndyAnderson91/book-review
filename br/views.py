@@ -7,7 +7,7 @@ from django.views import generic
 
 from br.custom.annotations import BOOKS
 from .models import Book, Review
-from .search import SEARCH_CATEGORIES, search
+from br.custom.search import SEARCH_CATEGORIES, search
 from .forms import SearchForm
 
 
