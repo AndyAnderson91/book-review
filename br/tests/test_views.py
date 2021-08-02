@@ -136,7 +136,7 @@ class BooksListViewTest(TestCase):
         """
         for arg in ['recent', 'popular', 'best_rated']:
             response = self.client.get(reverse('br:books_list', args=(arg,)))
-            self.assertContains(response, 'No published books are added to site')
+            self.assertContains(response, 'No published books in database')
 
     def test_pagination_on(self):
         # Creating 49 published books.
@@ -516,7 +516,7 @@ class MyReviewListViewTest(TestCase):
         # Log user in.
         self.client.force_login(self.user)
         response = self.client.get(self.my_reviews_url)
-        self.assertContains(response, 'No written reviews yet')
+        self.assertContains(response, 'No reviews written yet')
 
     def test_authenticated_user_with_no_reviews_queryset(self):
         # Log user in.
