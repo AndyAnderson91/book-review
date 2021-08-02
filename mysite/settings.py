@@ -35,7 +35,10 @@ INSTALLED_APPS = [
     'br.apps.BrConfig',
     # Users app.
     'users.apps.UsersConfig',
-    # Default apps
+    # Crispy and bootstrap.
+    'crispy_forms',
+    'crispy_bootstrap5',
+    # Default apps.
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
