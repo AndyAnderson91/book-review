@@ -11,7 +11,7 @@
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 border">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3 pt-0 pb-0 border">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'br:index' %}">Book review</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,9 +31,11 @@
                     </ul>
 
                     <form class="d-flex" method="get" action="{% url 'br:search' %}">
-                        {{ search_form }}
+                        <div class="ms-1 pt-3 mb-0">
+                            {{ search_form|crispy }}
+                        </div>
                         <input type="hidden" name="category" value="any">
-                        <button class="btn btn-success ms-1" type="submit">Search</button>
+                        <button class="btn btn-success ms-1 mb-3 mt-3" type="submit">Search</button>
                     </form>
 
                     <ul class="navbar-nav ms-auto">

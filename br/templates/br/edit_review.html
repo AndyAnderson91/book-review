@@ -4,9 +4,14 @@
     <h2>Edit my review on «{{book.title}}»</h2>
 {% endblock page_header %}
 {% block content %}
+    {% load crispy_forms_tags %}
     <form method="post" action="{% url 'br:edit_review' book.id book.slug %}">
         {% csrf_token %}
-        {{form.as_p}}
-        <button name="submit">Save edits</button>
+        <div class="col-md-1 mb-0">
+            {{ form.rating|as_crispy_field }}
+        </div>
+        {{ form.title|as_crispy_field }}
+        {{ form.text|as_crispy_field }}
+        <button class="btn btn-success" name="submit">Save changes</button>
     </form>
 {% endblock content %}
