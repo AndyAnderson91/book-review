@@ -46,7 +46,7 @@ class Book(models.Model):
     language = models.CharField(max_length=50)
     pub_date = models.DateField(help_text='YYYY-MM-DD')
     description = models.TextField(max_length=1024, blank=True)
-    img = models.ImageField(upload_to='img/book_img', default='img/book_img/default_book.png')
+    img = models.ImageField(upload_to='img/book_img/', default='img/book_img/default_book.png')
     slug = models.SlugField(max_length=80)
 
     class Meta:

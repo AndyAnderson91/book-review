@@ -8,6 +8,7 @@
         {% load static %}
         <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'custom/css/no_asterisk.css' %}" rel="stylesheet">
+        <link href="{% static 'custom/css/no_li_points.css' %}" rel="stylesheet">
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     </head>
     <body>
@@ -61,7 +62,7 @@
         </nav>
 
         <div role="main" class="container">
-            <div class="pb-1 mb-2 border-bottom">
+            <div class="pb-1 mb-4 border-bottom">
                 {% block page_header %}{% endblock page_header %}
             </div>
             <div>

@@ -5,6 +5,7 @@
 {% endblock page_header %}
 
 {% block content %}
+    <img src="{{ book.img.url }}" height="300" width="300">
     <p>Author{{ book.authors.all|length|pluralize }}:
         {% for author in book.authors.all %}
             <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>{% if not forloop.last %},{% endif %}
