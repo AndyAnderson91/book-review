@@ -1,68 +1,17 @@
-{#<p>#}
-{#    <a href="{{book.get_absolute_url}}">{{book.title}}</a>#}
-{##}
-{#    {% if book.is_published %}#}
-{#        (published in#}
-{#        {% if request.path == '/search/' and category == 'year' %}#}
-{#            {{book.pub_date.year}})#}
-{#        {% else %}#}
-{#            <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}})</a>#}
-{#        {% endif %}#}
-{##}
-{#    {% else %}#}
-{#        (coming {{book.pub_date|date:'F'}} {{book.pub_date.day}},#}
-{#        {% if request.path == '/search/' and category == 'year' %}#}
-{#            {{book.pub_date.year}})#}
-{#        {% else %}#}
-{#            <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}})</a>#}
-{#        {% endif %}#}
-{##}
-{#    {% endif %}#}
-{#</p>#}
-
-{#<img src="{{ book.img.url }}" height="200" width="200">#}
-
-{#<p>by {% for author in book.authors.all %}#}
-{#    {% if request.path == '/search/' and category == 'author' %}#}
-{#        {{author}}#}
-{#    {% else %}#}
-{#        <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>#}
-{#    {% endif %}#}
-{#    {% if not forloop.last %},{% endif %}#}
-{#{% endfor %}#}
-{#</p>#}
-
-{#<p>Rating:#}
-{#    {% if book.avg_rating %}#}
-{#        {{book.avg_rating|floatformat:2}} (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)#}
-{#    {% else %}#}
-{#        - (no reviews yet)#}
-{#    {% endif %}#}
-{#</p>#}
-
-{#<p>#}
-{#    {% if book.description|length > 300 %}#}
-{#        {{book.description|slice:':300'}}...#}
-{#    {% else %}#}
-{#        {{book.description}}#}
-{#    {% endif %}#}
-{#</p>#}
-
-<div class="card mb-3">
+<div class="card mb-3" style="max-width: 1080px;">
     <div class="row g-0">
-        <div class="col-md-2">
+        <div class="col-sm-2">
             <a href="{{book.get_absolute_url}}">
-                <img src="{{ book.img.url }}" class="img-fluid rounded-start" width="180" >
+                <img src="{{ book.img.url }}" class="img-fluid rounded border" width="160" >
             </a>
         </div>
-        <div class="col-md-10">
+        <div class="col-sm-10">
             <div class="card-body">
-
                 <h5 class="card-title">
                     <a href="{{book.get_absolute_url}}">{{book.title}}</a>
                 </h5>
 
-                <p>by {% for author in book.authors.all %}
+                <p class="card-text">by {% for author in book.authors.all %}
                     {% if request.path == '/search/' and category == 'author' %}
                         {{author}}
                     {% else %}
@@ -71,7 +20,7 @@
                     {% if not forloop.last %},{% endif %}
                 {% endfor %}
                 </p>
-                <p>
+                <p class="card-text">
                     {% if book.is_published %}
                         Rating:
                         {% if book.avg_rating %}
@@ -99,6 +48,6 @@
                 </p>
 
             </div>
+            {#        </div>#}
         </div>
     </div>
-</div>
