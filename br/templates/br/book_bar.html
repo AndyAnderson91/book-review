@@ -19,7 +19,7 @@
 
     {% endif %}
 </p>
-
+<img src="{{ book.img.url }}" height="200" width="200">
 <p>by {% for author in book.authors.all %}
     {% if request.path == '/search/' and category == 'author' %}
         {{author}}
