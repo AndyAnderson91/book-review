@@ -8,7 +8,11 @@
     {% load crispy_forms_tags %}
     <form method="post" action="{% url 'br:add_review' book.id book.slug %}">
         {% csrf_token %}
-        {{ form|crispy }}
+        <div class="col-md-1 mb-0">
+            {{ form.rating|as_crispy_field }}
+        </div>
+        {{ form.title|as_crispy_field }}
+        {{ form.text|as_crispy_field }}
         <button class="btn btn-success" name="submit">Add review</button>
     </form>
 {% endblock content %}

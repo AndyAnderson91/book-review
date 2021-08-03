@@ -8,7 +8,9 @@
     {% load crispy_forms_tags %}
     <form method="post">
         {% csrf_token %}
-        {{ form|crispy }}
+        <div class="col-md-4 mb-0">
+            {{ form|crispy }}
+        </div>
         <button class="btn btn-success" name="submit">Register</button>
     </form>
 {% endblock content %}
