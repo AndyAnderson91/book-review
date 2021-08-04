@@ -55,6 +55,7 @@ class BooksListView(generic.list.ListView):
 
 class BookDetailView(generic.detail.DetailView):
     model = Book
+    queryset = BOOKS
     query_pk_and_slug = True
     template_name = 'br/book.html'
 

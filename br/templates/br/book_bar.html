@@ -1,48 +1,47 @@
 <div class="card mb-3">
     <div class="row g-0">
-        <div class="col-sm-2">
+        <div class="col-sm-auto">
             <a href="{{book.get_absolute_url}}">
-                <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}">
+                <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 120px">
                 <img src="{{ book.small_img.url }}" class="card-img rounded border d-block d-sm-none" alt="{{ book.title }}">
             </a>
         </div>
-        <div class="col-sm-10">
+        <div class="col-sm container-fluid">
             <div class="card-body pt-2">
-                <h5 class="card-title">
-                    <a href="{{book.get_absolute_url}}">{{book.title}}</a>
-                </h5>
 
-                <p class="card-text">by {% for author in book.authors.all %}
-                    {% if request.path == '/search/' and category == 'author' %}
-                        {{author}}
-                    {% else %}
-                        <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>
-                    {% endif %}
-                    {% if not forloop.last %},{% endif %}
-                {% endfor %}
-                </p>
-                <p class="card-text">
+                <div class="row g-0 mb-2">
+                    <div class="col-md-auto">
+                        <h5 class="card-title">
+                            <a href="{{book.get_absolute_url}}">{{book.title}}</a>
+                        </h5>
+                        <p class="card-text mb-2">by {% for author in book.authors.all %}
+                            {% if request.path == '/search/' and category == 'author' %}
+                                {{author}}
+                            {% else %}
+                                <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>
+                            {% endif %}
+                            {% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                        </p>
+                    </div>
                     {% if book.is_published %}
-                        Rating:
-                        {% if book.avg_rating %}
-                            {{book.avg_rating|floatformat:2}} (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
-                        {% else %}
-                            - (no reviews yet)
-                        {% endif %}
-                    {% else %}
-                        Coming {{book.pub_date|date:'F'}} {{book.pub_date.day}},
-                        {% if request.path == '/search/' and category == 'year' %}
-                            {{book.pub_date.year}}
-                        {% else %}
-                            <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a>
-                        {% endif %}
-
+                        <div class="col-md-auto ms-auto">
+                            <p class="mb-2 pt-md-0 mb-md-0">
+                                {% if book.avg_rating %}
+                                    Rating: {{book.avg_rating|floatformat:2}}
+                                    (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
+                                {% else %}
+                                    Unrated
+                                {% endif %}
+                            </p>
+                        </div>
                     {% endif %}
-                </p>
+                </div>
 
                 <p class="card-text">
-                    {% if book.description|length > 500 %}
-                        {{book.description|slice:':500'}}...
+                    {% if book.description|length > 350 %}
+                        {{book.description|slice:':350'}}...
+                        <a href="{{ book.get_absolute_url }}#description">Read more</a>
                     {% else %}
                         {{book.description}}
                     {% endif %}

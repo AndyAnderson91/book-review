@@ -48,6 +48,7 @@ class Book(models.Model):
     description = models.TextField(max_length=1024, blank=True)
     full_img = models.ImageField(upload_to='img/book_img/full/', default='img/book_img/full/default-book-full.jpg')
     small_img = models.ImageField(upload_to='img/book_img/small/', default='img/book_img/small/default-book-small.jpg')
+    pages = models.PositiveIntegerField(default=500)
     slug = models.SlugField(max_length=80)
 
     class Meta:
