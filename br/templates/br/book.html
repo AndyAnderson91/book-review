@@ -5,34 +5,34 @@
 {% endblock page_header %}
 
 {% block content %}
-    <div class="row g-3 mb-3">
+    <div class="row g-3 mb-3" style="border-radius: .25rem; border: 1px solid rgba(0, 0, 0, 0)">
         <div class="col-sm-auto">
-            <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 210px;">
+            <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 185px;">
             <img src="{{ book.small_img.url }}" class="card-img rounded border d-block d-sm-none" alt="{{ book.title }}">
         </div>
         <div class="col-sm container-fluid pt-1">
 
             <div class="row g-0">
-                <div class="col-lg-auto">
+                {% if book.is_published %}
+                    <div class="col-md-auto ms-auto order-md-1">
+                        <p>
+                            {% if book.avg_rating %}
+                                Rating: {{book.avg_rating|floatformat:2}}
+                                (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
+                            {% else %}
+                                No reviewed
+                            {% endif %}
+                        </p>
+                    </div>
+                {% endif %}
+
+                <div class="col-md-auto order-md-0">
                     <p>Author{{ book.authors.all|length|pluralize }}:
                         {% for author in book.authors.all %}
                             <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>{% if not forloop.last %},{% endif %}
                         {% endfor %}
                     </p>
                 </div>
-
-                {% if book.is_published %}
-                    <div class="col-lg-auto ms-auto">
-                        <p>
-                            {% if book.avg_rating %}
-                                Rating: {{book.avg_rating|floatformat:2}}
-                                (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
-                            {% else %}
-                                Something
-                            {% endif %}
-                        </p>
-                    </div>
-                {% endif %}
             </div>
 
             <p>Genre{{ book.genres.all|length|pluralize }}:
@@ -44,9 +44,6 @@
                 <p>Publication year: <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
             {% else %}
                 <p>Expected at {{book.pub_date|date:'F'}} {{book.pub_date.day}}, <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
-            {% endif %}
-            {% if book.publisher %}
-                <p>First publisher: {{ book.publisher }}</p>
             {% endif %}
             <p>Country: {{ book.country }}</p>
             <p>Original language: {{ book.language }}</p>
