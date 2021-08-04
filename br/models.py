@@ -46,11 +46,13 @@ class Book(models.Model):
     language = models.CharField(max_length=50)
     pub_date = models.DateField(help_text='YYYY-MM-DD')
     description = models.TextField(max_length=1024, blank=True)
-    img = models.ImageField(upload_to='img/book_img/', default='img/book_img/default_book.png')
+    full_img = models.ImageField(upload_to='img/book_img/full/', default='img/book_img/full/default-book-full.jpg')
+    small_img = models.ImageField(upload_to='img/book_img/small/', default='img/book_img/small/default-book-small.jpg')
     slug = models.SlugField(max_length=80)
 
     class Meta:
         unique_together = ['title', 'pub_date']
+        ordering = ['title']
 
     def is_published(self):
         return self.pub_date <= datetime.date.today()
