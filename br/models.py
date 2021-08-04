@@ -40,15 +40,18 @@ class Genre(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=80)
+    original_title = models.CharField(max_length=80)
     # Book might have multiple authors, so many-to-many relationship is better
     authors = models.ManyToManyField(Author)
     genres = models.ManyToManyField(Genre)
     language = models.CharField(max_length=50)
+    country = models.CharField(max_length=50)
     pub_date = models.DateField(help_text='YYYY-MM-DD')
+    publisher = models.CharField(max_length=80, null=True, blank=True)
     description = models.TextField(max_length=1024, blank=True)
     full_img = models.ImageField(upload_to='img/book_img/full/', default='img/book_img/full/default-book-full.jpg')
     small_img = models.ImageField(upload_to='img/book_img/small/', default='img/book_img/small/default-book-small.jpg')
-    pages = models.PositiveIntegerField(default=500)
+    pages = models.PositiveIntegerField(null=True, blank=True)
     slug = models.SlugField(max_length=80)
 
     class Meta:

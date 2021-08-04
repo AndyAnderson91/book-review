@@ -30,7 +30,10 @@ class GenreAdmin(admin.ModelAdmin):
 
 
 class BookAdmin(admin.ModelAdmin):
-    prepopulated_fields = {'slug': ('title',)}
+    prepopulated_fields = {
+        'slug': ('title',),
+        'original_title': ('title',)
+    }
     inlines = [
         BookAuthor,
         BookGenre,
