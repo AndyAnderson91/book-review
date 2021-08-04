@@ -2,7 +2,7 @@
     <div class="row g-0">
         <div class="col-sm-auto">
             <a href="{{book.get_absolute_url}}">
-                <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 120px">
+                <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 180px">
                 <img src="{{ book.small_img.url }}" class="card-img rounded border d-block d-sm-none" alt="{{ book.title }}">
             </a>
         </div>
@@ -39,8 +39,8 @@
                 </div>
 
                 <p class="card-text">
-                    {% if book.description|length > 350 %}
-                        {{book.description|slice:':350'}}...
+                    {% if book.description|length > 700 %}
+                        {{book.description|slice:':700'}}...
                         <a href="{{ book.get_absolute_url }}#description">Read more</a>
                     {% else %}
                         {{book.description}}
