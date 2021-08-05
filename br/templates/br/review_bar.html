@@ -2,18 +2,26 @@
 
     <div class="card-header">
         <div class="row g-0">
-            <div class="col">
-                <p class="mb-0 text-muted">{{ review.owner|title }} {{ review.pub_date }}</p>
+            <div class="col-md">
+                <p class="mb-0 text-muted">
+                    {% if request.path == '/my_reviews/' %}
+                        {{ review.pub_date }} | Review on <span class="text-nowrap">
+                            <a href="{{ review.book.get_absolute_url }}">{{ review.book.title }}</a>
+                        </span>
+                    {% else %}
+                        {{ review.pub_date }} | {{ review.owner|title }}
+                    {% endif %}
+                </p>
             </div>
             <div class="col-auto">
                 {% if review.owner == request.user %}
                     <p class="mb-0">
-                        <a href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit my review</a> |
-                        <a href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete my review</a>
+                        <span class="text-nowrap">
+                            <a href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit review</a> |
+                            <a href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete review</a>
+                        </span>
                     </p>
                 {% endif %}
-
-
             </div>
         </div>
     </div>
@@ -21,41 +29,15 @@
     <div class="card-body">
         <h5 class="card-title">{{review.title}}</h5>
         <p class="card-text">Rating: {{ review.rating }}/5</p>
-        <p class="card-text">
+        <div class="card-text">
             {% if review.text|length > 700 %}
-                {{ review.text|slice:':700' }}...
-                <a href="{{ review.book.get_absolute_url }}">Read more</a>
+                <p>{{ review.text|slice:':700' }}<span id="dots{{ review.id }}">...</span><span class="textContinuation" id="more{{ review.id }}">{{ review.text|slice:'700:'}}</span>
+                    <span class="text-nowrap" style="cursor: pointer; color: blue;" onclick="myFunction({{ review.id }})" id="myBtn{{ review.id }}">Read more</span>
+                </p>
             {% else %}
-                {{ review.text }}
+                <p>{{ review.text }}</p>
             {% endif %}
-        </p>
+        </div>
+
     </div>
-
 </div>
-
-
-{% if review.owner == request.user %}
-    <p>
-        <a href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit my review</a>
-        <a href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete my review</a>
-    </p>
-    {% if request.path != '/my_reviews/' %}
-        <h3><a href="{% url 'br:my_reviews' %}">{{review.owner.username|title}}</a> {{review.pub_date}}</h3>
-    {% else %}
-        <h3>{{review.pub_date}} on <a href="{{review.book.get_absolute_url}}">{{review.book.title}}</a></h3>
-    {% endif %}
-
-{% else %}
-    <h3>{{review.owner.username|title}} {{review.pub_date}}</h3>
-{% endif %}
-
-<p>Rating: {{review.rating}}/5</p>
-<h4>{{review.title}}</h4>
-<p>
-    {% if review.text|length > 700 %}
-        {{ review.text|slice:':700' }}...
-        <a>Read more</a>
-    {% else %}
-        {{ review.text }}
-    {% endif %}
-</p>

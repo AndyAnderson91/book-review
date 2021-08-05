@@ -38,15 +38,16 @@
                         </div>
                     {% endif %}
                 </div>
-                <p class="card-text">
-                    {% if book.description|length > 700 %}
-                        {{book.description|slice:':700'}}...
-                        <a href="{{ book.get_absolute_url }}#description">Read more</a>
-                    {% else %}
-                        {{book.description}}
-                    {% endif %}
-                </p>
 
+                <div class="card-text">
+                    {% if book.description|length > 700 %}
+                        <p>{{ book.description|slice:':700' }}<span id="dots{{ book.id }}">...</span><span class="textContinuation" id="more{{ book.id }}">{{ book.description|slice:'700:'}}</span>
+                            <span class="text-nowrap" style="cursor: pointer; color: blue;" onclick="myFunction({{ book.id }})" id="myBtn{{ book.id }}">Read more</span>
+                        </p>
+                    {% else %}
+                        <p>{{ book.description }}</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

@@ -84,7 +84,7 @@ class Review(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.SET(get_sentinel_user)
     )
-    pub_date = models.DateField(auto_now=True)
+    pub_date = models.DateField(auto_now_add=True)
 
     class Meta:
         unique_together = ['book', 'owner']

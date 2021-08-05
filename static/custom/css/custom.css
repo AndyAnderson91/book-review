@@ -22,3 +22,7 @@ a:hover {
 a:active {
     text-decoration: none;
 }
+
+.textContinuation {
+    display: none;
+}
