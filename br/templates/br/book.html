@@ -5,73 +5,84 @@
 {% endblock page_header %}
 
 {% block content %}
-    <div class="row g-3 mb-3" style="border-radius: .25rem; border: 1px solid rgba(0, 0, 0, 0)">
-        <div class="col-sm-auto">
-            <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 185px;">
-            <img src="{{ book.small_img.url }}" class="card-img rounded border d-block d-sm-none" alt="{{ book.title }}">
-        </div>
-        <div class="col-sm container-fluid pt-1">
+    <div>
+        <div class="row g-3 mb-3" style="border-radius: .25rem; border: 1px solid rgba(0, 0, 0, 0)">
+            <div class="col-sm-auto mt-sm-0">
+                <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 185px;">
+                <img src="{{ book.small_img.url }}" class="card-img rounded border d-block d-sm-none" alt="{{ book.title }}">
+            </div>
+            <div class="col-sm container-fluid pt-1 mt-sm-0">
 
-            <div class="row g-0">
-                {% if book.is_published %}
-                    <div class="col-md-auto ms-auto order-md-1">
-                        <p>
-                            {% if book.avg_rating %}
-                                Rating: {{book.avg_rating|floatformat:2}}
-                                (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
-                            {% else %}
-                                No reviewed
-                            {% endif %}
+                <div class="row g-0">
+                    {% if book.is_published %}
+                        <div class="col-auto order-md-1">
+                            <p>
+                                {% if book.avg_rating %}
+                                    Rating: {{book.avg_rating|floatformat:2}}
+                                    (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
+                                {% else %}
+                                    No reviewed
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-md order-md-0">
+                        <p>Author{{ book.authors.all|length|pluralize }}:
+                            {% for author in book.authors.all %}
+                                <span class="text-nowrap"><a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a></span>{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+
                         </p>
                     </div>
-                {% endif %}
-
-                <div class="col-md-auto order-md-0">
-                    <p>Author{{ book.authors.all|length|pluralize }}:
-                        {% for author in book.authors.all %}
-                            <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>{% if not forloop.last %},{% endif %}
-                        {% endfor %}
-                    </p>
                 </div>
-            </div>
 
-            <p>Genre{{ book.genres.all|length|pluralize }}:
-                {% for genre in book.genres.all %}
-                    <a href="{% url 'br:search' %}?q={{genre}}&category=genre">{% if forloop.first %}{{ genre }}{% else %}{{genre|lower}}{% endif %}</a>{% if not forloop.last %},{% endif %}
-                {% endfor %}
-            </p>
-            {% if book.is_published %}
-                <p>Publication year: <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
-            {% else %}
-                <p>Expected at {{book.pub_date|date:'F'}} {{book.pub_date.day}}, <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
-            {% endif %}
-            <p>Country: {{ book.country }}</p>
-            <p>Original language: {{ book.language }}</p>
-            {% if book.title != book.original_title %}
-                <p>Original title: «{{ book.original_title }}»</p>
-            {% endif %}
-            {% if book.pages %}
-                <p class="mb-0">Number of pages: {{ book.pages }} (approximately)</p>
-            {% endif %}
+                <p>Genre{{ book.genres.all|length|pluralize }}:
+                    {% for genre in book.genres.all %}
+                        <a href="{% url 'br:search' %}?q={{genre}}&category=genre">{% if forloop.first %}{{ genre }}{% else %}{{genre|lower}}{% endif %}</a>{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                </p>
+                {% if book.is_published %}
+                    <p>Publication year: <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
+                {% else %}
+                    <p>Expected at {{book.pub_date|date:'F'}} {{book.pub_date.day}}, <a href="{% url 'br:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
+                {% endif %}
+                <p>Country: {{ book.country }}</p>
+                <p>Original language: {{ book.language }}</p>
+                {% if book.title != book.original_title %}
+                    <p>Original title: «{{ book.original_title }}»</p>
+                {% endif %}
+                {% if book.pages %}
+                    <p class="mb-0">Number of pages: {{ book.pages }} (approximately)</p>
+                {% endif %}
+            </div>
         </div>
-    </div>
-    <div>
-        <a id="description"></a>
-        <h4>Description:</h4>
-        <p>{{book.description}}</p>
+        <div>
+            <a id="description"></a>
+            <h4>Description:</h4>
+            <p>{{book.description}}</p>
+        </div>
     </div>
     <a id="reviews"></a>
     {% if book.is_published %}
-        {% if reviews %}
-            <h4>Reviews({{reviews|length}}):</h4>
-        {% else %}
-            <h4>No reviews yet</h4>
-        {% endif %}
-        {% if reviews.0.owner != request.user %}
-            <p>
-                <a href="{% url 'br:add_review' book.id book.slug %}">Write review</a>
-            </p>
-        {% endif %}
+        <div class="row g-0">
+            <div class="col">
+                {% if reviews %}
+                    <h4 class="mb-0" style="padding-top: 6px; padding-bottom: 6px;">Reviews({{reviews|length}}):</h4>
+                {% else %}
+                    <h4 class="mb-0" style="padding-top: 6px; padding-bottom: 6px;">No reviews yet</h4>
+                {% endif %}
+            </div>
+
+            <div class="col-auto">
+                {% if reviews.0.owner != request.user %}
+                    <p>
+                        <a href="{% url 'br:add_review' book.id book.slug %}" class="btn btn-success">Add new review</a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
         {% for review in page_obj %}
             {% include 'br/review_bar.html' %}
         {% endfor %}

@@ -10,15 +10,15 @@
             <div class="card-body">
 
                 <div class="row g-0">
-                    <div class="col-md-auto order-md-0">
+                    <div class="col-md">
                         <h5 class="card-title">
                             <a href="{{book.get_absolute_url}}">{{book.title}}</a>
                         </h5>
                         <p class="mb-2 mb-md-3">by {% for author in book.authors.all %}
                             {% if request.path == '/search/' and category == 'author' %}
-                                {{author}}
+                                <span class="text-nowrap">{{author}}</span>
                             {% else %}
-                                <a href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>
+                                <a href="{% url 'br:search' %}?q={{author}}&category=author"><span class="text-nowrap">{{author}}</span></a>
                             {% endif %}
                             {% if not forloop.last %},{% endif %}
                         {% endfor %}
@@ -26,7 +26,7 @@
                     </div>
 
                     {% if book.is_published %}
-                        <div class="col-md-auto order-md-1 ms-auto">
+                        <div class="col-auto">
                             <p class="">
                                 {% if book.avg_rating %}
                                     Rating: {{book.avg_rating|floatformat:2}}

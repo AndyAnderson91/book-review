@@ -1,3 +1,39 @@
+<div class="card mb-3">
+
+    <div class="card-header">
+        <div class="row g-0">
+            <div class="col">
+                <p class="mb-0 text-muted">{{ review.owner|title }} {{ review.pub_date }}</p>
+            </div>
+            <div class="col-auto">
+                {% if review.owner == request.user %}
+                    <p class="mb-0">
+                        <a href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit my review</a> |
+                        <a href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete my review</a>
+                    </p>
+                {% endif %}
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <h5 class="card-title">{{review.title}}</h5>
+        <p class="card-text">Rating: {{ review.rating }}/5</p>
+        <p class="card-text">
+            {% if review.text|length > 700 %}
+                {{ review.text|slice:':700' }}...
+                <a href="{{ review.book.get_absolute_url }}">Read more</a>
+            {% else %}
+                {{ review.text }}
+            {% endif %}
+        </p>
+    </div>
+
+</div>
+
+
 {% if review.owner == request.user %}
     <p>
         <a href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit my review</a>
@@ -15,4 +51,11 @@
 
 <p>Rating: {{review.rating}}/5</p>
 <h4>{{review.title}}</h4>
-<p>{{review.text}}</p>
+<p>
+    {% if review.text|length > 700 %}
+        {{ review.text|slice:':700' }}...
+        <a>Read more</a>
+    {% else %}
+        {{ review.text }}
+    {% endif %}
+</p>
