@@ -74,11 +74,9 @@
                 {% endif %}
             </div>
 
-            <div class="col-auto">
+            <div class="col-auto mb-2">
                 {% if reviews.0.owner != request.user %}
-                    <p>
-                        <a href="{% url 'br:add_review' book.id book.slug %}" class="btn btn-success">Add new review</a>
-                    </p>
+                    <a href="{% url 'br:add_review' book.id book.slug %}" class="btn btn-success">Add new review</a>
                 {% endif %}
             </div>
         </div>

@@ -1,12 +1,15 @@
+/*disable default ul decor*/
 ul {
     padding: 0;
     list-style: none;
 }
 
+/*disable default asterisk on labels by django-crispy-forms*/
 .asteriskField {
     display: none;
 }
 
+/*disable default link underline*/
 a:link {
     text-decoration: none;
 }
@@ -23,6 +26,20 @@ a:active {
     text-decoration: none;
 }
 
+/*hidden part of text in read more/read less blocks*/
 .textContinuation {
     display: none;
 }
+
+/*bootstrap form-control class changes*/
+.form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    } 
+
+/*search form decor*/
+.search-form:focus {
+        border-color: lightgray;
+        box-shadow: none;
+    } 
+
