@@ -1,7 +1,9 @@
 {%  extends 'br/base.html' %}
 
 {% block page_header %}
-    <h2>Edit my review on «{{book.title}}»</h2>
+    <div class="pb-1 mb-4 border-bottom">
+        <h2>Edit my review on «{{book.title}}»</h2>
+    </div>
 {% endblock page_header %}
 {% block content %}
     {% load crispy_forms_tags %}

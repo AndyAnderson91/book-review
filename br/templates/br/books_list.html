@@ -1,13 +1,15 @@
 {%  extends 'br/base.html' %}
 
 {% block page_header %}
-    <h2>
-        {% if sort_type == 'recent'  %}Recently published books
-        {% elif sort_type == 'popular' %}Most reviewed books
-        {% elif sort_type == 'best_rated' %}Best rated books
-        {% else %}Books
-        {% endif %}
-    </h2>
+    <div class="pb-1 mb-4 border-bottom">
+        <h2>
+            {% if sort_type == 'recent'  %}Recently published books
+            {% elif sort_type == 'popular' %}Most reviewed books
+            {% elif sort_type == 'best_rated' %}Best rated books
+            {% else %}Books
+            {% endif %}
+        </h2>
+    </div>
 {% endblock page_header %}
 
 {% block content %}
