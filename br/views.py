@@ -5,13 +5,14 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
-from br.custom.annotations import BOOKS
 from .models import Book, Review
+from br.custom.annotations import BOOKS
+from br.custom.pagination import get_pagination_numbers
 from br.custom.search import SEARCH_CATEGORIES, search
 from .forms import SearchForm
 
 
-BOOKS_PER_PAGE = 10
+BOOKS_PER_PAGE = 2
 REVIEWS_PER_PAGE = 5
 
 
@@ -47,9 +48,16 @@ class BooksListView(generic.list.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        pages_total = context.get('paginator').num_pages
+        cur_page = context.get('page_obj').number
+        nums = get_pagination_numbers(cur_page, pages_total)
+
         context.update({
-            'sort_type': self.kwargs.get('sort_type')
+            'sort_type': self.kwargs.get('sort_type'),
+            'nums': nums,
         })
+
         return context
 
 
