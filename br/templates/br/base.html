@@ -17,7 +17,8 @@
         <script src="{% static 'custom/js/read_more.js' %}"></script>
 
     </head>
-    <body style="background-color: #f4f4f4;">
+    <body class="d-flex flex-column" style="min-height: 100vh; background-color: #f4f4f4;">
+
         <nav class="navbar navbar-expand-lg navbar-light mb-4 border" style="background-color: white;">
             <div class="container-fluid d-flex justify-content-lg-center">
 
@@ -78,7 +79,8 @@
             </div>
         </nav>
 
-        <div role="main" class="container p-4" style="max-width: 1140px; background-color: white; border-radius: 0.5rem;">
+
+        <div role="main" class="container-fluid flex-fill p-4" style="max-width: 1140px; background-color: white; border-radius: 0.5rem;">
             <div>
                 {% block page_header %}{% endblock page_header %}
             </div>
@@ -86,6 +88,7 @@
                 {% block content %} {% endblock content %}
             </div>
         </div>
+
 
         <footer class="container-fluid border mt-4" style="background-color: white;">
             <div class="container border-bottom" style="max-width: 1140px; height: 24px;"></div>
