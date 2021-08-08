@@ -1,33 +1,33 @@
+{% load custom_tags %}
+
 {% if paginator.num_pages > 1 %}
     <div class="pagination">
 
         <span class="new-system">
-            {{ request.GET.urlencode }}
 
             {% if page_obj.has_previous %}
-                <a href="?{{request.GET.urlencode}}&page={{ page_obj.previous_page_number }}">previous</a>
+                <a href="?{% url_replace page=page_obj.previous_page_number %}">previous</a>
             {% endif %}
 
             {% if nums.sep_first %}
-                <a href="?{{request.GET.urlencode}}&page=1">1</a>
+                <a href="?{% url_replace page='1' %}">1</a>
                 ...
             {% endif %}
             {% for page_num in nums.mid_nums %}
-                <a href="?{{request.GET.urlencode}}&page={{ page_num }}">{{ page_num }}</a>
+                <a href="?{% url_replace page=page_num %}">{{ page_num }}</a>
             {% endfor %}
             {% if nums.sep_last %}
                 ...
-                <a href="?{{request.GET.urlencode}}&page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+                <a href="?{% url_replace page=paginator.num_pages %}">{{ paginator.num_pages }}</a>
             {% endif %}
 
             {% if page_obj.has_next %}
-                <a href="?{{request.GET.urlencode}}&page={{ page_obj.next_page_number }}">next</a>
+                <a href="?{% url_replace page=page_obj.next_page_number %}">next</a>
             {% endif %}
         </span>
 
         <span class="current">
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
         </span>
-
     </div>
 {% endif %}

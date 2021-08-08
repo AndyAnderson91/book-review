@@ -6,6 +6,7 @@
         <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
         <title>Book review</title>
         {% load static %}
+        {% load custom_tags %}
 
         <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
@@ -62,14 +63,14 @@
                                 <a class="nav-link text-nowrap" href="{% url 'br:my_reviews' %}">Hello, {{user.username|title}}!</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-nowrap" href="{% url 'users:logout' %}{% if request.path != '/my_reviews/' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}{% endif %}">Logout</a>
+                                <a class="nav-link text-nowrap" href="{% url 'users:logout' %}{% url_next next=request.get_full_path %}">Logout</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link text-nowrap" href="{% url 'users:login' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Login</a>
+                                <a class="nav-link text-nowrap" href="{% url 'users:login' %}{% url_next next=request.get_full_path %}">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-nowrap" href="{% url 'users:register' %}?next={{request.path}}{% if request.GET.urlencode %}?{{request.GET.urlencode|urlencode}}{% endif %}">Sign up</a>
+                                <a class="nav-link text-nowrap" href="{% url 'users:register' %}{% url_next next=request.get_full_path %}">Sign up</a>
                             </li>
                         {% endif %}
                     </ul>
