@@ -32,3 +32,14 @@ def url_next(context, **kwargs):
         return '?' + urlencode(kwargs)
     else:
         return ''
+
+
+@register.simple_tag(takes_context=True)
+def get_page_range(context, on_each_side=2, on_ends=1):
+    """
+    Allows to call 'get_elided_page_range' method directly from template.
+    """
+    cur_page = context.get('page_obj').number
+    page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=on_each_side, on_ends=on_ends)
+
+    return page_range

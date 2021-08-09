@@ -25,18 +25,27 @@
                         </p>
                     </div>
 
-                    {% if book.is_published %}
-                        <div class="col-auto">
-                            <p class="">
-                                {% if book.avg_rating %}
-                                    Rating: {{book.avg_rating|floatformat:2}}
-                                    (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
-                                {% else %}
-                                    Unrated
-                                {% endif %}
-                            </p>
-                        </div>
-                    {% endif %}
+                    {#                        <div class="col-auto mb-3">#}
+                    {#	                        {% if book.is_published %}#}
+                    {#                                {% if book.avg_rating %}#}
+                    {#                                    <span>Rating: {{book.avg_rating|floatformat:2}}#}
+                    {#	                                    (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)</span>#}
+                    {#                                {% else %}#}
+                    {#	                                <span>Unrated</span>#}
+                    {#                                {% endif %}#}
+                    {#	                        {% endif %}#}
+                    {#                        </div>#}
+
+                    <div class="col-auto mb-3">
+                        {% if book.is_published and book.avg_rating %}
+                            <span>Rating: {{book.avg_rating|floatformat:2}}
+                                (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)</span>
+                        {% elif book.is_published and not book.avg_rating %}
+                            <span>Unrated</span>
+                        {% else %}
+                            <span>{{book.pub_date.day}} {{book.pub_date|date:'F'}} {{book.pub_date.year}}</span>
+                        {% endif %}
+                    </div>
                 </div>
 
                 <div class="card-text">

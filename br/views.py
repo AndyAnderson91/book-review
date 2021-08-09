@@ -25,18 +25,6 @@ class IndexListView(generic.list.ListView):
         anticipated_books = BOOKS.filter(pub_date__gt=today)
         return anticipated_books.order_by('pub_date', 'title')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        cur_page = context.get('page_obj').number
-        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
-
-        context.update({
-            'page_range': page_range,
-        })
-
-        return context
-
 
 class BooksListView(generic.list.ListView):
     template_name = 'br/books_list.html'
@@ -59,14 +47,9 @@ class BooksListView(generic.list.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        cur_page = context.get('page_obj').number
-        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
-
         context.update({
-            'sort_type': self.kwargs.get('sort_type'),
-            'page_range': page_range,
-        })
+            'sort_type': self.kwargs.get('sort_type')
+            })
 
         return context
 
@@ -93,12 +76,10 @@ class BookDetailView(generic.detail.DetailView):
 
         cur_page = self.request.GET.get('page')
         page_obj = paginator.get_page(cur_page)
-        page_range = paginator.get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
 
         context.update({
             'paginator': paginator,
             'page_obj': page_obj,
-            'page_range': page_range,
             'reviews': reviews,
         })
 
@@ -198,18 +179,6 @@ class MyReviewsListView(generic.list.ListView):
     def get_queryset(self):
         return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        cur_page = context.get('page_obj').number
-        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
-
-        context.update({
-            'page_range': page_range,
-        })
-
-        return context
-
 
 class SearchListView(generic.list.ListView):
     template_name = 'br/search.html'
@@ -235,11 +204,7 @@ class SearchListView(generic.list.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        cur_page = context.get('page_obj').number
-        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
-
         context.update({
-            'page_range': page_range,
             'q': self.request.GET.get('q'),
             'category': self.request.GET.get('category'),
             'SEARCH_CATEGORIES': SEARCH_CATEGORIES,
