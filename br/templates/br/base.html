@@ -81,11 +81,11 @@
         </nav>
 
 
-        <div role="main" class="container-fluid flex-fill p-4" style="max-width: 1140px; background-color: white; border-radius: 0.5rem;">
+        <div role="main" class="d-flex flex-column container-fluid flex-fill p-4" style="max-width: 1140px; background-color: white; border-radius: 0.5rem;">
             <div>
                 {% block page_header %}{% endblock page_header %}
             </div>
-            <div>
+            <div class="d-flex flex-fill flex-column">
                 {% block content %} {% endblock content %}
             </div>
         </div>

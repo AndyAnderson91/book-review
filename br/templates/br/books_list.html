@@ -14,13 +14,16 @@
 
 {% block content %}
     {% if paginator.count %}
+
         <ul>
             {% for book in page_obj %}
 
                 <li>{% include 'br/book_bar.html' %}</li>
             {% endfor %}
         </ul>
+
         {% include 'br/pagination.html' %}
+
     {% else %}
         <h3>No published books in database</h3>
     {% endif %}
