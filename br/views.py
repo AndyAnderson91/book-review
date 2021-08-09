@@ -7,7 +7,6 @@ from django.views import generic
 
 from .models import Book, Review
 from br.custom.annotations import BOOKS
-from br.custom.pagination import get_pagination_numbers
 from br.custom.search import SEARCH_CATEGORIES, search
 from .forms import SearchForm
 
@@ -25,6 +24,18 @@ class IndexListView(generic.list.ListView):
         today = datetime.date.today()
         anticipated_books = BOOKS.filter(pub_date__gt=today)
         return anticipated_books.order_by('pub_date', 'title')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        cur_page = context.get('page_obj').number
+        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
+
+        context.update({
+            'page_range': page_range,
+        })
+
+        return context
 
 
 class BooksListView(generic.list.ListView):
@@ -49,13 +60,12 @@ class BooksListView(generic.list.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        pages_total = context.get('paginator').num_pages
         cur_page = context.get('page_obj').number
-        nums = get_pagination_numbers(cur_page, pages_total)
+        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
 
         context.update({
             'sort_type': self.kwargs.get('sort_type'),
-            'nums': nums,
+            'page_range': page_range,
         })
 
         return context
@@ -81,14 +91,17 @@ class BookDetailView(generic.detail.DetailView):
         reviews = my_review + other_reviews
         paginator = Paginator(reviews, REVIEWS_PER_PAGE)
 
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+        cur_page = self.request.GET.get('page')
+        page_obj = paginator.get_page(cur_page)
+        page_range = paginator.get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
 
         context.update({
             'paginator': paginator,
             'page_obj': page_obj,
+            'page_range': page_range,
             'reviews': reviews,
         })
+
         return context
 
 
@@ -185,6 +198,18 @@ class MyReviewsListView(generic.list.ListView):
     def get_queryset(self):
         return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        cur_page = context.get('page_obj').number
+        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
+
+        context.update({
+            'page_range': page_range,
+        })
+
+        return context
+
 
 class SearchListView(generic.list.ListView):
     template_name = 'br/search.html'
@@ -209,7 +234,12 @@ class SearchListView(generic.list.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        cur_page = context.get('page_obj').number
+        page_range = context.get('paginator').get_elided_page_range(cur_page, on_each_side=2, on_ends=1)
+
         context.update({
+            'page_range': page_range,
             'q': self.request.GET.get('q'),
             'category': self.request.GET.get('category'),
             'SEARCH_CATEGORIES': SEARCH_CATEGORIES,
