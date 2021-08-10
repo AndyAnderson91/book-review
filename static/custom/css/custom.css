@@ -6,6 +6,7 @@ ul {
 
 a {
     text-decoration: none;
+    color: #000000E6;
 }
 
 /*link style*/
@@ -29,6 +30,7 @@ a {
     color: brown;
 }
 
+/*Navigation links*/
 .navigation-link {
     color: #000000E6;
     padding: 8px 4px 5px 4px;
@@ -39,11 +41,54 @@ a {
     color: #666666;
     border-bottom: 3px solid #999999;
 }
-.current {
+.current-navigation-link {
     border-bottom: 3px solid green;
 }
 
+@media screen and (max-width: 992px) {
+    .navigation-link {
+        border-bottom: none;
+    }
+    .navigation-link:hover {
+        border-bottom: none;
+    }
+    .current-navigation-link {
+        color: green;
+        border-bottom: none;
+    }
+}
 
+/*Pagination links*/
+.pagination-item {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.current-pagination {
+    background-color: green;
+    color: white;
+}
+
+.pagination-ellipsis {
+    background-color: white;
+}
+
+.pagination-number-link:hover {
+    color: #000000E6;
+    background-color: #99999933;
+}
+
+.pagination-arrow-link:hover {
+    color: gray;
+}
+
+
+/*Footer links*/
 .footer-link {
     color: #000000E6;
     padding: .5rem 1rem;
@@ -56,9 +101,8 @@ a {
     color: #686868;
 }
 
-.pagination-link {
-    color: lightcoral;
-}
+
+
 
 /*hide a part of text in read more/read less blocks*/
 .textContinuation {
