@@ -1,11 +1,4 @@
 <!DOCTYPE html>
-{% url 'users:login' as login %}
-{% url 'users:register' as register %}
-{% url 'br:my_reviews' as my_reviews %}
-{% url 'br:books_list' sort_type='recent' as recent %}
-{% url 'br:books_list' sort_type='popular' as popular %}
-{% url 'br:books_list' sort_type='best_rated' as best_rated %}
-
 
 <html lang="en">
     <head>
@@ -15,6 +8,12 @@
 
         {% load static %}
         {% load custom_tags %}
+        {% url 'users:login' as login_url %}
+        {% url 'users:register' as register_url %}
+        {% url 'br:my_reviews' as my_reviews_url %}
+        {% url 'br:books_list' sort_type='recent' as recent_url %}
+        {% url 'br:books_list' sort_type='popular' as popular_url %}
+        {% url 'br:books_list' sort_type='best_rated' as best_rated_url %}
 
         <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'fontawesome/css/all.css' %}">
@@ -52,13 +51,13 @@
 
                     <ul class="navbar-nav ms-1 order-lg-first">
                         <li class="nav-item">
-                            <a class="navigation-link text-nowrap ms-lg-0 {% if request.path == recent %}current-navigation-link{% endif %}" href="{{ recent }}">Recent</a>
+                            <a class="navigation-link text-nowrap ms-lg-0 {% if request.path == recent_url %}current-navigation-link{% endif %}" href="{{ recent_url }}">Recent</a>
                         </li>
                         <li class="nav-item">
-                            <a class="navigation-link text-nowrap {% if request.path == popular %}current-navigation-link{% endif %}" href="{{ popular }}">Popular</a>
+                            <a class="navigation-link text-nowrap {% if request.path == popular_url %}current-navigation-link{% endif %}" href="{{ popular_url }}">Popular</a>
                         </li>
                         <li class="nav-item">
-                            <a class="navigation-link text-nowrap {% if request.path == best_rated %}current-navigation-link{% endif %}" href="{{ best_rated }}">Best rated</a>
+                            <a class="navigation-link text-nowrap {% if request.path == best_rated_url %}current-navigation-link{% endif %}" href="{{ best_rated_url }}">Best rated</a>
                         </li>
                     </ul>
 
@@ -68,17 +67,17 @@
                     <ul class="navbar-nav ms-lg-2">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="navigation-link text-nowrap {% if request.path == my_reviews %}current-navigation-link{% endif %}" href="{{ my_reviews }}">Hello, {{user.username|title}}!</a>
+                                <a class="navigation-link text-nowrap {% if request.path == my_reviews_url %}current-navigation-link{% endif %}" href="{{ my_reviews_url }}">Hello, {{user.username|title}}!</a>
                             </li>
                             <li class="nav-item">
                                 <a class="navigation-link text-nowrap" href="{% url 'users:logout' %}{% url_next next=request.get_full_path %}">Logout</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="navigation-link text-nowrap {% if request.path == login %}current-navigation-link{% endif %}" href="{% url 'users:login' %}{% url_next next=request.get_full_path %}">Login</a>
+                                <a class="navigation-link text-nowrap {% if request.path == login_url %}current-navigation-link{% endif %}" href="{{ login_url }}{% url_next next=request.get_full_path %}">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="navigation-link text-nowrap {% if request.path == register %}current-navigation-link{% endif %}" href="{% url 'users:register' %}{% url_next next=request.get_full_path %}">Sign up</a>
+                                <a class="navigation-link text-nowrap {% if request.path == register_url %}current-navigation-link{% endif %}" href="{{ register_url }}{% url_next next=request.get_full_path %}">Sign up</a>
                             </li>
                         {% endif %}
                     </ul>

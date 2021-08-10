@@ -179,6 +179,11 @@ class MyReviewsListView(generic.list.ListView):
     def get_queryset(self):
         return Review.objects.filter(owner=self.request.user).order_by('-pub_date', 'title')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        return context
+
 
 class SearchListView(generic.list.ListView):
     template_name = 'br/search.html'
