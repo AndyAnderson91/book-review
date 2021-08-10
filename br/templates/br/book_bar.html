@@ -12,34 +12,23 @@
                 <div class="row g-0">
                     <div class="col-md">
                         <h5 class="card-title">
-                            <a href="{{book.get_absolute_url}}">{{book.title}}</a>
+                            <a class="text-link" href="{{book.get_absolute_url}}">{{book.title}}</a>
                         </h5>
                         <p class="mb-2 mb-md-3">by {% for author in book.authors.all %}
                             {% if request.path == '/search/' and category == 'author' %}
                                 <span class="text-nowrap">{{author}}</span>
                             {% else %}
-                                <a href="{% url 'br:search' %}?q={{author}}&category=author"><span class="text-nowrap">{{author}}</span></a>
+                                <a class="text-link" href="{% url 'br:search' %}?q={{author}}&category=author"><span class="text-nowrap">{{author}}</span></a>
                             {% endif %}
                             {% if not forloop.last %},{% endif %}
                         {% endfor %}
                         </p>
                     </div>
 
-                    {#                        <div class="col-auto mb-3">#}
-                    {#	                        {% if book.is_published %}#}
-                    {#                                {% if book.avg_rating %}#}
-                    {#                                    <span>Rating: {{book.avg_rating|floatformat:2}}#}
-                    {#	                                    (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)</span>#}
-                    {#                                {% else %}#}
-                    {#	                                <span>Unrated</span>#}
-                    {#                                {% endif %}#}
-                    {#	                        {% endif %}#}
-                    {#                        </div>#}
-
                     <div class="col-auto mb-3">
                         {% if book.is_published and book.avg_rating %}
                             <span>Rating: {{book.avg_rating|floatformat:2}}
-                                (<a href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)</span>
+                                (<a class="text-link" href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)</span>
                         {% elif book.is_published and not book.avg_rating %}
                             <span>Unrated</span>
                         {% else %}

@@ -6,7 +6,7 @@
                 <p class="mb-0 text-muted">
                     {% if request.path == '/my_reviews/' %}
                         {{ review.pub_date }} | Review on <span class="text-nowrap">
-                            <a href="{{ review.book.get_absolute_url }}">{{ review.book.title }}</a>
+                            <a class="text-link" href="{{ review.book.get_absolute_url }}">{{ review.book.title }}</a>
                         </span>
                     {% else %}
                         {{ review.pub_date }} | {{ review.owner|title }}
@@ -17,8 +17,8 @@
                 {% if review.owner == request.user %}
                     <p class="mb-0">
                         <span class="text-nowrap">
-                            <a href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit review</a> |
-                            <a href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete review</a>
+                            <a class="text-link" href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit review</a> |
+                            <a class="text-link" href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete review</a>
                         </span>
                     </p>
                 {% endif %}
@@ -40,4 +40,5 @@
         </div>
 
     </div>
+
 </div>

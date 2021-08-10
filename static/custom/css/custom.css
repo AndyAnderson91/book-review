@@ -1,33 +1,62 @@
-/*disable default ul decor*/
+/*disable default ul style*/
 ul {
     padding: 0;
     list-style: none;
 }
 
-/*disable default asterisk on labels by django-crispy-forms*/
-.asteriskField {
+a {
+    text-decoration: none;
+}
+
+/*link style*/
+.text-link:link {
+    color: #1A1A1A;
+}
+
+.text-link:visited {
+    color: #1A1A1A;
+}
+
+.text-link:hover {
+    color: orange;
+}
+
+.text-link:active {
+    color: brown;
+}
+
+.text-link:focus {
+    color: yellow;
+}
+
+/*change default nav-link color*/
+.nav-link {
+    color: #000000E6 !important;
+}
+
+.footer-link {
+    color: #000000E6;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.footer-icon-link {
+    font-size: 24px;
+    color: #686868;
+}
+
+.pagination-link {
+    color: lightcoral;
+}
+
+/*hide a part of text in read more/read less blocks*/
+.textContinuation {
     display: none;
 }
 
-/*disable default link underline*/
-a:link {
-    text-decoration: none;
-}
-
-a:visited {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: none;
-}
-
-a:active {
-    text-decoration: none;
-}
-
-/*hidden part of text in read more/read less blocks*/
-.textContinuation {
+/*disable default asterisk on labels by django-crispy-forms*/
+.asteriskField {
     display: none;
 }
 

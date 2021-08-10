@@ -6,7 +6,7 @@
 
         <div>
             {% if page_obj.has_previous %}
-                <a class="d-flex align-items-center" href="?{% url_replace page=page_obj.previous_page_number %}">
+                <a class="d-flex align-items-center pagination-link" href="?{% url_replace page=page_obj.previous_page_number %}">
                     <span class="me-1"><i class="fas fa-chevron-left" style="font-size: 14px;"></i></span>
                     <span class="d-none d-sm-inline">Previous page</span>
                 </a>
@@ -27,7 +27,7 @@
                         {% if page_num == page_obj.paginator.ELLIPSIS %}
                             <span>{{ page_num }}</span>
                         {% else %}
-                            <span><a href="?{% url_replace page=page_num %}">{{ page_num }}</a></span>
+                            <span><a class="pagination-link" href="?{% url_replace page=page_num %}">{{ page_num }}</a></span>
                         {% endif %}
                     {% endif %}
                 </li>
@@ -36,7 +36,7 @@
 
         <div>
             {% if page_obj.has_next %}
-                <a class="d-flex align-items-center" href="?{% url_replace page=page_obj.next_page_number %}">
+                <a class="d-flex align-items-center pagination-link" href="?{% url_replace page=page_obj.next_page_number %}">
                     <span class="d-none d-sm-inline">Next page</span>
                     <span class="ms-1"><i class="fas fa-chevron-right" style="font-size: 14px;"></i></span>
                 </a>

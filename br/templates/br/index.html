@@ -1,17 +1,18 @@
 {%  extends 'br/base.html' %}
+{% load static %}
 
 {% block page_header %}
     <div class="mb-3">
-        <h1>Write reviews on your favorite books!</h1>
+        <h1>Welcome to the Book Review!</h1>
     </div>
 
     <div class="row g-0 mb-5">
         <div class="col-md order-md-1 mb-3 mb-md-0">
-            <img src="static/custom/img/main.jpg" class="img-fluid">
+            <img src="{% static 'custom/img/main.png' %}" class="img-fluid">
         </div>
         <div class="col-md-4 col-lg-5 order-md-0">
             <div class="d-block d-md-none d-lg-block">
-                <p>Look for interesting books and rate them.</p>
+                <p>Look for your favorite books and rate them.</p>
                 <p>Track your reviews and edit or delete them anytime.</p>
                 <p>Check out other people's ratings and reviews.</p>
                 <p>See the books lists such as recent, the most popular and the best rated books.</p>
