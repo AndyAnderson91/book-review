@@ -17,6 +17,10 @@ a {
     color: #1A1A1A;
 }
 
+.text-link:focus {
+    color: blue;
+}
+
 .text-link:hover {
     color: orange;
 }
@@ -25,14 +29,20 @@ a {
     color: brown;
 }
 
-.text-link:focus {
-    color: yellow;
+.navigation-link {
+    color: #000000E6;
+    padding: 8px 4px 5px 4px;
+    margin: 0 4px;
+    border-bottom: 3px solid white;
+}
+.navigation-link:hover {
+    color: #666666;
+    border-bottom: 3px solid #999999;
+}
+.current {
+    border-bottom: 3px solid green;
 }
 
-/*change default nav-link color*/
-.nav-link {
-    color: #000000E6 !important;
-}
 
 .footer-link {
     color: #000000E6;

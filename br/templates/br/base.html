@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+{% url 'users:login' as login %}
+{% url 'users:register' as register %}
+{% url 'br:my_reviews' as my_reviews %}
+{% url 'br:books_list' sort_type='recent' as recent %}
+{% url 'br:books_list' sort_type='popular' as popular %}
+{% url 'br:books_list' sort_type='best_rated' as best_rated %}
+
 
 <html lang="en">
     <head>
@@ -45,13 +52,13 @@
 
                     <ul class="navbar-nav ms-1 order-lg-first">
                         <li class="nav-item">
-                            <a class="nav-link text-nowrap ps-0" href="{% url 'br:books_list' sort_type='recent' %}">Recent</a>
+                            <a class="navigation-link text-nowrap ms-0 {% if request.path == recent %}current{% endif %}" href="{{ recent }}">Recent</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-nowrap" href="{% url 'br:books_list' sort_type='popular' %}">Popular</a>
+                            <a class="navigation-link text-nowrap {% if request.path == popular %}current{% endif %}" href="{{ popular }}">Popular</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-nowrap" href="{% url 'br:books_list' sort_type='best_rated' %}">Best rated</a>
+                            <a class="navigation-link text-nowrap {% if request.path == best_rated %}current{% endif %}" href="{{ best_rated }}">Best rated</a>
                         </li>
                     </ul>
 
@@ -61,17 +68,17 @@
                     <ul class="navbar-nav ms-2">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link text-nowrap" href="{% url 'br:my_reviews' %}">Hello, {{user.username|title}}!</a>
+                                <a class="navigation-link text-nowrap {% if request.path == my_reviews %}current{% endif %}" href="{{ my_reviews }}">Hello, {{user.username|title}}!</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-nowrap" href="{% url 'users:logout' %}{% url_next next=request.get_full_path %}">Logout</a>
+                                <a class="navigation-link text-nowrap" href="{% url 'users:logout' %}{% url_next next=request.get_full_path %}">Logout</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link text-nowrap" href="{% url 'users:login' %}{% url_next next=request.get_full_path %}">Login</a>
+                                <a class="navigation-link text-nowrap {% if request.path == login %}current{% endif %}" href="{% url 'users:login' %}{% url_next next=request.get_full_path %}">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-nowrap" href="{% url 'users:register' %}{% url_next next=request.get_full_path %}">Sign up</a>
+                                <a class="navigation-link text-nowrap {% if request.path == register %}current{% endif %}" href="{% url 'users:register' %}{% url_next next=request.get_full_path %}">Sign up</a>
                             </li>
                         {% endif %}
                     </ul>
