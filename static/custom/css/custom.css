@@ -1,28 +1,49 @@
+:root {
+    /*Custom colors*/
+    --light-black: #3A3A3A;
+    --dark-black: #000000;
+
+    --medium-green: #43a642;
+    --light-green: #58b544;
+}
+
+body {
+    color: var(--light-black);
+    /*Site background*/
+    background-color: #f4f4f4;
+}
+
+
 /*disable default ul style*/
 ul {
     padding: 0;
     list-style: none;
 }
 
-a {
+
+/*Books links*/
+.book-title-link {
+    color: var(--dark-black);
     text-decoration: none;
-    color: #000000E6;
+}
+.book-title-link:hover {
+    color: orange;
 }
 
-/*link style*/
-.text-link:link {
-    color: #1A1A1A;
+.book-field-link {
+    text-decoration-style: dotted;
+    color: var(--dark-black);
+}
+.book-field-link:hover {
+    color: orange;
 }
 
-.text-link:visited {
-    color: #1A1A1A;
+.read-more-link {
+    cursor: pointer;
+    color: orange;
+    text-decoration-style: dotted;
 }
-
-.text-link:focus {
-    color: blue;
-}
-
-.text-link:hover {
+.read-more-link:hover {
     color: orange;
 }
 
@@ -30,19 +51,32 @@ a {
     color: brown;
 }
 
+/*Review links*/
+.review-link {
+    color: gray;
+    text-decoration-style: dotted;
+}
+.review-link:hover {
+    color: orange;
+}
+.review-link:active {
+    color: brown;
+}
+
 /*Navigation links*/
 .navigation-link {
-    color: #000000E6;
+    color: var(--light-black);
+    text-decoration: none;
     padding: 8px 4px 5px 4px;
     margin: 0 4px;
     border-bottom: 3px solid white;
 }
 .navigation-link:hover {
     color: #666666;
-    border-bottom: 3px solid #999999;
+    border-bottom: 3px solid orange;
 }
 .current-navigation-link {
-    border-bottom: 3px solid green;
+    border-bottom: 3px solid var(--medium-green);
 }
 
 @media screen and (max-width: 992px) {
@@ -53,13 +87,15 @@ a {
         border-bottom: none;
     }
     .current-navigation-link {
-        color: green;
+        color: var(--medium-green);
         border-bottom: none;
     }
 }
 
 /*Pagination links*/
 .pagination-item {
+    color: var(--dark-black);
+    text-decoration: none;
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
@@ -70,7 +106,7 @@ a {
 }
 
 .current-pagination {
-    background-color: green;
+    background-color: var(--medium-green);
     color: white;
 }
 
@@ -79,7 +115,7 @@ a {
 }
 
 .pagination-number-link:hover {
-    color: #000000E6;
+    color: var(--dark-black);
     background-color: #99999933;
 }
 
@@ -89,16 +125,62 @@ a {
 
 
 /*Footer links*/
+.footer-logo-link {
+    color: var(--light-black);
+    text-decoration: none;
+}
+
+.footer-logo-link:hover {
+    color: var(--light-black);
+}
+
 .footer-link {
-    color: #000000E6;
+    color: var(--light-black);
     padding: .5rem 1rem;
     text-decoration: none;
     white-space: nowrap;
+}
+.footer-link:hover {
+    color: gray;
 }
 
 .footer-icon-link {
     font-size: 24px;
     color: #686868;
+}
+
+.facebook:hover {
+    color: #4267B2;
+}
+.instagram:hover {
+    color: #E1306C;
+}
+.telegram:hover {
+    color: #0088cc;
+}
+.linkedin:hover {
+    color: #0e76a8;
+}
+.twitter:hover {
+    color: #1DA1F2;
+}
+
+/*Buttons*/
+.btn-color {
+    color: white;
+    background-color: var(--medium-green);
+    border-color: var(--medium-green);
+}
+.btn-color:hover {
+    color: white;
+    background-color: var(--light-green);
+    border-color: var(--light-green);
+}
+.btn-color:active {
+    color: white;
+    background-color: var(--light-green);
+    border-color: var(--light-green);
+    box-shadow: none;
 }
 
 
@@ -116,7 +198,7 @@ a {
 
 /*bootstrap form-control class changes*/
 .form-control:focus {
-        border-color: #28a745;
+        border-color: var(--medium-green);
         box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
     } 
 

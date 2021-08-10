@@ -20,8 +20,8 @@
                 {% if review.owner == request.user %}
                     <p class="mb-0">
                         <span class="text-nowrap">
-                            <a class="text-link" href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit review</a> |
-                            <a class="text-link" href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete review</a>
+                            <a class="review-link" href="{% url 'br:edit_review' review.book.id review.book.slug %}">Edit review</a> |
+                            <a class="review-link" href="{% url 'br:delete_review' review.book.id review.book.slug %}">Delete review</a>
                         </span>
                     </p>
                 {% endif %}
@@ -37,7 +37,7 @@
         <div class="card-text">
             {% if review.text|length > 700 %}
                 <p>{{ review.text|slice:':700' }}<span id="dots{{ review.id }}">...</span><span class="textContinuation" id="more{{ review.id }}">{{ review.text|slice:'700:'}}</span>
-                    <span class="text-nowrap" style="cursor: pointer; color: blue;" onclick="myFunction({{ review.id }})" id="myBtn{{ review.id }}">Read more</span>
+                    <a class="text-nowrap read-more-link" style="cursor: pointer;" onclick="myFunction({{ review.id }})" id="myBtn{{ review.id }}">Read more</a>
                 </p>
             {% else %}
                 <p>{{ review.text }}</p>
