@@ -1,20 +1,21 @@
 :root {
     /*Custom colors*/
+    --black: #000000;
     --light-black: #3A3A3A;
-    --dark-black: #000000;
+
+    --dark-gray: #666666;
 
     --medium-green: #43a642;
     --light-green: #58b544;
 }
 
+/*Body text color and background color*/
 body {
     color: var(--light-black);
-    /*Site background*/
     background-color: #f4f4f4;
 }
 
-
-/*disable default ul style*/
+/*Disables default ul style*/
 ul {
     padding: 0;
     list-style: none;
@@ -22,22 +23,27 @@ ul {
 
 
 /*Books links*/
+
+/*Book card title*/
 .book-title-link {
-    color: var(--dark-black);
+
+    color: var(--black);
     text-decoration: none;
 }
 .book-title-link:hover {
     color: orange;
 }
 
+/*Author, genre, year links*/
 .book-field-link {
     text-decoration-style: dotted;
-    color: var(--dark-black);
+    color: var(--black);
 }
 .book-field-link:hover {
     color: orange;
 }
 
+/*Read more - read less links*/
 .read-more-link {
     cursor: pointer;
     color: orange;
@@ -47,13 +53,9 @@ ul {
     color: orange;
 }
 
-.text-link:active {
-    color: brown;
-}
-
 /*Review links*/
 .review-link {
-    color: gray;
+    color: var(--dark-gray);
     text-decoration-style: dotted;
 }
 .review-link:hover {
@@ -67,16 +69,16 @@ ul {
 .navigation-link {
     color: var(--light-black);
     text-decoration: none;
-    padding: 8px 4px 5px 4px;
-    margin: 0 4px;
-    border-bottom: 3px solid white;
+    padding: 0.5rem 0.25rem 0.3125rem 0.25rem;
+    margin: 0 0.25rem;
+    border-bottom: 0.1875rem solid white;
 }
 .navigation-link:hover {
-    color: #666666;
-    border-bottom: 3px solid orange;
+    color: var(--dark-gray);
+    border-bottom: 0.1875rem solid orange;
 }
 .current-navigation-link {
-    border-bottom: 3px solid var(--medium-green);
+    border-bottom: 0.1875rem solid var(--medium-green);
 }
 
 @media screen and (max-width: 992px) {
@@ -94,7 +96,7 @@ ul {
 
 /*Pagination links*/
 .pagination-item {
-    color: var(--dark-black);
+    color: var(--black);
     text-decoration: none;
     display: flex;
     flex-grow: 1;
@@ -102,7 +104,7 @@ ul {
     flex-basis: auto;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 0.25rem;
 }
 
 .current-pagination {
@@ -115,8 +117,8 @@ ul {
 }
 
 .pagination-number-link:hover {
-    color: var(--dark-black);
-    background-color: #99999933;
+    color: var(--black);
+    background-color: #ebebeb;
 }
 
 .pagination-arrow-link:hover {
@@ -136,7 +138,7 @@ ul {
 
 .footer-link {
     color: var(--light-black);
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     text-decoration: none;
     white-space: nowrap;
 }
@@ -145,8 +147,8 @@ ul {
 }
 
 .footer-icon-link {
-    font-size: 24px;
-    color: #686868;
+    font-size: 1.5rem;
+    color: var(--dark-gray)
 }
 
 .facebook:hover {
@@ -186,23 +188,23 @@ ul {
 
 
 
-/*hide a part of text in read more/read less blocks*/
+/*Hides a part of text in read more/read less blocks*/
 .textContinuation {
     display: none;
 }
 
-/*disable default asterisk on labels by django-crispy-forms*/
+/*Disables default asterisk on labels by django-crispy-forms*/
 .asteriskField {
     display: none;
 }
 
-/*bootstrap form-control class changes*/
+/*Bootstrap form-control class changes*/
 .form-control:focus {
         border-color: var(--medium-green);
         box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
     } 
 
-/*search form decor*/
+/*Search form style*/
 .search-form:focus {
         border-color: lightgray;
         box-shadow: none;

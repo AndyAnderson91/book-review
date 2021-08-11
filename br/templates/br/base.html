@@ -31,8 +31,8 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-white border mb-4">
             <div class="container-fluid d-flex justify-content-lg-center">
 
-                <div class="d-flex justify-content-end" style="min-width: 170px;">
-                    <a class="navbar-brand text-link" href="{% url 'br:index' %}">
+                <div class="d-flex justify-content-end" style="min-width: 10.625rem;">
+                    <a class="navbar-brand" href="{% url 'br:index' %}">
                         <img src="{% static 'bootstrap/svg/book.svg' %}" alt="" width="30" height="30"><span class="ms-2">Book review</span></a>
                 </div>
 
@@ -64,7 +64,7 @@
 
                 </div>
 
-                <div class="collapse navbar-collapse multi-collapse ms-1" id="el2" style="min-width: 170px; flex-grow: 0;">
+                <div class="collapse navbar-collapse multi-collapse ms-1" id="el2" style="min-width: 10.625rem; flex-grow: 0;">
                     <ul class="navbar-nav ms-lg-2">
                         {% if user.is_authenticated %}
                             <li class="nav-item">
@@ -100,7 +100,7 @@
 
 
         <footer class="container-fluid border bg-white mt-4">
-            <div class="container border-bottom" style="max-width: 1140px; height: 24px;"></div>
+            <div class="container border-bottom" style="max-width: 1140px; height: 1.5rem;"></div>
             <div class="container pb-4 pt-1" style="max-width: 1140px;">
 
                 <div class="row g-0">
@@ -129,7 +129,7 @@
                     <div class="col-sm d-flex justify-content-center justify-content-sm-end justify-content-md-start order-sm-1 order-md-0">
 
                         <a class="d-flex align-items-center footer-logo-link me-2 me-md-0" href="#start">
-                            <i class="icon-book pt-2 me-1" style="font-size: 30px;"></i>
+                            <i class="icon-book pt-2 me-1" style="font-size: 1.875rem;"></i>
                             <span>Book review<i class="far fa-copyright ms-1 me-1"></i>2021</span>
                         </a>
 
