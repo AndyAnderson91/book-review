@@ -81,7 +81,7 @@ class IndexListViewTest(TestCase):
         If anticipated books exist, they are sent to template.
         """
         # Creating 32 anticipated books.
-        books = create_books(32, published=False)
+        create_books(32, published=False)
         response = self.client.get(reverse('br:index'))
         self.assertTrue(response.context['anticipated_books'])
 
@@ -351,7 +351,8 @@ class ReviewUpdateViewTest(TestCase):
 
     def test_authenticated_user_with_no_review_get(self):
         """
-        Authenticated user who doesn't have review on a particular book will get 404 if he'll try to get edit page via url.
+        Authenticated user who doesn't have review on a particular book will get 404,
+        if he'll try to get edit page via url.
         """
         # Log user in.
         self.client.force_login(self.user)
@@ -423,7 +424,8 @@ class ReviewDeleteViewTest(TestCase):
 
     def test_authenticated_user_with_no_review_get(self):
         """
-        Authenticated user who doesn't have review on a particular book will get 404 if he'll try to get delete page via url.
+        Authenticated user who doesn't have review on a particular book will get 404,
+        if he'll try to get delete page via url.
         """
         # Log user in.
         self.client.force_login(self.user)
@@ -528,7 +530,7 @@ class MyReviewListViewTest(TestCase):
         # Log user in.
         self.client.force_login(self.user)
         # Creates 18 reviews
-        reviews = create_reviews(self.books, self.user, n=18)
+        create_reviews(self.books, self.user, n=18)
         response = self.client.get(self.my_reviews_url)
         self.assertTrue(response.context['is_paginated'])
 
@@ -614,7 +616,9 @@ class SearchListViewTest(TestCase):
 
     def test_full_match_queryset(self):
         """
-        Since create_books method uses title pattern 'book №...', every book has word 'book' in its title, so q = 'book' will add every single book to results list.
+        Since create_books method uses title pattern 'book №...',
+        every book has word 'book' in its title,
+        so q = 'book' will add every single book to results list.
         """
         response = self.client.get(reverse('br:search'), {
             'q': 'book',

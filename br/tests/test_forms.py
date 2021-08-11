@@ -46,4 +46,3 @@ class SearchFormTestCase(TestCase):
             'category': 'any'
         })
         self.assertFalse(form.is_valid())
-
