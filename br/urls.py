@@ -9,10 +9,10 @@ urlpatterns = [
     # Index page.
     path('', views.IndexListView.as_view(), name='index'),
 
-    # Books list pages.
+    # Books lists pages.
     re_path(r'^(?P<sort_type>(recent|popular|best_rated))/$', views.BooksListView.as_view(), name='books_list'),
 
-    # Book page.
+    # Book detail page.
     re_path(r'^book/(?P<pk>\d+)-(?P<slug>[\w-]+)/$', views.BookDetailView.as_view(), name='book'),
 
     # Create, edit and delete review pages.

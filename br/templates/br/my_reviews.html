@@ -9,7 +9,7 @@
 {% block content %}
     {% if my_reviews %}
         {% for review in my_reviews %}
-            {% include 'br/review_bar.html' %}
+            {% include 'br/review_card.html' %}
         {% endfor %}
     {% else %}
         <h4>No reviews written yet</h4>
