@@ -29,7 +29,10 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '3tgbz5+n+$9#t2p6qaxa%(7*ffl$=h
 # DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ['book-review-django.herokuapp.com']
+ALLOWED_HOSTS = [
+    'localhost',
+    'book-review-django.herokuapp.com',
+]
 
 
 # Application definition

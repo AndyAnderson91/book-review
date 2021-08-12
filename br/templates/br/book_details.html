@@ -23,7 +23,7 @@
                                     Rating: {{book.avg_rating|floatformat:2}}
                                     (<a class="book-field-link" href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
                                 {% else %}
-                                    No reviewed
+                                    Unrated
                                 {% endif %}
                             </p>
                         </div>
@@ -69,20 +69,20 @@
     {% if book.is_published %}
         <div class="row g-0">
             <div class="col">
-                {% if reviews %}
-                    <h4 style="padding-top: 0.375rem; padding-bottom: 0.375rem;">
+                <h4 style="padding-top: 0.375rem; padding-bottom: 0.375rem;">
+                    {% if reviews %}
                         <span>Reviews ({{reviews|length}}):</span>
-                {% else %}
-                    <span>No reviews yet</span>
-                {% endif %}
-            </h4>
-        </div>
+                    {% else %}
+                        <span>No reviews yet.</span>
+                    {% endif %}
+                </h4>
+            </div>
 
-        <div class="col-auto mb-2">
-            {% if reviews.0.owner != request.user %}
-                <a href="{% url 'br:add_review' book.id book.slug %}" class="btn btn-color">Add new review</a>
-            {% endif %}
-        </div>
+            <div class="col-auto mb-2">
+                {% if reviews.0.owner != request.user %}
+                    <a href="{% url 'br:add_review' book.id book.slug %}" class="btn btn-color">Add new review</a>
+                {% endif %}
+            </div>
         </div>
 
         {% for review in page_obj %}

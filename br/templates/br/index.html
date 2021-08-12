@@ -39,9 +39,11 @@
 
 {% block content %}
 
-    {% if paginator.count %}
 
-        <h4>Most anticipated books:</h4>
+    {% if paginator.count %}
+        <div class="pb-1 mb-4 border-bottom">
+            <h2>Most anticipated books</h2>
+        </div>
         <ul>
             {% for book in anticipated_books %}
 
@@ -54,7 +56,7 @@
 
     {% else %}
 
-        <h1>No books are anticipated at the moment</h1>
+        <h4>No books are anticipated at the moment.</h4>
 
     {% endif %}
 
