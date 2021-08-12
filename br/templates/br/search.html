@@ -1,4 +1,5 @@
 {%  extends 'br/base.html' %}
+{% load static %}
 
 
 {% block page_header %}
@@ -28,7 +29,10 @@
 
     {% elif category in SEARCH_CATEGORIES %}
 
-        <h4>Nothing found for «{{q}}» :(</h4>
+        <h4>Nothing found for «{{q}}»... except these kittens.</h4>
+        <div class="d-flex justify-content-center">
+            <img src="{% static 'custom/img/search.jpg' %}" style="max-height: 360px;" alt="">
+        </div>
 
     {% else %}
 
