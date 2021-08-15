@@ -29,9 +29,9 @@
 
     {% elif category in SEARCH_CATEGORIES %}
 
-        <h4>Nothing found for «{{q}}»... except these kittens.</h4>
-        <div class="d-flex justify-content-center">
-            <img src="{% static 'custom/img/search.jpg' %}" style="max-height: 360px;" alt="">
+        <h4>Nothing found for «{{q}}».</h4>
+        <div class="d-flex justify-content-center p-2">
+            <img src="{% static 'custom/img/search.jpg' %}" class="img-fluid" style="max-height: 345px;" alt="">
         </div>
 
     {% else %}

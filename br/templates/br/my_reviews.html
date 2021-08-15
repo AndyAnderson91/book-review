@@ -13,9 +13,9 @@
             {% include 'br/review_card.html' %}
         {% endfor %}
     {% else %}
-        <h4>I haven't written reviews yet. Great time to start!</h4>
-        <div class="d-flex justify-content-center">
-            <img src="{% static 'custom/img/my_reviews.jpg' %}" style="max-height: 360px;" alt="">
+        <h4>I haven't written reviews yet.</h4>
+        <div class="d-flex justify-content-center p-2">
+            <img src="{% static 'custom/img/my_reviews.jpg' %}" class="img-fluid" style="max-height: 345px;" alt="">
         </div>
     {% endif %}
     {% include 'br/pagination.html' %}

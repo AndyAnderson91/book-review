@@ -9,4 +9,4 @@ class SearchForm(forms.Form):
         'placeholder': 'Book, author, genre, year...',
         'class': 'form-control search-form',
     }),
-    )
+                        )
