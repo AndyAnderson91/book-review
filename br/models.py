@@ -65,7 +65,6 @@ class Book(models.Model):
     country = models.CharField(max_length=50)
     # Not limiting pub_date max value by today in case of anticipated books.
     pub_date = models.DateField(help_text='YYYY-MM-DD')
-    publisher = models.CharField(max_length=80, null=True, blank=True)
     description = models.TextField(max_length=1024, blank=True)
     # Using unnamed book images by default.
     full_img = models.ImageField(upload_to='img/book_img/full/', default='img/book_img/full/default-book-full.jpg')
