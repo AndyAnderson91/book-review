@@ -51,7 +51,7 @@
                 {% endif %}
                 <p>Country: {{ book.country }}</p>
                 <p>Original language: {{ book.language }}</p>
-                {% if book.title != book.original_title %}
+                {% if book.original_title %}
                     <p>Original title: «{{ book.original_title }}»</p>
                 {% endif %}
                 {% if book.pages %}
