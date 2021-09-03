@@ -10,8 +10,8 @@
     <div>
         <div class="row g-3 mb-3" style="border: 0.125rem solid transparent">
             <div class="col-sm-auto mt-sm-0">
-                <img src="{{ book.full_img.url }}" class="card-img rounded border d-none d-sm-block" alt="{{ book.title }}" style="max-width: 11.5rem;">
-                <img src="{{ book.small_img.url }}" class="card-img rounded border d-block d-sm-none" alt="{{ book.title }}">
+                <img src="{{ book.full_img.url }}" class="card-img rounded {% if book.full_img.url|slice:'-21:' == 'default-book-full.jpg' %}border{% endif %} d-none d-sm-block" alt="{{ book.title }}" style="max-width: 11.5rem;">
+                <img src="{{ book.small_img.url }}" class="card-img rounded {% if book.small_img.url|slice:'-22:' == 'default-book-small.jpg' %}border{% endif %} d-block d-sm-none" alt="{{ book.title }}">
             </div>
             <div class="col-sm container-fluid pt-1 mt-sm-0">
 
