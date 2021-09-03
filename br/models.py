@@ -30,6 +30,7 @@ class Author(models.Model):
 
     class Meta:
         unique_together = ['first_name', 'patronymic', 'last_name', 'born']
+        ordering = ['first_name']
 
     def __str__(self):
         """
@@ -47,6 +48,9 @@ class Genre(models.Model):
     Book genre model.
     """
     name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
