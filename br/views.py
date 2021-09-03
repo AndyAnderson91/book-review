@@ -11,8 +11,8 @@ from br.custom.search import SEARCH_CATEGORIES, search
 from .forms import SearchForm
 
 
-BOOKS_PER_PAGE = 2
-REVIEWS_PER_PAGE = 2
+BOOKS_PER_PAGE = 5
+REVIEWS_PER_PAGE = 5
 
 
 class IndexListView(generic.list.ListView):
