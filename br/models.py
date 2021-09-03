@@ -56,8 +56,8 @@ class Book(models.Model):
     """
     Book model.
     """
-    title = models.CharField(max_length=100, help_text='In English')
-    original_title = models.CharField(max_length=100, help_text="If it's different", null=True, blank=True)
+    title = models.CharField(max_length=100)
+    original_title = models.CharField(max_length=100, null=True, blank=True)
     # Book might have multiple authors, so many-to-many relationship is chosen.
     authors = models.ManyToManyField(Author)
     genres = models.ManyToManyField(Genre)
