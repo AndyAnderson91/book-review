@@ -32,7 +32,7 @@
                     <div class="col-md order-md-0">
                         <p>Author{{ book.authors.all|length|pluralize }}:
                             {% for author in book.authors.all %}
-                                <span class="text-nowrap"><a class="book-field-link" href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a></span>{% if not forloop.last %},{% endif %}
+                                <a class="text-nowrap book-field-link" href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>{% if not forloop.last %},{% endif %}
                             {% endfor %}
 
                         </p>

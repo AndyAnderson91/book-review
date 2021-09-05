@@ -18,9 +18,7 @@
                             {% if request.path == '/search/' and category == 'author' %}
                                 <span class="text-nowrap">{{author}}</span>
                             {% else %}
-                                <a class="book-field-link" href="{% url 'br:search' %}?q={{author}}&category=author"><span class="text-nowrap">{{author}}</span></a>
-                            {% endif %}
-                            {% if not forloop.last %},{% endif %}
+                                <a class="text-nowrap book-field-link" href="{% url 'br:search' %}?q={{author}}&category=author">{{author}}</a>{% endif %}{% if not forloop.last %},{% endif %}
                         {% endfor %}
                         </p>
                     </div>
