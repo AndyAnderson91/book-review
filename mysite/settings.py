@@ -26,6 +26,7 @@ load_dotenv()
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = os.environ.get('HEROKU_DEBUG', str(os.getenv('DEBUG'))) == 'True'
 
 ALLOWED_HOSTS = [
@@ -150,6 +151,7 @@ CLOUDINARY_STORAGE = {
     'API_KEY': str(os.getenv('API_KEY')),
     'API_SECRET': str(os.getenv('API_SECRET')),
 }
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
