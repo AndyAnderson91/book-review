@@ -27,7 +27,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = os.environ.get('HEROKU_DEBUG', str(os.getenv('LOCAL_DEBUG'))) == 'True'
+DEBUG = os.environ.get('REMOTE_DEBUG', str(os.getenv('LOCAL_DEBUG'))) == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
