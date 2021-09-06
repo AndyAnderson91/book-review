@@ -12,22 +12,23 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 import dj_database_url
 from pathlib import Path
-from dotenv import load_dotenv
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-load_dotenv()
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = os.environ.get('REMOTE_DEBUG', str(os.getenv('LOCAL_DEBUG'))) == 'True'
+DEBUG = os.environ.get('REMOTE_DEBUG', config('LOCAL_DEBUG')) == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -147,9 +148,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': str(os.getenv('CLOUD_NAME')),
-    'API_KEY': str(os.getenv('API_KEY')),
-    'API_SECRET': str(os.getenv('API_SECRET')),
+    'CLOUD_NAME': config('CLOUD_NAME', default=''),
+    'API_KEY': config('API_KEY', default=''),
+    'API_SECRET': config('API_SECRET', default=''),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
