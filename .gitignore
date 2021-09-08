@@ -129,6 +129,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# staticfiles folder
+staticfiles/
+
 # Media files
 media/
+
 
