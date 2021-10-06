@@ -1,4 +1,4 @@
-{%  extends 'br/base.html' %}
+{%  extends 'general/base.html' %}
 {% load static %}
 
 {% block page_header %}
@@ -19,11 +19,11 @@
         <ul>
             {% for book in page_obj %}
 
-                <li>{% include 'br/book_card.html' %}</li>
+                <li>{% include 'books/book_card.html' %}</li>
             {% endfor %}
         </ul>
 
-        {% include 'br/pagination.html' %}
+        {% include 'general/pagination.html' %}
 
     {% else %}
         <h4>There are no published books in app database.</h4>

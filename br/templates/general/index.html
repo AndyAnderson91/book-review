@@ -1,4 +1,4 @@
-{%  extends 'br/base.html' %}
+{%  extends 'general/base.html' %}
 {% load static %}
 
 {% block page_header %}
@@ -47,12 +47,12 @@
         <ul>
             {% for book in anticipated_books %}
 
-                <li>{% include 'br/book_card.html' %}</li>
+                <li>{% include 'books/book_card.html' %}</li>
 
             {% endfor %}
         </ul>
 
-        {% include 'br/pagination.html' %}
+        {% include 'general/pagination.html' %}
 
     {% else %}
 

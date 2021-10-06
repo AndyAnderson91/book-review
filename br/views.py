@@ -16,7 +16,7 @@ class IndexListView(generic.list.ListView):
     """
     Home page. Contains greeting and anticipated books list.
     """
-    template_name = 'br/index.html'
+    template_name = 'general/index.html'
     context_object_name = 'anticipated_books'
     paginate_by = BOOKS_PER_PAGE
 
@@ -34,7 +34,7 @@ class BooksListView(generic.list.ListView):
     Responsible for 3 pages (recent, popular and best rated books).
     Sends list of published books ordered by requested type.
     """
-    template_name = 'br/books_list.html'
+    template_name = 'books/books_list.html'
     context_object_name = 'books'
     paginate_by = BOOKS_PER_PAGE
 
@@ -75,7 +75,7 @@ class BookDetailView(generic.detail.DetailView):
     model = Book
     queryset = BOOKS
     query_pk_and_slug = True
-    template_name = 'br/book_details.html'
+    template_name = 'books/book_details.html'
 
     def get_context_data(self, **kwargs):
         """
@@ -110,7 +110,7 @@ class BookDetailView(generic.detail.DetailView):
 class ReviewCreateView(generic.edit.CreateView):
     model = Review
     fields = ['rating', 'title', 'text']
-    template_name = 'br/add_review.html'
+    template_name = 'reviews/add_review.html'
 
     def get(self, request, *args, **kwargs):
         """
@@ -151,7 +151,7 @@ class ReviewCreateView(generic.edit.CreateView):
 
 class ReviewUpdateView(generic.edit.UpdateView):
     fields = ['rating', 'title', 'text']
-    template_name = 'br/edit_review.html'
+    template_name = 'reviews/edit_review.html'
 
     def get_object(self, queryset=None):
         book = get_object_or_404(Book, id=self.kwargs.get('pk'), slug=self.kwargs.get('slug'))
@@ -175,7 +175,7 @@ class ReviewUpdateView(generic.edit.UpdateView):
 
 
 class ReviewDeleteView(generic.edit.DeleteView):
-    template_name = 'br/delete_review.html'
+    template_name = 'reviews/delete_review.html'
     query_pk_and_slug = True
 
     def get_object(self, queryset=None):
@@ -202,7 +202,7 @@ class MyReviewsListView(generic.list.ListView):
     """
     Sends reviews filtered by user.
     """
-    template_name = 'br/my_reviews.html'
+    template_name = 'reviews/my_reviews.html'
     context_object_name = 'my_reviews'
     paginate_by = REVIEWS_PER_PAGE
 
@@ -215,7 +215,7 @@ class MyReviewsListView(generic.list.ListView):
 
 
 class SearchListView(generic.list.ListView):
-    template_name = 'br/search.html'
+    template_name = 'search/search.html'
     context_object_name = 'results'
     paginate_by = BOOKS_PER_PAGE
 
@@ -226,10 +226,10 @@ class SearchListView(generic.list.ListView):
             return super().get(request, *args, **kwargs)
         elif not form.data.get('q'):
             # Displays empty request page.
-            return render(request, 'br/empty_search_request.html')
+            return render(request, 'search/empty_search_request.html')
         else:
             # Displays wrong request page.
-            return render(request, 'br/wrong_search_request.html')
+            return render(request, 'search/wrong_search_request.html')
 
     def get_queryset(self):
         # 'q' is a search request.

@@ -1,4 +1,4 @@
-{% extends 'br/base.html' %}
+{% extends 'general/base.html' %}
 
 {% block page_header %}
     <div class="pb-1 mb-4 border-bottom">
@@ -86,10 +86,10 @@
         </div>
 
         {% for review in page_obj %}
-            {% include 'br/review_card.html' %}
+            {% include 'reviews/review_card.html' %}
         {% endfor %}
     {% else %}
         <h4>Reviews can be written as soon as the book is published</h4>
     {% endif %}
-    {% include 'br/pagination.html' %}
+    {% include 'general/pagination.html' %}
 {% endblock content %}

@@ -1,4 +1,4 @@
-{% extends 'br/base.html' %}
+{% extends 'general/base.html' %}
 {% load static %}
 
 {% block page_header %}
@@ -10,7 +10,7 @@
 {% block content %}
     {% if my_reviews %}
         {% for review in my_reviews %}
-            {% include 'br/review_card.html' %}
+            {% include 'reviews/review_card.html' %}
         {% endfor %}
     {% else %}
         <h4>I haven't written reviews yet.</h4>
@@ -18,5 +18,5 @@
             <img src="{% static 'custom/img/my_reviews.jpg' %}" class="img-fluid" style="max-height: 345px;" alt="">
         </div>
     {% endif %}
-    {% include 'br/pagination.html' %}
+    {% include 'general/pagination.html' %}
 {% endblock content %}
