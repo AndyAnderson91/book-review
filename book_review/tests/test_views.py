@@ -209,7 +209,7 @@ class BookDetailViewTest(TestCase):
         If no reviews on a published book, an empty queryset is sent to template.
         """
         response = self.client.get(self.published_book.get_absolute_url())
-        self.assertEqual(response.context['reviews'], [])
+        self.assertQuerysetEqual(response.context['reviews'], [])
 
     def test_published_book_with_review(self):
         """
@@ -217,7 +217,7 @@ class BookDetailViewTest(TestCase):
         """
         review = create_reviews([self.published_book], self.user)[0]
         response = self.client.get(self.published_book.get_absolute_url())
-        self.assertEqual(response.context['reviews'], [review])
+        self.assertQuerysetEqual(response.context['reviews'], [review])
 
     def test_anticipated_book_message(self):
         """
@@ -229,7 +229,7 @@ class BookDetailViewTest(TestCase):
 
     def test_anticipated_book_reviews_queryset(self):
         response = self.client.get(self.anticipated_book.get_absolute_url())
-        self.assertEqual(response.context['reviews'], [])
+        self.assertQuerysetEqual(response.context['reviews'], [])
 
 
 class ReviewCreateViewTest(TestCase):
