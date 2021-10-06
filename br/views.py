@@ -9,10 +9,7 @@ from .models import Book, Review
 from br.custom.annotations import BOOKS
 from br.custom.search import SEARCH_CATEGORIES, search
 from .forms import SearchForm
-
-
-BOOKS_PER_PAGE = 5
-REVIEWS_PER_PAGE = 5
+from .constants import BOOKS_PER_PAGE, REVIEWS_PER_PAGE
 
 
 class IndexListView(generic.list.ListView):
