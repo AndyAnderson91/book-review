@@ -6,6 +6,8 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 
+from .custom.constants import RATINGS
+
 
 def get_sentinel_user():
     """
@@ -17,8 +19,6 @@ def get_sentinel_user():
 class Author(models.Model):
     """
     Book author model.
-    Born field is not shown anywhere on site,
-    but is needed for unique_together constraint.
     """
     first_name = models.CharField(max_length=50)
     patronymic = models.CharField(max_length=50, blank=True)
@@ -36,10 +36,10 @@ class Author(models.Model):
         """
         String representation is an author's full name.
         """
+        parts = [self.first_name, self.last_name]
         if self.patronymic:
-            parts = [self.first_name, self.patronymic, self.last_name]
-        else:
-            parts = [self.first_name, self.last_name]
+            parts.insert(1, self.patronymic)
+
         return " ".join(parts)
 
 
@@ -62,7 +62,7 @@ class Book(models.Model):
     """
     title = models.CharField(max_length=100)
     original_title = models.CharField(max_length=100, null=True, blank=True)
-    # Book might have multiple authors, so many-to-many relationship is chosen.
+    # Book might have multiple authors, so many-to-many relationship is used.
     authors = models.ManyToManyField(Author)
     genres = models.ManyToManyField(Genre)
     language = models.CharField(max_length=50)
@@ -70,17 +70,13 @@ class Book(models.Model):
     # Not limiting pub_date max value by today in case of anticipated books.
     pub_date = models.DateField(help_text='YYYY-MM-DD')
     description = models.TextField(max_length=1024, blank=True)
-    # Using unnamed book images by default.
     full_img = models.ImageField(upload_to='img/book_img/full/', default='img/book_img/full/default-book-full.jpg')
     small_img = models.ImageField(upload_to='img/book_img/small/', default='img/book_img/small/default-book-small.jpg')
     pages = models.PositiveIntegerField(null=True, blank=True)
-    # Using slug for better url.
     slug = models.SlugField(max_length=80)
 
     class Meta:
-        # Title and pub_date should be enough for unique constraint.
         unique_together = ['title', 'pub_date']
-        # Default ordering.
         ordering = ['title']
 
     def is_published(self):
@@ -91,11 +87,10 @@ class Book(models.Model):
 
     def get_absolute_url(self):
         """
-        Slug only is not enough coz 2 books with same titles are possible,
-        so id is added.
+        Slug and pk are used together since different books may have identical titles.
         """
         return reverse('br:book', kwargs={
-            'pk': self.id,
+            'pk': self.pk,
             'slug': self.slug
         })
 
@@ -103,18 +98,13 @@ class Book(models.Model):
         return self.title
 
 
-# 5 point rating system.
-RATINGS = [(i, i) for i in range(1, 6)]
-
-
 class Review(models.Model):
     """
-    Review model. Unique constraint is on book-owner pair,
-    since each user can only have 1 review on each book once.
-    Review may be edited or deleted.
+    Review model. Unique constraint is on book-owner fields,
+    since each user may only have 1 review on each book.
     """
     title = models.CharField(max_length=60)
-    # One review can only refer to one book while one book can have many reviews
+    # One review can only refer to one book.
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     text = models.TextField(max_length=8192)
     rating = models.IntegerField(choices=RATINGS)
