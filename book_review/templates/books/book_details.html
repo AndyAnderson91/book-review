@@ -1,0 +1,95 @@
+{% extends 'general/base.html' %}
+
+{% block page_header %}
+    <div class="pb-1 mb-4 border-bottom">
+        <h2>{{book.title}}</h2>
+    </div>
+{% endblock page_header %}
+
+{% block content %}
+    <div>
+        <div class="row g-3 mb-3" style="border: 0.125rem solid transparent">
+            <div class="col-sm-auto mt-sm-0">
+                <img src="{{ book.full_img.url }}" class="card-img rounded {% if book.full_img.url|slice:'-21:' == 'default-book-full.jpg' %}border{% endif %} d-none d-sm-block" alt="{{ book.title }}" style="max-width: 11.5rem;">
+                <img src="{{ book.small_img.url }}" class="card-img rounded {% if book.small_img.url|slice:'-22:' == 'default-book-small.jpg' %}border{% endif %} d-block d-sm-none" alt="{{ book.title }}">
+            </div>
+            <div class="col-sm container-fluid pt-1 mt-sm-0">
+
+                <div class="row g-0">
+                    {% if book.is_published %}
+                        <div class="col-auto order-md-1">
+                            <p>
+                                {% if book.avg_rating %}
+                                    Rating: {{book.avg_rating|floatformat:2}}
+                                    (<a class="book-field-link" href="{{book.get_absolute_url}}#reviews">{{book.review_set.count}} review{{book.review_set.count|pluralize}}</a>)
+                                {% else %}
+                                    Unrated
+                                {% endif %}
+                            </p>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-md order-md-0">
+                        <p>Author{{ book.authors.all|length|pluralize }}:
+                            {% for author in book.authors.all %}
+                                <a class="text-nowrap book-field-link" href="{% url 'book_review:search' %}?q={{author}}&category=author">{{author}}</a>{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+
+                        </p>
+                    </div>
+                </div>
+
+                <p>Genre{{ book.genres.all|length|pluralize }}:
+                    {% for genre in book.genres.all %}
+                        <a class="book-field-link" href="{% url 'book_review:search' %}?q={{genre}}&category=genre">{% if forloop.first %}{{ genre }}{% else %}{{genre|lower}}{% endif %}</a>{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                </p>
+                {% if book.is_published %}
+                    <p>Publication year: <a class="book-field-link" href="{% url 'book_review:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
+                {% else %}
+                    <p>Expected at {{book.pub_date|date:'F'}} {{book.pub_date.day}}, <a class="book-field-link" href="{% url 'book_review:search' %}?q={{book.pub_date.year}}&category=year">{{book.pub_date.year}}</a></p>
+                {% endif %}
+                <p>Country: {{ book.country }}</p>
+                <p>Original language: {{ book.language }}</p>
+                {% if book.original_title and book.original_title != book.title %}
+                    <p>Original title: «{{ book.original_title }}»</p>
+                {% endif %}
+                {% if book.pages %}
+                    <p class="mb-0">Number of pages: {{ book.pages }} (approximately)</p>
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <a id="description"></a>
+            <h4>Description:</h4>
+            <p>{{book.description}}</p>
+        </div>
+    </div>
+    <a id="reviews"></a>
+    {% if book.is_published %}
+        <div class="row g-0">
+            <div class="col">
+                <h4 style="padding-top: 0.375rem; padding-bottom: 0.375rem;">
+                    {% if reviews %}
+                        <span>Reviews ({{reviews|length}}):</span>
+                    {% else %}
+                        <span>No reviews yet.</span>
+                    {% endif %}
+                </h4>
+            </div>
+
+            <div class="col-auto mb-2">
+                {% if reviews.0.owner != request.user %}
+                    <a href="{% url 'book_review:add_review' book.id book.slug %}" class="btn btn-color">Add new review</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% for review in page_obj %}
+            {% include 'reviews/review_card.html' %}
+        {% endfor %}
+    {% else %}
+        <h4>Reviews can be written as soon as the book is published</h4>
+    {% endif %}
+    {% include 'general/pagination.html' %}
+{% endblock content %}

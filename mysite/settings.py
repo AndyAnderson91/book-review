@@ -40,7 +40,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     # Book_review app.
-    'br.apps.BrConfig',
+    'book_review.apps.BookReviewConfig',
     # Users app.
     'users.apps.UsersConfig',
     # Crispy and bootstrap.
@@ -84,7 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'br.context_processors.search_form',
+                'book_review.context_processors.search_form',
             ],
         },
     },

@@ -1,0 +1,20 @@
+{%  extends 'general/base.html' %}
+
+{% block page_header %}
+    <div class="pb-1 mb-4 border-bottom">
+        <h2>New review on «{{book.title}}»</h2>
+    </div>
+{% endblock page_header %}
+
+{% block content %}
+    {% load crispy_forms_tags %}
+    <form method="post" action="{% url 'book_review:add_review' book.id book.slug %}">
+        {% csrf_token %}
+        <div class="col-md-1 mb-0">
+            {{ form.rating|as_crispy_field }}
+        </div>
+        {{ form.title|as_crispy_field }}
+        {{ form.text|as_crispy_field }}
+        <button class="btn btn-color" name="submit">Add review</button>
+    </form>
+{% endblock content %}
