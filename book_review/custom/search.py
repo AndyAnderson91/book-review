@@ -1,8 +1,5 @@
 from django.db.models import Q
-from book_review.custom.annotations import BOOKS, AUTHORS
-
-
-SEARCH_CATEGORIES = ['book', 'author', 'genre', 'year', 'any']
+from book_review.custom.annotations import annotated_books, annotated_authors
 
 
 def search(q, category):
@@ -17,31 +14,30 @@ def search(q, category):
     """
 
     if category == 'book':
-        results = BOOKS.filter(title__icontains=q)
+        results = annotated_books.filter(title__icontains=q)
 
     elif category == 'author':
-        results = BOOKS.filter(
-            Q(authors__in=AUTHORS.filter(full_name__icontains=q)) |
-            Q(authors__in=AUTHORS.filter(short_name__icontains=q))
+        results = annotated_books.filter(
+            Q(authors__in=annotated_authors.filter(full_name__icontains=q)) |
+            Q(authors__in=annotated_authors.filter(short_name__icontains=q))
         )
 
     elif category == 'genre':
-        results = BOOKS.filter(genres__name__icontains=q)
+        results = annotated_books.filter(genres__name__icontains=q)
 
     elif category == 'year':
-        results = BOOKS.filter(pub_date__year__icontains=q)
+        results = annotated_books.filter(pub_date__year__icontains=q)
 
     elif category == 'any':
-        results = BOOKS.filter(
+        results = annotated_books.filter(
             Q(title__icontains=q) |
-            Q(authors__in=AUTHORS.filter(full_name__icontains=q)) |
-            Q(authors__in=AUTHORS.filter(short_name__icontains=q)) |
+            Q(authors__in=annotated_authors.filter(full_name__icontains=q)) |
+            Q(authors__in=annotated_authors.filter(short_name__icontains=q)) |
             Q(genres__name__icontains=q) |
             Q(pub_date__year__icontains=q)
         )
 
     else:
-        results = BOOKS.none()
+        results = annotated_books.none()
 
     return results.order_by('-avg_rating', 'title')
-

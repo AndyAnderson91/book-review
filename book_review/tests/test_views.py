@@ -10,7 +10,6 @@ from book_review.models import Book, Review
 from book_review.views import BOOKS_PER_PAGE, REVIEWS_PER_PAGE
 
 
-
 def create_books(n, published):
     """
     n - amount of books to create,

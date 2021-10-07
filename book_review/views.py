@@ -7,10 +7,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
 from .models import Book, Review
-from .custom.annotations import BOOKS
-from .custom.search import SEARCH_CATEGORIES, search
+from .custom.annotations import annotated_books
+from .custom.search import search
 from .forms import SearchForm
-from .custom.constants import BOOKS_PER_PAGE, REVIEWS_PER_PAGE
+from .custom.constants import BOOKS_PER_PAGE, REVIEWS_PER_PAGE, SEARCH_CATEGORIES
 
 
 class IndexListView(generic.list.ListView):
@@ -23,7 +23,7 @@ class IndexListView(generic.list.ListView):
 
     def get_queryset(self):
         today = datetime.date.today()
-        anticipated_books = BOOKS.filter(pub_date__gt=today)
+        anticipated_books = annotated_books.filter(pub_date__gt=today)
         return anticipated_books.order_by('pub_date', 'title')
 
 
@@ -38,7 +38,7 @@ class BooksListView(generic.list.ListView):
 
     def get_queryset(self):
         today = datetime.date.today()
-        published_books = BOOKS.filter(pub_date__lte=today)
+        published_books = annotated_books.filter(pub_date__lte=today)
         sort_type = self.kwargs.get('sort_type')
         sort_by = {
             'recent': '-pub_date',
@@ -67,7 +67,7 @@ class BookDetailView(generic.detail.DetailView):
     will always see his review on the top of the list regardless of the date.
     """
     model = Book
-    queryset = BOOKS
+    queryset = annotated_books
     query_pk_and_slug = True
     template_name = 'books/book_details.html'
 

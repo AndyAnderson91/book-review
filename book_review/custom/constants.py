@@ -1,10 +1,13 @@
 """
-This module contains all constants values used in application.
+This module contains constants values used in application.
 """
 
-# 5 point review rating system.
+# Rating values used in Review model.
 RATINGS = [(i, i) for i in range(1, 6)]
 
-# Pagination constants.
+# Pagination constants used by view classes.
 BOOKS_PER_PAGE = 5
 REVIEWS_PER_PAGE = 5
+
+# Search constants used by SearchListView class.
+SEARCH_CATEGORIES = ['book', 'author', 'genre', 'year', 'any']
