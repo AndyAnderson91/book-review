@@ -15,7 +15,32 @@ Provide an opportunity for users to read and write reviews on the books of inter
 * After any authentication action (registration, login or logout) user will be redirected to his previous page;
 * Review contains its title, body and book rating from 1 to 5. Every book has its average rating affecting its position on the "Best rated" page;
 * Authenticated user has a personal page with all written reviews. This page is accessible via "My reviews" link from the main page or by clicking on username link at navigation bar.
-## Credentials for Heroku deployed version:
-* Admin (login: admin, password: 111);
-* User who wrote several reviews (login: james, password: 111).
-
+## To run application on local machine:
+#### 1. Clone the repository:
+`git clone https://github.com/AndyAnderson91/book-review.git && cd book-review`
+#### 2. Create a virtual environment:
+`python3 -m venv venv`
+#### 3. Activate the virtual environment:
+`source venv/bin/activate`
+#### 4. Install all required dependencies:
+`pip install -r requirements.txt`
+#### 5. Collect static files:
+`python manage.py collectstatic`
+#### 6. Apply the migrations:
+`python manage.py migrate`
+#### 7. Create superuser:
+`python manage.py createsuperuser`
+#### 8. Run server:
+`python manage.py runserver`
+#### 9. From now local version is available at http://localhost:8000
+## Testing:
+All tests are written with *unittest* module.
+To run tests locally use:<br>
+`python manage.py test`
+## Credentials for [heroku version](https://book-review-django.herokuapp.com/):
+#### Admin:
+* login: admin
+* password: 111
+#### User with several reviews:
+* login: james
+* password: 111
