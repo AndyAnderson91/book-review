@@ -39,8 +39,8 @@ To run tests locally use:<br>
 `python manage.py test`
 ## Credentials for [heroku version](https://book-review-django.herokuapp.com/):
 #### Admin:
-* login: admin
+* username: admin
 * password: 111
 #### User with several reviews:
-* login: james
+* username: james
 * password: 111
