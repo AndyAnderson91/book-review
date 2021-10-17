@@ -4,9 +4,9 @@
 {% block page_header %}
     <div class="pb-1 mb-4 border-bottom">
         <h2>
-            {% if sort_type == 'recent'  %}Recently published books
-            {% elif sort_type == 'popular' %}Most reviewed books
-            {% elif sort_type == 'best_rated' %}Best rated books
+            {% if request.GET.order == 'recent'  %}Recently published books
+            {% elif request.GET.order == 'popular' %}Most reviewed books
+            {% elif request.GET.order == 'best_rated' %}Best rated books
             {% else %}Books
             {% endif %}
         </h2>

@@ -11,9 +11,7 @@
         {% url 'users:login' as login_url %}
         {% url 'users:register' as register_url %}
         {% url 'book_review:my_reviews' as my_reviews_url %}
-        {% url 'book_review:books_list' sort_type='recent' as recent_url %}
-        {% url 'book_review:books_list' sort_type='popular' as popular_url %}
-        {% url 'book_review:books_list' sort_type='best_rated' as best_rated_url %}
+        {% url 'book_review:books_list' as books_list_url %}
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
@@ -50,13 +48,13 @@
 
                     <ul class="navbar-nav ms-1 order-lg-first">
                         <li class="nav-item">
-                            <a class="navigation-link text-nowrap ms-lg-0 {% if request.path == recent_url %}current-navigation-link{% endif %}" href="{{ recent_url }}">Recent</a>
+                            <a class="navigation-link text-nowrap ms-lg-0 {% if request.path == books_list_url and request.GET.order == 'recent' %}current-navigation-link{% endif %}" href="{% url 'book_review:books_list' %}?order=recent">Recent</a>
                         </li>
                         <li class="nav-item">
-                            <a class="navigation-link text-nowrap {% if request.path == popular_url %}current-navigation-link{% endif %}" href="{{ popular_url }}">Popular</a>
+                            <a class="navigation-link text-nowrap {% if request.path == books_list_url and request.GET.order == 'popular' %}current-navigation-link{% endif %}" href="{% url 'book_review:books_list' %}?order=popular">Popular</a>
                         </li>
                         <li class="nav-item">
-                            <a class="navigation-link text-nowrap {% if request.path == best_rated_url %}current-navigation-link{% endif %}" href="{{ best_rated_url }}">Best rated</a>
+                            <a class="navigation-link text-nowrap {% if request.path == books_list_url and request.GET.order == 'best_rated' %}current-navigation-link{% endif %}" href="{% url 'book_review:books_list' %}?order=best_rated">Best rated</a>
                         </li>
                     </ul>
 

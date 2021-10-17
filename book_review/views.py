@@ -4,7 +4,9 @@ from itertools import chain
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views import generic
+from django.http import Http404
 
 from .models import Book, Review
 from .custom.annotations import annotated_books
@@ -30,33 +32,32 @@ class IndexListView(generic.list.ListView):
 class BooksListView(generic.list.ListView):
     """
     Return list of published books ordered by provided url argument.
-    'recent', 'popular' or 'best_rated' value is possible.
+    'recent', 'popular' or 'best_rated' values are possible.
+    Different order value leads to 404.
+    'recent' value is used by default.
     """
     template_name = 'books/books_list.html'
     context_object_name = 'books'
     paginate_by = BOOKS_PER_PAGE
 
+    def get(self, *args, **kwargs):
+        if self.request.GET.get('order') is None:
+            return redirect(reverse('book_review:books_list') + '?order=recent')
+        return super().get(*args, **kwargs)
+
     def get_queryset(self):
         today = datetime.date.today()
         published_books = annotated_books.filter(pub_date__lte=today)
-        sort_type = self.kwargs.get('sort_type')
-        sort_by = {
+        order_dict = {
             'recent': '-pub_date',
             'popular': '-num_reviews',
             'best_rated': '-avg_rating',
         }
-        return published_books.order_by(
-            sort_by.get(sort_type, '-pub_date'),
-            'title'
-        )
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'sort_type': self.kwargs.get('sort_type')
-            })
-
-        return context
+        order_key = self.request.GET.get('order')
+        order_value = order_dict.get(order_key)
+        if order_value is None:
+            raise Http404
+        return published_books.order_by(order_value, 'title')
 
 
 class BookDetailView(generic.detail.DetailView):

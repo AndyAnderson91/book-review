@@ -123,48 +123,43 @@ class BooksListViewTest(TestCase):
 
     def test_view_accessible_by_name(self):
         for arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('book_review:books_list', args=(arg,)))
+            response = self.client.get(reverse('book_review:books_list') + '?order=recent')
             self.assertEqual(response.status_code, 200)
 
     def test_empty_queryset(self):
-        for arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('book_review:books_list', args=(arg,)))
-            self.assertQuerysetEqual(response.context['books'], [])
+        response = self.client.get(reverse('book_review:books_list') + '?order=recent')
+        self.assertQuerysetEqual(response.context['books'], [])
 
     def test_empty_queryset_message(self):
         """
         If no published books, an appropriate message is displayed.
         """
-        for arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('book_review:books_list', args=(arg,)))
-            self.assertContains(response, 'There are no published books in app database.')
+        response = self.client.get(reverse('book_review:books_list') + '?order=recent')
+        self.assertContains(response, 'There are no published books in app database.')
 
     def test_pagination_on(self):
         # Creating 49 published books.
         create_books(49, published=True)
 
-        for url_arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('book_review:books_list', args=(url_arg,)))
-            self.assertTrue(response.context['is_paginated'])
+        response = self.client.get(reverse('book_review:books_list') + '?order=recent')
+        self.assertTrue(response.context['is_paginated'])
 
     def test_books_per_page(self):
         # Creating 49 published books.
         published_books = create_books(49, published=True)
 
-        for url_arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('book_review:books_list', args=(url_arg,)))
-            if len(published_books) >= BOOKS_PER_PAGE:
-                self.assertEqual(len(response.context['page_obj']), BOOKS_PER_PAGE)
-            else:
-                self.assertEqual(len(response.context['page_obj']), len(published_books))
+        response = self.client.get(reverse('book_review:books_list') + '?order=recent')
+        if len(published_books) >= BOOKS_PER_PAGE:
+            self.assertEqual(len(response.context['page_obj']), BOOKS_PER_PAGE)
+        else:
+            self.assertEqual(len(response.context['page_obj']), len(published_books))
 
     def test_books_sent_to_template_count(self):
         # Creating 49 published books.
         published_books = create_books(49, published=True)
 
-        for url_arg in ['recent', 'popular', 'best_rated']:
-            response = self.client.get(reverse('book_review:books_list', args=(url_arg,)))
-            self.assertEqual(response.context['paginator'].count, len(published_books))
+        response = self.client.get(reverse('book_review:books_list') + '?order=recent')
+        self.assertEqual(response.context['paginator'].count, len(published_books))
 
 
 class BookDetailViewTest(TestCase):
