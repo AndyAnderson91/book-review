@@ -43,13 +43,13 @@ ul {
     color: orange;
 }
 
-/*Read more - read less links*/
-.read-more-link {
+/*Orange links*/
+.orange-link {
     cursor: pointer;
-    color: orange;
+    color: #e67e00;
     text-decoration-style: dotted;
 }
-.read-more-link:hover {
+.orange-link:hover {
     color: orange;
 }
 
@@ -184,8 +184,6 @@ ul {
     border-color: var(--light-green);
     box-shadow: none;
 }
-
-
 
 
 /*Hides a part of text in read more/read less blocks*/

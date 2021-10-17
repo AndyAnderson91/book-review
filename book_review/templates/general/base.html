@@ -71,7 +71,7 @@
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="navigation-link text-nowrap {% if request.path == login_url %}current-navigation-link{% endif %}" href="{{ login_url }}{% url_next next=request.get_full_path %}">Login</a>
+                                <a class="navigation-link text-nowrap {% if request.path == login_url %}current-navigation-link{% endif %}" href="{{ login_url }}{% url_next next=request.get_full_path %}">Log in</a>
                             </li>
                             <li class="nav-item">
                                 <a class="navigation-link text-nowrap {% if request.path == register_url %}current-navigation-link{% endif %}" href="{{ register_url }}{% url_next next=request.get_full_path %}">Sign up</a>

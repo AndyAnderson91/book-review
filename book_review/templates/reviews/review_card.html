@@ -37,7 +37,7 @@
         <div class="card-text">
             {% if review.text|length > 700 %}
                 <p>{{ review.text|slice:':700' }}<span id="dots{{ review.id }}">...</span><span class="textContinuation" id="more{{ review.id }}">{{ review.text|slice:'700:'}}</span>
-                    <a class="text-nowrap read-more-link" onclick="myFunction({{ review.id }})" id="myBtn{{ review.id }}">Read more</a>
+                    <a class="text-nowrap orange-link" onclick="myFunction({{ review.id }})" id="myBtn{{ review.id }}">Read more</a>
                 </p>
             {% else %}
                 <p>{{ review.text }}</p>

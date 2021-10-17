@@ -38,7 +38,7 @@
                 <div class="card-text">
                     {% if book.description|length > 650 %}
                         <p>{{ book.description|slice:':650' }}<span id="dots{{ book.id }}">...</span><span class="textContinuation" id="more{{ book.id }}">{{ book.description|slice:'650:'}}</span>
-                            <a class="text-nowrap read-more-link" onclick="myFunction({{ book.id }})" id="myBtn{{ book.id }}">Read more</a>
+                            <a class="text-nowrap orange-link" onclick="myFunction({{ book.id }})" id="myBtn{{ book.id }}">Read more</a>
                         </p>
                     {% else %}
                         <p>{{ book.description }}</p>

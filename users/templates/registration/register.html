@@ -11,6 +11,7 @@
         <div class="col-md-5 mb-0">
             {{ form|crispy }}
         </div>
-        <button class="btn btn-color" name="submit">Register</button>
+        <button class="btn btn-color" name="submit">Sign up</button>
+        <span class="ms-2" style="color: #6c757d;">Already a member? - <a class="orange-link" href="{% url 'users:login' %}">Log in</a></span>
     </form>
 {% endblock content %}
