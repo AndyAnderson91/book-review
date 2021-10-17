@@ -1,12 +1,13 @@
 :root {
     /*Custom colors*/
-    --black: #000000;
     --light-black: #3A3A3A;
 
     --dark-gray: #666666;
 
-    --medium-green: #43a642;
-    --light-green: #58b544;
+    --medium-green: #21a400;
+    --light-green: #24b800;
+
+    --dark-orange: #e67e00;
 }
 
 /*Body text color and background color*/
@@ -27,7 +28,7 @@ ul {
 /*Book card title*/
 .book-title-link {
 
-    color: var(--black);
+    color: black;
     text-decoration: none;
 }
 .book-title-link:hover {
@@ -37,7 +38,7 @@ ul {
 /*Author, genre, year links*/
 .book-field-link {
     text-decoration-style: dotted;
-    color: var(--black);
+    color: black;
 }
 .book-field-link:hover {
     color: orange;
@@ -46,7 +47,7 @@ ul {
 /*Orange links*/
 .orange-link {
     cursor: pointer;
-    color: #e67e00;
+    color: var(--dark-orange);
     text-decoration-style: dotted;
 }
 .orange-link:hover {
@@ -60,9 +61,6 @@ ul {
 }
 .review-link:hover {
     color: orange;
-}
-.review-link:active {
-    color: brown;
 }
 
 /*Navigation links*/
@@ -96,7 +94,7 @@ ul {
 
 /*Pagination links*/
 .pagination-item {
-    color: var(--black);
+    color: black;
     text-decoration: none;
     display: flex;
     flex-grow: 1;
@@ -117,7 +115,7 @@ ul {
 }
 
 .pagination-number-link:hover {
-    color: var(--black);
+    color: black;
     background-color: #ebebeb;
 }
 
