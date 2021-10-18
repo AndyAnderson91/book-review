@@ -35,6 +35,7 @@ DEBUG = config('DEBUG', default='False') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
+    '127.0.0.1',
     'book-review-django.herokuapp.com',
 ]
 
@@ -75,11 +76,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'mysite.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
