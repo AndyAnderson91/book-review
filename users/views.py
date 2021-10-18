@@ -6,6 +6,9 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class RegisterFormView(generic.edit.FormView):
+    """
+    Create new user and log him in.
+    """
     form_class = UserCreationForm
     template_name = 'registration/register.html'
 

@@ -81,14 +81,14 @@ class Book(models.Model):
 
     def is_published(self):
         """
-        Returns True if book is already published. False if anticipated
+        Returns True if book is already published.
         """
         return self.pub_date <= datetime.date.today()
 
     def get_absolute_url(self):
-        """
-        Slug and pk are used together since different books may have identical titles.
-        """
+        # Using slug only is not safe enough since different books may have identical titles.
+        # Using id only is not giving informative url for user,
+        # So slug and id are used together.
         return reverse('book_review:book', kwargs={
             'pk': self.pk,
             'slug': self.slug
@@ -100,8 +100,7 @@ class Book(models.Model):
 
 class Review(models.Model):
     """
-    Review model. Unique constraint is on book-owner fields,
-    since each user may only have 1 review on each book.
+    Review model.
     """
     title = models.CharField(max_length=60)
     # One review can only refer to one book.
@@ -115,6 +114,8 @@ class Review(models.Model):
     pub_date = models.DateField(auto_now_add=True)
 
     class Meta:
+        # Put unique constraint on book and owner fields,
+        # since each user may only have 1 review on each book.
         unique_together = ['book', 'owner']
 
     def __str__(self):

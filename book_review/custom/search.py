@@ -4,13 +4,14 @@ from book_review.custom.annotations import annotated_books, annotated_authors
 
 def search(q, category):
     """
+    Return queryset of books by a given query. Books are sorted by average reviews rating and title.
     Categories are needed for cases if 'author', 'genre' or 'year' links are pressed.
     For example, if some books are published in 1984 year, and year link in book details page is pressed,
-    only books with 1984 year publishing will be searched. G. Orwell '1984' titled book will not be in results.
+    only books with 1984 year publishing will be returned. G. Orwell '1984' titled book will not be in results.
     However, this system is only used while pressing links.
     If 1984 is entered in search bar, both - books with 1984 publishing year and Orwell's '1984' will be shown.
     For anything entered in search bar category is 'any'.
-    'book' category is not actively using at the moment, but might be used in future.
+    This system allows user to filter search results.
     """
 
     if category == 'book':

@@ -8,7 +8,7 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def url_replace(context, **kwargs):
     """
-    Replaces values of url parameters (such as page=value in pagination).
+    Replaces value of url parameter (such as page=value in pagination).
     """
     query = context.get('request').GET.copy()
     query.update(kwargs)

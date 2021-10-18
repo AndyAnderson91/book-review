@@ -1,6 +1,9 @@
 """
 This module provides two annotated query sets:
 Annotated books and annotated authors.
+Both sets are used in search function.
+Annotated books are also needed to order books by specific value
+(such as average rating value of all reviews, number of reviews etc.)
 """
 
 from django.db.models import Avg, Count, Value

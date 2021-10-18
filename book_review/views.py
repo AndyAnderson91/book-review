@@ -31,10 +31,9 @@ class IndexListView(generic.list.ListView):
 
 class BooksListView(generic.list.ListView):
     """
-    Return list of published books ordered by provided url argument.
-    'recent', 'popular' or 'best_rated' values are possible.
-    Different order value leads to 404.
-    'recent' value is used by default.
+    Return list of published books ordered according to provided url argument.
+    'recent', 'popular' or 'best_rated' argument values are possible.
+    Different argument value leads to 404.
     """
     template_name = 'books/books_list.html'
     context_object_name = 'books'
@@ -62,8 +61,8 @@ class BooksListView(generic.list.ListView):
 
 class BookDetailView(generic.detail.DetailView):
     """
-    Return particular book and a list of reviews for it.
-    Reviews are sorted by review publication date.
+    Return a particular book and list of reviews for it.
+    Reviews are ordered by review publication date.
     Authenticated user who already has review on requested book
     will always see his review on the top of the list regardless of the date.
     """
@@ -193,7 +192,7 @@ class ReviewDeleteView(generic.edit.DeleteView):
 class MyReviewsListView(generic.list.ListView):
     """
     Return a list of all reviews written by a user.
-    Reviews are sorted by review publication date.
+    Reviews are ordered by review publication date.
     """
     template_name = 'reviews/my_reviews.html'
     context_object_name = 'my_reviews'
@@ -210,7 +209,7 @@ class MyReviewsListView(generic.list.ListView):
 class SearchListView(generic.list.ListView):
     """
     Return a list of books found by request.
-    'q' is a variable that points to query string.
+    'q' is a name of the variable that points to query string.
     """
     template_name = 'search/search.html'
     context_object_name = 'results'
