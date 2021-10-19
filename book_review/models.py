@@ -61,7 +61,7 @@ class Book(models.Model):
     Book model.
     """
     title = models.CharField(max_length=100)
-    original_title = models.CharField(max_length=100, null=True, blank=True)
+    original_title = models.CharField(max_length=100, blank=True)
     # Book might have multiple authors, so many-to-many relationship is used.
     authors = models.ManyToManyField(Author)
     genres = models.ManyToManyField(Genre)
