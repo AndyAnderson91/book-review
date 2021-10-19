@@ -88,9 +88,9 @@ class BookDetailView(generic.detail.DetailView):
         context.update({
             'paginator': paginator,
             'page_obj': page_obj,
+            'is_paginated': True,
             'reviews': reviews,
         })
-
         return context
 
 
