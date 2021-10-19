@@ -34,9 +34,8 @@ Provide an opportunity for users to read and write reviews on the books of inter
 `python manage.py runserver`
 #### 9. From now local version is available at http://localhost:8000
 ## Testing:
-All tests are written with *unittest* module.
-To run tests locally use:<br>
-`python manage.py test`
+All tests are written with **pytest** framework and **pytest-django** plugin.<br>
+To run tests locally use `pytest` command in terminal.
 ## Credentials for [heroku version](https://book-review-django.herokuapp.com/):
 #### Admin:
 * username: admin
