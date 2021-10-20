@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from book_review.views import REVIEWS_PER_PAGE
+from book_review.custom.constants import REVIEWS_PER_PAGE
 
 
 pytestmark = pytest.mark.django_db
