@@ -13,7 +13,7 @@ def test_view_is_accessible_by_name(client):
 
 
 def test_empty_search_query_appropriate_message(client):
-    message = 'Empty request. Type something to search'
+    message = 'Empty request. Please, type something to search.'
     url = reverse('book_review:search')
     response = client.get(url)
     content = response.content.decode()
